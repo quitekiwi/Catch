@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Catch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,650;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* three-tone leather palette, 60-30-10 */
+    --sand: #D8C7A8;
+    --chestnut: #6E4028;
+    --coffee: #3C2417;
+
+    --bg: var(--sand);                                              /* 60% — dominant */
+    --bg-raised: color-mix(in srgb, var(--sand) 88%, var(--coffee) 12%);
+    --card: var(--bg-raised);
+    --ink: var(--coffee);                                           /* 30% — text */
+    --ink-dim: color-mix(in srgb, var(--coffee) 72%, var(--sand) 28%);
+    --ink-faint: color-mix(in srgb, var(--coffee) 42%, var(--sand) 58%);
+    --accent: var(--chestnut);                                      /* 10% — pop, used sparingly */
+    --accent-hover: color-mix(in srgb, var(--chestnut) 82%, var(--sand) 18%);
+    --accent-ink: var(--sand);
+    --steel: var(--chestnut);
+    --line: color-mix(in srgb, var(--coffee) 25%, var(--sand) 75%);
+    --glow: color-mix(in srgb, var(--chestnut) 15%, transparent);
+    --grain-opacity: 0.03;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; padding:0; background:var(--bg); color:var(--ink);
+    font-family:'Fraunces',serif; height:100%; overscroll-behavior-y:none; position:relative; }
+
+  body::before{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:var(--grain-opacity);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode:overlay;
+  }
+  body::after{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:9998;
+    background:radial-gradient(ellipse at 50% 0%, transparent 40%, rgba(0,0,0,0.24) 130%);
+  }
+
+  #root{ min-height:100vh; display:flex; flex-direction:column; max-width:640px; margin:0 auto;
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0; position:relative; }
+
+  header{ padding:32px 20px 14px; border-bottom:1px solid var(--line); }
+  .wordmark{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .wordmark svg{ width:18px; height:18px; flex-shrink:0; }
+  .wordmark span{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.24em;
+    text-transform:uppercase; color:var(--ink-faint); }
+  h1{ font-family:'Anton',sans-serif; font-weight:400; font-size:38px; letter-spacing:0.01em;
+    margin:0; line-height:0.95; text-transform:uppercase; color:var(--ink); }
+  .sub{ color:var(--ink-dim); font-size:15px; margin-top:8px; font-style:italic; font-weight:400;
+    font-family:'Fraunces',serif; }
+
+  .save-block{ padding:20px 20px 8px; display:flex; flex-direction:column; gap:8px; }
+  .save-row{ display:flex; gap:8px; }
+  .save-row input[type=text]{
+    flex:1; background:var(--bg-raised); border:1px solid var(--line); border-radius:3px;
+    padding:14px 14px; color:var(--ink); font-family:'JetBrains Mono',monospace; font-size:13.5px; outline:none;
+  }
+  .save-row input[type=text]:focus{ border-color:var(--accent); }
+  .save-row input[type=text]::placeholder{ color:var(--ink-faint); }
+  .save-btn{
+    background:var(--accent); color:var(--accent-ink); border:none; border-radius:3px; padding:0 22px;
+    font-family:'Anton',sans-serif; font-size:13px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; white-space:nowrap;
+  }
+  .save-btn:hover{ background:var(--accent-hover); }
+  .save-btn:active{ transform:scale(0.97); }
+  .save-btn:disabled{ opacity:0.35; }
+
+  .detail-row{ display:flex; gap:8px; }
+  .detail-row input[type=text]{
+    flex:1.3; background:transparent; border:1px solid var(--line); border-radius:3px;
+    padding:9px 10px; color:var(--ink-dim); font-family:'Fraunces',serif; font-style:italic; font-size:13.5px; outline:none;
+  }
+  .detail-row input[type=text]:focus{ border-color:var(--accent); }
+  .detail-row input[type=text]::placeholder{ color:var(--ink-faint); }
+  .detail-row select{
+    flex:1; background:transparent; border:1px solid var(--line); border-radius:3px;
+    padding:9px 8px; color:var(--ink-dim); font-family:'JetBrains Mono',monospace; font-size:11.5px; outline:none;
+  }
+
+  .search-row{ padding:14px 20px 10px; display:flex; align-items:center; gap:8px; }
+  .search-row .lbl{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.18em; color:var(--ink-faint); text-transform:uppercase; }
+  .search-row input{
+    flex:1; background:transparent; border:none; border-bottom:1px solid var(--line);
+    padding:8px 2px; color:var(--ink-dim); font-family:'JetBrains Mono',monospace; font-size:12.5px; outline:none;
+  }
+  .search-row input:focus{ border-color:var(--accent); color:var(--ink); }
+  .search-row input::placeholder{ color:var(--ink-faint); }
+
+  .filters{ padding:4px 20px 8px; display:flex; gap:6px; flex-wrap:wrap; }
+  .filters.folders{ padding-bottom:16px; }
+  .filter-chip{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.1em;
+    padding:6px 11px; border-radius:2px; border:1px solid var(--line); color:var(--ink-faint);
+    background:transparent; cursor:pointer;
+  }
+  .filter-chip.active{ border-color:var(--accent); color:var(--accent); background:var(--glow); }
+  .filter-chip.ghost{ border-style:dashed; }
+
+  .list{ flex:1; padding:4px 20px 110px; display:flex; flex-direction:column; gap:2px; }
+
+  .empty{ margin-top:60px; text-align:center; color:var(--ink-faint); padding:0 30px; }
+  .empty .stamp{ font-family:'Anton',sans-serif; font-size:15px; letter-spacing:0.1em; color:var(--ink-dim);
+    text-transform:uppercase; margin-bottom:10px; }
+  .empty p{ font-size:14.5px; line-height:1.6; margin:4px 0; font-style:italic; }
+
+  .entry{
+    display:flex; gap:14px; padding:16px 4px; border-bottom:1px solid var(--line);
+    animation: rise 0.3s ease;
+  }
+  @keyframes rise{ from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:translateY(0);} }
+
+  .entry-num{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--steel);
+    padding-top:2px; flex-shrink:0; min-width:44px; letter-spacing:0.03em; }
+  .entry-num .n{ display:block; }
+  .entry-num .tag{ display:block; font-size:9px; color:var(--ink-faint); margin-top:2px; letter-spacing:0.12em; }
+
+  .entry-body{ flex:1; min-width:0; transition:opacity 0.4s ease; }
+  .entry.read .entry-body{ opacity:0.42; }
+  .entry.read .entry-num{ opacity:0.42; }
+
+  .entry-title{ font-family:'Fraunces',serif; font-weight:650; font-size:17px; line-height:1.4;
+    word-break:break-word; margin-bottom:4px; }
+  .entry-title a{ color:var(--ink); text-decoration:none; }
+  .entry-title a:hover{ color:var(--accent); }
+  .entry.read .entry-title a{ text-decoration:line-through; text-decoration-color:var(--ink-faint); }
+  .entry-url{ font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-faint); margin-bottom:5px;
+    word-break:break-all; }
+
+  .entry-meta{ font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-faint);
+    display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .entry-meta .domain{ color:var(--accent); }
+  .folder-pill{ border:1px solid var(--steel); color:var(--steel); border-radius:20px; padding:1px 8px; font-size:9.5px;
+    letter-spacing:0.06em; text-transform:uppercase; }
+
+  .entry-actions{ display:flex; flex-direction:column; gap:8px; flex-shrink:0; align-items:center; padding-top:2px; }
+  .icon-btn{
+    background:transparent; border:1px solid var(--line); color:var(--ink-faint); cursor:pointer;
+    width:26px; height:26px; border-radius:2px; font-size:12px; line-height:1;
+    display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace;
+  }
+  .icon-btn:hover{ color:var(--ink); border-color:var(--ink-dim); }
+  .icon-btn.on{ color:var(--accent); border-color:var(--accent); }
+  .icon-btn.danger:hover{ color:var(--accent); border-color:var(--accent); }
+
+  .install-hint{
+    margin:16px 20px 0; padding:13px 14px; background:var(--bg-raised); border:1px solid var(--line);
+    border-left:2px solid var(--accent); font-size:12px; color:var(--ink-dim); line-height:1.65;
+    display:flex; gap:10px; align-items:flex-start; font-family:'JetBrains Mono',monospace;
+  }
+  .install-hint .x{ margin-left:auto; background:none; border:none; color:var(--ink-faint); cursor:pointer; font-size:13px; flex-shrink:0; }
+
+  .count-footer{ position:fixed; bottom:0; left:0; right:0; text-align:center; padding:12px 0 calc(12px + env(safe-area-inset-bottom));
+    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint);
+    background:linear-gradient(to top, var(--bg) 55%, transparent); pointer-events:none; z-index:10; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef, useMemo } = React;
+
+// Standalone storage: uses the browser's own localStorage, so this works
+// once hosted on a real URL — no Claude account or server needed.
+const storage = {
+  get: async (key) => {
+    const v = localStorage.getItem(key);
+    return v === null ? null : { value: v };
+  },
+  set: async (key, value) => {
+    localStorage.setItem(key, value);
+    return { value };
+  }
+};
+
+function domainFrom(url){
+  try{
+    const u = new URL(url.match(/^https?:\/\//) ? url : 'https://' + url);
+    return u.hostname.replace(/^www\./,'');
+  }catch(e){ return url.slice(0,30); }
+}
+function normalizeUrl(raw){
+  let v = raw.trim();
+  if(!v) return null;
+  if(!/^https?:\/\//i.test(v)) v = 'https://' + v;
+  try{ new URL(v); return v; }catch(e){ return null; }
+}
+function timeAgo(ts){
+  const s = Math.floor((Date.now()-ts)/1000);
+  if(s<60) return 'JUST NOW';
+  const m = Math.floor(s/60); if(m<60) return m+'M AGO';
+  const h = Math.floor(m/60); if(h<24) return h+'H AGO';
+  const d = Math.floor(h/24); if(d<30) return d+'D AGO';
+  const mo = Math.floor(d/30); if(mo<12) return mo+'MO AGO';
+  return Math.floor(mo/12)+'Y AGO';
+}
+function pad(n){ return String(n).padStart(3,'0'); }
+
+const Mark = () => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 4 L12 12 L4 20" stroke="var(--accent)" strokeWidth="2"/>
+    <path d="M20 4 L12 12 L20 20" stroke="var(--steel)" strokeWidth="2"/>
+  </svg>
+);
+
+function App(){
+  const [links, setLinks] = useState(null);
+  const [folders, setFolders] = useState([]);
+  const [counter, setCounter] = useState(0);
+  const [inputVal, setInputVal] = useState('');
+  const [nameVal, setNameVal] = useState('');
+  const [selectedFolder, setSelectedFolder] = useState('');
+  const [query, setQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [folderFilter, setFolderFilter] = useState('all');
+  const [showHint, setShowHint] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    (async () => {
+      try{
+        const res = await storage.get('catch:links', false);
+        setLinks(res && res.value ? JSON.parse(res.value) : []);
+      }catch(e){ setLinks([]); }
+      try{
+        const f = await storage.get('catch:folders', false);
+        setFolders(f && f.value ? JSON.parse(f.value) : []);
+      }catch(e){ setFolders([]); }
+      try{
+        const c = await storage.get('catch:counter', false);
+        setCounter(c && c.value ? parseInt(c.value,10) : 0);
+      }catch(e){ setCounter(0); }
+      try{
+        const hintRes = await storage.get('catch:hint-dismissed', false);
+        if(hintRes && hintRes.value === 'true') setShowHint(false);
+      }catch(e){}
+    })();
+  }, []);
+
+  useEffect(() => {
+    if(links === null) return;
+    try{
+      const params = new URLSearchParams(window.location.search);
+      const incoming = params.get('url');
+      if(incoming){
+        addLink(incoming, params.get('title') || '', '');
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    }catch(e){}
+    // eslint-disable-next-line
+  }, [links === null]);
+
+  async function persist(next){ setLinks(next); try{ await storage.set('catch:links', JSON.stringify(next), false); }catch(e){} }
+  async function persistFolders(next){ setFolders(next); try{ await storage.set('catch:folders', JSON.stringify(next), false); }catch(e){} }
+  async function persistCounter(next){ setCounter(next); try{ await storage.set('catch:counter', String(next), false); }catch(e){} }
+
+  async function createFolder(){
+    const name = window.prompt('Name this folder (e.g. AI, Recipes, Gifts):');
+    if(!name || !name.trim()) return null;
+    const folder = { id:'f_'+Date.now()+'_'+Math.random().toString(36).slice(2,5), name:name.trim() };
+    await persistFolders([...folders, folder]);
+    return folder.id;
+  }
+
+  async function handleFolderSelectChange(e){
+    if(e.target.value === '__new__'){
+      const id = await createFolder();
+      setSelectedFolder(id || '');
+    } else {
+      setSelectedFolder(e.target.value);
+    }
+  }
+
+  async function handleFolderChipNew(){
+    const id = await createFolder();
+    if(id) setFolderFilter(id);
+  }
+
+  async function addLink(raw, name, folderId){
+    const url = normalizeUrl(raw);
+    if(!url) return false;
+    const nextCounter = counter + 1;
+    const entry = { id:'l_'+Date.now()+'_'+Math.random().toString(36).slice(2,7), url, sessionNo: nextCounter,
+      name: (name||'').trim(), folderId: folderId || null,
+      domain: domainFrom(url), addedAt: Date.now(), read: false };
+    await persistCounter(nextCounter);
+    await persist([entry, ...(links || [])]);
+    return true;
+  }
+
+  async function handleSaveClick(){
+    if(!inputVal.trim()) return;
+    setSaving(true);
+    const ok = await addLink(inputVal, nameVal, selectedFolder);
+    setSaving(false);
+    if(ok){ setInputVal(''); setNameVal(''); setSelectedFolder(''); inputRef.current && inputRef.current.blur(); }
+  }
+  async function toggleRead(id){ await persist(links.map(l => l.id===id ? {...l, read: !l.read} : l)); }
+  async function removeLink(id){ await persist(links.filter(l => l.id!==id)); }
+  async function dismissHint(){ setShowHint(false); try{ await storage.set('catch:hint-dismissed','true',false);}catch(e){} }
+
+  const folderById = useMemo(() => {
+    const m = {}; folders.forEach(f => m[f.id]=f); return m;
+  }, [folders]);
+
+  const visible = useMemo(() => {
+    if(!links) return [];
+    let list = links;
+    if(statusFilter==='unread') list = list.filter(l=>!l.read);
+    if(statusFilter==='read') list = list.filter(l=>l.read);
+    if(folderFilter!=='all') list = list.filter(l=>l.folderId===folderFilter);
+    if(query.trim()){
+      const q = query.trim().toLowerCase();
+      list = list.filter(l =>
+        (l.name||'').toLowerCase().includes(q) ||
+        l.domain.toLowerCase().includes(q) ||
+        l.url.toLowerCase().includes(q) ||
+        (folderById[l.folderId]?.name || '').toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }, [links, statusFilter, folderFilter, query, folderById]);
+
+  const unreadCount = links ? links.filter(l=>!l.read).length : 0;
+
+  return (
+    <div id="root">
+      <header>
+        <div className="wordmark"><Mark /><span>Session Log</span></div>
+        <h1>Catch</h1>
+        <div className="sub">Paste it, find it later. Nothing else.</div>
+      </header>
+
+      {showHint && (
+        <div className="install-hint">
+          <span>NOTE —</span>
+          <span>On iPhone: Share → Add to Home Screen, so this opens full-screen like an app.</span>
+          <button className="x" onClick={dismissHint}>✕</button>
+        </div>
+      )}
+
+      <div className="save-block">
+        <div className="save-row">
+          <input ref={inputRef} type="text" inputMode="url" placeholder="paste a link…" value={inputVal}
+            onChange={e=>setInputVal(e.target.value)} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
+          <button className="save-btn" onClick={handleSaveClick} disabled={!inputVal.trim() || saving}>
+            {saving ? '···' : 'Catch'}
+          </button>
+        </div>
+        <div className="detail-row">
+          <input type="text" placeholder="name it (optional)…" value={nameVal}
+            onChange={e=>setNameVal(e.target.value)} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
+          <select value={selectedFolder} onChange={handleFolderSelectChange}>
+            <option value="">No folder</option>
+            {folders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+            <option value="__new__">+ New folder…</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="search-row">
+        <span className="lbl">Find</span>
+        <input type="text" placeholder="search the archive…" value={query} onChange={e=>setQuery(e.target.value)} />
+      </div>
+
+      <div className="filters">
+        {['all','unread','read'].map(f => (
+          <button key={f} className={"filter-chip" + (statusFilter===f ? " active" : "")} onClick={()=>setStatusFilter(f)}>
+            {f}{f==='unread' && unreadCount>0 ? ` · ${unreadCount}` : ''}
+          </button>
+        ))}
+      </div>
+      <div className="filters folders">
+        <button className={"filter-chip" + (folderFilter==='all' ? " active" : "")} onClick={()=>setFolderFilter('all')}>all folders</button>
+        {folders.map(f => (
+          <button key={f.id} className={"filter-chip" + (folderFilter===f.id ? " active" : "")} onClick={()=>setFolderFilter(f.id)}>
+            {f.name}
+          </button>
+        ))}
+        <button className="filter-chip ghost" onClick={handleFolderChipNew}>+ new</button>
+      </div>
+
+      <div className="list">
+        {links === null && <div className="empty"><p>loading the archive…</p></div>}
+        {links !== null && visible.length === 0 && links.length === 0 && (
+          <div className="empty">
+            <div className="stamp">— archive empty —</div>
+            <p>Nothing caught yet. Paste a link above and it becomes Session 001.</p>
+          </div>
+        )}
+        {links !== null && visible.length === 0 && links.length > 0 && (
+          <div className="empty"><p>nothing matches that.</p></div>
+        )}
+        {visible.map(l => {
+          const folder = l.folderId ? folderById[l.folderId] : null;
+          return (
+            <div className={"entry" + (l.read ? " read" : "")} key={l.id}>
+              <div className="entry-num">
+                <span className="n">{pad(l.sessionNo)}</span>
+                <span className="tag">{l.read ? 'CLOSED' : 'OPEN'}</span>
+              </div>
+              <div className="entry-body">
+                <div className="entry-title">
+                  <a href={l.url} target="_blank" rel="noopener noreferrer">
+                    {l.name ? l.name : l.url.replace(/^https?:\/\//,'')}
+                  </a>
+                </div>
+                {l.name && <div className="entry-url">{l.url.replace(/^https?:\/\//,'')}</div>}
+                <div className="entry-meta">
+                  <span className="domain">{l.domain}</span><span>·</span><span>{timeAgo(l.addedAt)}</span>
+                  {folder && <span className="folder-pill">{folder.name}</span>}
+                </div>
+              </div>
+              <div className="entry-actions">
+                <button className={"icon-btn" + (l.read ? " on" : "")} title={l.read ? "Reopen" : "Close"} onClick={()=>toggleRead(l.id)}>
+                  {l.read ? '⟲' : '✓'}
+                </button>
+                <button className="icon-btn danger" title="Delete" onClick={()=>removeLink(l.id)}>✕</button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {links !== null && links.length > 0 && (
+        <div className="count-footer">{links.length} caught · {unreadCount} open</div>
+      )}
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
