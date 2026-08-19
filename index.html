@@ -8,51 +8,54 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,650;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* three-tone leather palette, 60-30-10 */
-    --sand: #D8C7A8;
-    --chestnut: #6E4028;
-    --coffee: #3C2417;
-
-    --bg: var(--sand);                                              /* 60% — dominant */
-    --bg-raised: color-mix(in srgb, var(--sand) 88%, var(--coffee) 12%);
-    --card: var(--bg-raised);
-    --ink: var(--coffee);                                           /* 30% — text */
-    --ink-dim: color-mix(in srgb, var(--coffee) 72%, var(--sand) 28%);
-    --ink-faint: color-mix(in srgb, var(--coffee) 42%, var(--sand) 58%);
-    --accent: var(--chestnut);                                      /* 10% — pop, used sparingly */
-    --accent-hover: color-mix(in srgb, var(--chestnut) 82%, var(--sand) 18%);
-    --accent-ink: var(--sand);
-    --steel: var(--chestnut);
-    --line: color-mix(in srgb, var(--coffee) 25%, var(--sand) 75%);
-    --glow: color-mix(in srgb, var(--chestnut) 15%, transparent);
-    --grain-opacity: 0.03;
+    --outline: #14100a;
+    --bg: #1C1A17; --ink: #A69981; --accent: #8C2020; --title-color: #C1272D;
+    --spine-a: #BFB493; --spine-b: #393D3C;
+    --paper: #EFE6D3; --paper-ink: #2a2015;
+    --bg-raised: color-mix(in srgb, var(--bg) 85%, white 15%);
+    --ink-dim: color-mix(in srgb, var(--ink) 78%, var(--bg) 22%);
+    --ink-faint: color-mix(in srgb, var(--ink) 48%, var(--bg) 52%);
+    --line: color-mix(in srgb, var(--ink) 22%, var(--bg) 78%);
+    --shelf-wood: color-mix(in srgb, var(--bg) 55%, black 45%);
+    --danger: #a14545;
   }
-  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html,body{ margin:0; padding:0; background:var(--bg); color:var(--ink);
-    font-family:'Fraunces',serif; height:100%; overscroll-behavior-y:none; position:relative; }
+  body[data-theme="sage"]{
+    --bg: #16231F; --ink: #748C76; --accent: #B09C70; --title-color: #B09C70;
+    --spine-a: #B1BFA3; --spine-b: #59523E;
+    --paper: #E9EFE2; --paper-ink: #23291f;
+  }
 
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:'Fraunces',serif;
+    height:100%; overscroll-behavior-y:none; position:relative; transition:background 0.2s,color 0.2s; }
   body::before{
-    content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:var(--grain-opacity);
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:0.045;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     mix-blend-mode:overlay;
   }
   body::after{
     content:''; position:fixed; inset:0; pointer-events:none; z-index:9998;
-    background:radial-gradient(ellipse at 50% 0%, transparent 40%, rgba(0,0,0,0.24) 130%);
+    background:radial-gradient(ellipse at 50% 0%, transparent 40%, rgba(0,0,0,0.35) 130%);
   }
 
-  #root{ min-height:100vh; display:flex; flex-direction:column; max-width:640px; margin:0 auto;
+  #root{ min-height:100vh; display:flex; flex-direction:column; max-width:720px; margin:0 auto;
     padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0; position:relative; }
 
-  header{ padding:32px 20px 14px; border-bottom:1px solid var(--line); }
+  header{ padding:32px 20px 14px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
   .wordmark{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
   .wordmark svg{ width:18px; height:18px; flex-shrink:0; }
   .wordmark span{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.24em;
     text-transform:uppercase; color:var(--ink-faint); }
   h1{ font-family:'Anton',sans-serif; font-weight:400; font-size:38px; letter-spacing:0.01em;
-    margin:0; line-height:0.95; text-transform:uppercase; color:var(--ink); }
-  .sub{ color:var(--ink-dim); font-size:15px; margin-top:8px; font-style:italic; font-weight:400;
-    font-family:'Fraunces',serif; }
+    margin:0; line-height:0.95; text-transform:uppercase; color:var(--title-color); }
+  .sub{ color:var(--ink-dim); font-size:15px; margin-top:8px; font-style:italic; font-weight:400; font-family:'Fraunces',serif; }
+  .header-actions{ display:flex; flex-direction:column; gap:6px; align-items:flex-end; flex-shrink:0; padding-top:2px; }
+  .theme-switch{ display:flex; border:1px solid var(--line); border-radius:2px; overflow:hidden; }
+  .theme-switch button{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase;
+    padding:6px 9px; border:none; background:transparent; color:var(--ink-faint); cursor:pointer; }
+  .theme-switch button.active{ background:var(--accent); color:var(--paper); }
+  .privacy-link{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--ink-faint); background:none; border:none; cursor:pointer; padding:0; text-decoration:underline; text-underline-offset:2px; }
 
   .save-block{ padding:20px 20px 8px; display:flex; flex-direction:column; gap:8px; }
   .save-row{ display:flex; gap:8px; }
@@ -63,10 +66,9 @@
   .save-row input[type=text]:focus{ border-color:var(--accent); }
   .save-row input[type=text]::placeholder{ color:var(--ink-faint); }
   .save-btn{
-    background:var(--accent); color:var(--accent-ink); border:none; border-radius:3px; padding:0 22px;
+    background:var(--accent); color:var(--paper); border:none; border-radius:3px; padding:0 22px;
     font-family:'Anton',sans-serif; font-size:13px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; white-space:nowrap;
   }
-  .save-btn:hover{ background:var(--accent-hover); }
   .save-btn:active{ transform:scale(0.97); }
   .save-btn:disabled{ opacity:0.35; }
 
@@ -82,7 +84,7 @@
     padding:9px 8px; color:var(--ink-dim); font-family:'JetBrains Mono',monospace; font-size:11.5px; outline:none;
   }
 
-  .search-row{ padding:14px 20px 10px; display:flex; align-items:center; gap:8px; }
+  .search-row{ padding:14px 20px 6px; display:flex; align-items:center; gap:8px; }
   .search-row .lbl{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.18em; color:var(--ink-faint); text-transform:uppercase; }
   .search-row input{
     flex:1; background:transparent; border:none; border-bottom:1px solid var(--line);
@@ -91,61 +93,111 @@
   .search-row input:focus{ border-color:var(--accent); color:var(--ink); }
   .search-row input::placeholder{ color:var(--ink-faint); }
 
-  .filters{ padding:4px 20px 8px; display:flex; gap:6px; flex-wrap:wrap; }
-  .filters.folders{ padding-bottom:16px; }
+  .row-label{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.18em; color:var(--ink-faint);
+    text-transform:uppercase; margin:14px 20px 8px; }
+  .chips{ padding:0 20px; display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
   .filter-chip{
-    font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.1em;
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.08em;
     padding:6px 11px; border-radius:2px; border:1px solid var(--line); color:var(--ink-faint);
     background:transparent; cursor:pointer;
   }
-  .filter-chip.active{ border-color:var(--accent); color:var(--accent); background:var(--glow); }
+  .filter-chip.active{ border-color:var(--accent); color:var(--accent); background:color-mix(in srgb, var(--accent) 16%, transparent); }
   .filter-chip.ghost{ border-style:dashed; }
 
-  .list{ flex:1; padding:4px 20px 110px; display:flex; flex-direction:column; gap:2px; }
+  /* folder catalog cards */
+  .catalog{ display:flex; gap:14px; overflow-x:auto; padding:10px 20px 18px; }
+  .catalog-card{ flex:0 0 auto; width:90px; background:var(--paper); padding:15px 9px 9px; position:relative; cursor:pointer;
+    border:2px solid transparent;
+    clip-path: polygon(3% 1%, 78% 0, 88% 13%, 100% 15%, 99% 97%, 2% 100%, 0 5%); }
+  .catalog-card.active{ border-color:var(--accent); }
+  .catalog-card .tab{ position:absolute; top:-9px; left:9px; width:28px; height:10px; }
+  .catalog-card .fname{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.03em; color:var(--paper-ink); text-transform:uppercase; }
+  .catalog-card .fcount{ font-family:'JetBrains Mono',monospace; font-size:8px; color:color-mix(in srgb, var(--paper-ink) 55%, transparent); margin-top:3px; }
 
-  .empty{ margin-top:60px; text-align:center; color:var(--ink-faint); padding:0 30px; }
-  .empty .stamp{ font-family:'Anton',sans-serif; font-size:15px; letter-spacing:0.1em; color:var(--ink-dim);
+  .shelves{ flex:1; padding:4px 20px 130px; }
+
+  .empty-archive{ margin-top:60px; text-align:center; color:var(--ink-faint); padding:0 30px; }
+  .empty-archive .stamp{ font-family:'Anton',sans-serif; font-size:15px; letter-spacing:0.1em; color:var(--ink-dim);
     text-transform:uppercase; margin-bottom:10px; }
-  .empty p{ font-size:14.5px; line-height:1.6; margin:4px 0; font-style:italic; }
+  .empty-archive p{ font-size:14.5px; line-height:1.6; margin:4px 0; font-style:italic; }
 
-  .entry{
-    display:flex; gap:14px; padding:16px 4px; border-bottom:1px solid var(--line);
-    animation: rise 0.3s ease;
+  .shelf-block{ margin-top:32px; }
+  .shelf-plaque{ display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); padding:5px 12px;
+    margin-bottom:14px; background:var(--bg-raised); }
+  .shelf-plaque .dot{ width:5px; height:5px; background:var(--accent); flex-shrink:0; border-radius:50%; }
+  .shelf-plaque span{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.16em; color:var(--ink-dim); text-transform:uppercase; }
+
+  .shelf{ display:flex; align-items:flex-end; gap:5px; padding:20px 4px 14px; position:relative; flex-wrap:wrap; row-gap:22px; }
+  .plank{ position:absolute; left:0; right:0; bottom:0; height:14px; background:var(--shelf-wood);
+    background-image:repeating-linear-gradient(90deg, transparent, transparent 7px, color-mix(in srgb, var(--shelf-wood) 70%, black 30%) 8px);
+    clip-path: polygon(0% 15%, 2% 0%, 98% 8%, 100% 20%, 100% 100%, 0% 100%);
+    box-shadow:0 0 0 1px var(--outline); }
+
+  .book{ position:relative; border:1px solid var(--outline); transform-origin:bottom center; isolation:isolate; cursor:pointer;
+    clip-path: polygon(0% 1%, 8% 0%, 22% 0.5%, 40% 0%, 58% 0.5%, 76% 0%, 92% 0.5%, 100% 1%,
+      100% 20%, 99.5% 40%, 100% 60%, 99.5% 80%, 100% 99%,
+      92% 100%, 76% 99.5%, 58% 100%, 40% 99.5%, 22% 100%, 8% 99.5%, 0% 99%,
+      0.5% 80%, 0% 60%, 0.5% 40%, 0% 20%); }
+  .book::before{ content:''; position:absolute; inset:0; background:var(--title-color); opacity:0.5;
+    mix-blend-mode:multiply; transform:translate(2.5px,-2px); z-index:0; }
+  .book:nth-child(4n+1){ transform:rotate(-1.1deg); }
+  .book:nth-child(4n+2){ transform:rotate(0.6deg); }
+  .book:nth-child(4n+3){ transform:rotate(-0.4deg); }
+  .book:nth-child(4n+4){ transform:rotate(1deg); }
+  .book.selected{ outline:2px solid var(--title-color); outline-offset:2px; }
+
+  .book .label{ position:absolute; top:36%; left:-6px; right:-6px; background:var(--paper); padding:5px 6px; text-align:center; z-index:2;
+    clip-path: polygon(0% 1.5%, 25% 0%, 75% 0.5%, 100% 1.5%, 99.3% 50%, 100% 98.5%, 70% 100%, 30% 99.5%, 0% 100%, 0.7% 50%); }
+  .book .label::before{ content:''; position:absolute; inset:0; background:var(--spine-b); opacity:0.4; mix-blend-mode:multiply; transform:translate(1.5px,-1.5px); }
+  .book .label .num{ font-family:'JetBrains Mono',monospace; font-size:8.5px; color:var(--accent); letter-spacing:0.08em; display:block; position:relative; z-index:1; }
+  .book .label .title{ font-family:'Fraunces',serif; font-weight:650; font-size:9.5px; color:var(--paper-ink); line-height:1.15; display:block; margin-top:2px; position:relative; z-index:1; }
+  .book.closed{ filter:brightness(0.7) saturate(0.65); }
+  .book .ribbon{ position:absolute; top:-15px; left:50%; width:9px; height:21px; margin-left:-4.5px; z-index:3;
+    clip-path: polygon(0% 0%, 38% 0%, 50% 13%, 62% 0%, 100% 0%, 100% 100%, 0% 100%); }
+
+  .empty-shelf{ position:relative; padding:30px 4px 18px; }
+  .cobweb{ position:absolute; bottom:10px; opacity:0.4; z-index:1; }
+  .cobweb-left{ left:0px; transform:rotate(-4deg); }
+  .cobweb-right{ right:0px; transform:scaleX(-1) rotate(-6deg); }
+  .dust{ position:absolute; inset:0; opacity:0.55; pointer-events:none;
+    background-image:
+      radial-gradient(circle at 18% 40%, var(--ink-faint) 1.5px, transparent 1.6px),
+      radial-gradient(circle at 34% 65%, var(--ink-faint) 1px, transparent 1.1px),
+      radial-gradient(circle at 52% 30%, var(--ink-faint) 1.8px, transparent 1.9px),
+      radial-gradient(circle at 68% 55%, var(--ink-faint) 1px, transparent 1.1px),
+      radial-gradient(circle at 81% 42%, var(--ink-faint) 1.4px, transparent 1.5px),
+      radial-gradient(circle at 25% 20%, var(--ink-faint) 1px, transparent 1.1px),
+      radial-gradient(circle at 91% 25%, var(--ink-faint) 1.3px, transparent 1.4px);
   }
-  @keyframes rise{ from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:translateY(0);} }
+  .empty-shelf .msg{ font-family:'Fraunces',serif; font-style:italic; font-size:13px; color:var(--ink-faint);
+    text-align:center; padding-bottom:22px; position:relative; z-index:1; }
 
-  .entry-num{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--steel);
-    padding-top:2px; flex-shrink:0; min-width:44px; letter-spacing:0.03em; }
-  .entry-num .n{ display:block; }
-  .entry-num .tag{ display:block; font-size:9px; color:var(--ink-faint); margin-top:2px; letter-spacing:0.12em; }
-
-  .entry-body{ flex:1; min-width:0; transition:opacity 0.4s ease; }
-  .entry.read .entry-body{ opacity:0.42; }
-  .entry.read .entry-num{ opacity:0.42; }
-
-  .entry-title{ font-family:'Fraunces',serif; font-weight:650; font-size:17px; line-height:1.4;
-    word-break:break-word; margin-bottom:4px; }
-  .entry-title a{ color:var(--ink); text-decoration:none; }
-  .entry-title a:hover{ color:var(--accent); }
-  .entry.read .entry-title a{ text-decoration:line-through; text-decoration-color:var(--ink-faint); }
-  .entry-url{ font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-faint); margin-bottom:5px;
-    word-break:break-all; }
-
-  .entry-meta{ font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-faint);
-    display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-  .entry-meta .domain{ color:var(--accent); }
-  .folder-pill{ border:1px solid var(--steel); color:var(--steel); border-radius:20px; padding:1px 8px; font-size:9.5px;
-    letter-spacing:0.06em; text-transform:uppercase; }
-
-  .entry-actions{ display:flex; flex-direction:column; gap:8px; flex-shrink:0; align-items:center; padding-top:2px; }
-  .icon-btn{
-    background:transparent; border:1px solid var(--line); color:var(--ink-faint); cursor:pointer;
-    width:26px; height:26px; border-radius:2px; font-size:12px; line-height:1;
-    display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace;
+  /* detail panel for a selected book */
+  .detail-panel{ background:var(--bg-raised); border:1px solid var(--line); border-left:2px solid var(--accent);
+    padding:16px 16px 14px; margin:-6px 0 26px; }
+  .detail-panel .dp-num{ font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--accent); letter-spacing:0.1em; margin-bottom:6px; }
+  .detail-panel .dp-title{ font-family:'Fraunces',serif; font-weight:650; font-size:16px; margin-bottom:4px; }
+  .detail-panel .dp-title a{ color:var(--ink); text-decoration:none; }
+  .detail-panel .dp-title a:hover{ color:var(--accent); }
+  .detail-panel .dp-url{ font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-faint); margin-bottom:10px; word-break:break-all; }
+  .dp-edit-row{ display:flex; gap:6px; margin-bottom:8px; }
+  .dp-edit-row input[type=text]{
+    flex:1.3; background:var(--bg); border:1px solid var(--accent); border-radius:3px;
+    padding:8px 9px; color:var(--ink); font-family:'Fraunces',serif; font-style:italic; font-size:13.5px; outline:none;
   }
-  .icon-btn:hover{ color:var(--ink); border-color:var(--ink-dim); }
-  .icon-btn.on{ color:var(--accent); border-color:var(--accent); }
-  .icon-btn.danger:hover{ color:var(--accent); border-color:var(--accent); }
+  .dp-edit-row select{
+    flex:1; background:var(--bg); border:1px solid var(--accent); border-radius:3px;
+    padding:8px 6px; color:var(--ink); font-family:'JetBrains Mono',monospace; font-size:11.5px; outline:none;
+  }
+  .dp-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+  .dp-actions button{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em;
+    padding:7px 13px; border-radius:2px; cursor:pointer;
+  }
+  .dp-save{ background:var(--accent); color:var(--paper); border:none; }
+  .dp-ghost{ background:transparent; color:var(--ink-dim); border:1px solid var(--line); }
+  .dp-ghost:hover{ color:var(--ink); border-color:var(--ink-dim); }
+  .dp-danger{ background:transparent; color:var(--danger); border:1px solid var(--danger); }
 
   .install-hint{
     margin:16px 20px 0; padding:13px 14px; background:var(--bg-raised); border:1px solid var(--line);
@@ -156,13 +208,26 @@
 
   .sync-banner{
     margin:16px 20px 0; padding:10px 14px; background:var(--bg-raised); border:1px solid var(--line);
-    border-left:2px solid #a14545; font-size:11.5px; color:var(--ink-dim); line-height:1.6;
+    border-left:2px solid var(--danger); font-size:11.5px; color:var(--ink-dim); line-height:1.6;
     font-family:'JetBrains Mono',monospace;
   }
 
   .count-footer{ position:fixed; bottom:0; left:0; right:0; text-align:center; padding:12px 0 calc(12px + env(safe-area-inset-bottom));
     font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint);
     background:linear-gradient(to top, var(--bg) 55%, transparent); pointer-events:none; z-index:10; }
+
+  /* privacy modal */
+  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:20000; display:flex; align-items:flex-end;
+    justify-content:center; }
+  @media (min-width:640px){ .modal-overlay{ align-items:center; } }
+  .modal{ background:var(--bg); border:1px solid var(--line); border-top:2px solid var(--accent); max-width:560px; width:100%;
+    max-height:82vh; overflow-y:auto; padding:22px 22px 20px; border-radius:4px 4px 0 0; }
+  @media (min-width:640px){ .modal{ border-radius:4px; border-top:1px solid var(--line); border-left:2px solid var(--accent); } }
+  .modal h2{ font-family:'Anton',sans-serif; font-size:20px; text-transform:uppercase; color:var(--title-color); margin:0 0 14px; letter-spacing:0.02em; }
+  .modal p{ font-size:14px; line-height:1.7; color:var(--ink-dim); margin:0 0 12px; font-family:'Fraunces',serif; }
+  .modal h3{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); margin:18px 0 8px; }
+  .modal-close{ margin-top:16px; background:var(--accent); color:var(--paper); border:none; border-radius:3px; padding:9px 18px;
+    font-family:'Anton',sans-serif; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; }
 </style>
 </head>
 <body>
@@ -173,15 +238,11 @@
 <script type="text/babel" data-presets="react">
 const { useState, useEffect, useRef, useMemo } = React;
 
-// ── Supabase-backed storage ──────────────────────────────────────────────
-// The publishable key below is meant to be public — it's not a secret.
-// It lets every device/browser read & write the same shared data, which is
-// what fixes the Brave-vs-Safari split storage problem. There's no login;
-// anyone with this exact URL+key combo could technically read/write this
-// data, which is an accepted tradeoff for a personal link stash (see
-// project handoff notes).
 const SUPABASE_URL = 'https://xgeqkpitsoziywgzautn.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_xMKJ_dj27JkM6XGFJH_8bA_7hM4vyJj';
+const SHELF_SIZE = 9;
+const RIBBON_SLOTS = ['--accent', '--spine-a', '--spine-b', '--title-color'];
+const PRIVACY_TEXT_VERSION = '1';
 
 async function sb(path, options = {}) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
@@ -202,16 +263,13 @@ async function sb(path, options = {}) {
   return text ? JSON.parse(text) : null;
 }
 
-// row <-> app-object mapping (db uses snake_case, app uses camelCase)
 function rowToLink(r){ return { id:r.id, url:r.url, sessionNo:r.session_no, name:r.name||'', folderId:r.folder_id, domain:r.domain, addedAt:r.added_at, read:!!r.read }; }
 function linkToRow(l){ return { id:l.id, url:l.url, session_no:l.sessionNo, name:l.name||'', folder_id:l.folderId||null, domain:l.domain, added_at:l.addedAt, read:!!l.read }; }
-function rowToFolder(r){ return { id:r.id, name:r.name }; }
+function rowToFolder(r){ return { id:r.id, name:r.name, colorIdx: r.color_idx || 0 }; }
 
 function domainFrom(url){
-  try{
-    const u = new URL(url.match(/^https?:\/\//) ? url : 'https://' + url);
-    return u.hostname.replace(/^www\./,'');
-  }catch(e){ return url.slice(0,30); }
+  try{ const u = new URL(url.match(/^https?:\/\//) ? url : 'https://' + url); return u.hostname.replace(/^www\./,''); }
+  catch(e){ return url.slice(0,30); }
 }
 function normalizeUrl(raw){
   let v = raw.trim();
@@ -219,23 +277,69 @@ function normalizeUrl(raw){
   if(!/^https?:\/\//i.test(v)) v = 'https://' + v;
   try{ new URL(v); return v; }catch(e){ return null; }
 }
-function timeAgo(ts){
-  const s = Math.floor((Date.now()-ts)/1000);
-  if(s<60) return 'JUST NOW';
-  const m = Math.floor(s/60); if(m<60) return m+'M AGO';
-  const h = Math.floor(m/60); if(h<24) return h+'H AGO';
-  const d = Math.floor(h/24); if(d<30) return d+'D AGO';
-  const mo = Math.floor(d/30); if(mo<12) return mo+'MO AGO';
-  return Math.floor(mo/12)+'Y AGO';
-}
 function pad(n){ return String(n).padStart(3,'0'); }
+function displayTitle(l){ return l.name ? l.name : l.url.replace(/^https?:\/\//,''); }
+
+// deterministic pseudo-random book size from the link id, so spines don't
+// reshuffle their width/height on every re-render
+function hashStr(s){ let h=0; for(let i=0;i<s.length;i++){ h = (h*31 + s.charCodeAt(i)) >>> 0; } return h; }
+function bookDims(id){
+  const h = hashStr(id);
+  const width = 34 + (h % 21);              // 34–54
+  const height = 130 + ((h >> 5) % 61);      // 130–190
+  return { width, height };
+}
+
+function chunk(arr, size){
+  const out = [];
+  for(let i=0;i<arr.length;i+=size) out.push(arr.slice(i, i+size));
+  return out;
+}
 
 const Mark = () => (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M4 4 L12 12 L4 20" stroke="var(--accent)" strokeWidth="2"/>
-    <path d="M20 4 L12 12 L20 20" stroke="var(--steel)" strokeWidth="2"/>
+    <path d="M20 4 L12 12 L20 20" stroke="var(--spine-a)" strokeWidth="2"/>
   </svg>
 );
+
+const Cobwebs = () => (
+  <React.Fragment>
+    <svg className="cobweb cobweb-left" viewBox="0 0 40 40" width="34" height="34">
+      <g fill="none" stroke="var(--ink-faint)" strokeWidth="0.9">
+        <line x1="0" y1="40" x2="0" y2="0"/><line x1="0" y1="40" x2="14" y2="4"/>
+        <line x1="0" y1="40" x2="26" y2="12"/><line x1="0" y1="40" x2="34" y2="24"/>
+        <line x1="0" y1="40" x2="40" y2="40"/>
+        <path d="M0,28 A12,12 0 0 1 12,40"/><path d="M0,15 A25,25 0 0 1 25,40"/>
+      </g>
+    </svg>
+    <svg className="cobweb cobweb-right" viewBox="0 0 40 40" width="20" height="20">
+      <g fill="none" stroke="var(--ink-faint)" strokeWidth="0.9">
+        <line x1="0" y1="40" x2="0" y2="0"/><line x1="0" y1="40" x2="16" y2="7"/>
+        <line x1="0" y1="40" x2="30" y2="20"/><line x1="0" y1="40" x2="40" y2="40"/>
+        <path d="M0,20 A20,20 0 0 1 20,40"/>
+      </g>
+    </svg>
+  </React.Fragment>
+);
+
+function PrivacyModal({ onClose }){
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal" onClick={e=>e.stopPropagation()}>
+        <h2>About your data</h2>
+        <p>Catch stores everything you save — links, names, folders — in a shared cloud database (Supabase). This is what lets the same list show up whether you're in Safari, Brave, or the home-screen icon.</p>
+        <h3>Who can access it</h3>
+        <p>There's no login and no account system. The app connects to the database using a key that's visible in the app's page source to anyone who looks. In practice, this means the security model is "no one else knows this address exists," not "no one else could get in." This is a deliberate tradeoff for a single-person tool, not an oversight.</p>
+        <h3>What's not happening</h3>
+        <p>Nothing is encrypted per-user, nothing is sold, and there are no ads or analytics tracking you across other sites. This app talks only to its own database.</p>
+        <h3>If that changes</h3>
+        <p>If this app is ever shared with other people or shipped more broadly, that would require real per-user accounts and access control first — not just this notice.</p>
+        <button className="modal-close" onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+}
 
 function App(){
   const [links, setLinks] = useState(null);
@@ -247,28 +351,30 @@ function App(){
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [folderFilter, setFolderFilter] = useState('all');
+  const [sortMode, setSortMode] = useState('newest');
   const [showHint, setShowHint] = useState(true);
   const [saving, setSaving] = useState(false);
   const [syncError, setSyncError] = useState(false);
+  const [theme, setTheme] = useState('leather');
+  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [editName, setEditName] = useState('');
+  const [editFolder, setEditFolder] = useState('');
   const inputRef = useRef(null);
 
   useEffect(() => {
+    try{
+      const t = localStorage.getItem('catch:theme');
+      if(t === 'leather' || t === 'sage') setTheme(t);
+    }catch(e){}
     (async () => {
-      try{
-        const rows = await sb('links?select=*&order=session_no.desc');
-        setLinks((rows || []).map(rowToLink));
-      }catch(e){ console.error(e); setLinks([]); setSyncError(true); }
-      try{
-        const rows = await sb('folders?select=*&order=created_at.asc');
-        setFolders((rows || []).map(rowToFolder));
-      }catch(e){ console.error(e); setFolders([]); setSyncError(true); }
-      try{
-        const rows = await sb('meta?select=value&key=eq.counter');
-        setCounter(rows && rows[0] ? parseInt(rows[0].value, 10) : 0);
-      }catch(e){ console.error(e); setCounter(0); }
-      try{
-        if(localStorage.getItem('catch:hint-dismissed') === 'true') setShowHint(false);
-      }catch(e){}
+      try{ const rows = await sb('links?select=*&order=session_no.desc'); setLinks((rows || []).map(rowToLink)); }
+      catch(e){ console.error(e); setLinks([]); setSyncError(true); }
+      try{ const rows = await sb('folders?select=*&order=created_at.asc'); setFolders((rows || []).map(rowToFolder)); }
+      catch(e){ console.error(e); setFolders([]); setSyncError(true); }
+      try{ const rows = await sb('meta?select=value&key=eq.counter'); setCounter(rows && rows[0] ? parseInt(rows[0].value, 10) : 0); }
+      catch(e){ console.error(e); setCounter(0); }
+      try{ if(localStorage.getItem('catch:hint-dismissed') === 'true') setShowHint(false); }catch(e){}
     })();
   }, []);
 
@@ -277,37 +383,28 @@ function App(){
     try{
       const params = new URLSearchParams(window.location.search);
       const incoming = params.get('url');
-      if(incoming){
-        addLink(incoming, params.get('title') || '', '');
-        window.history.replaceState({}, '', window.location.pathname);
-      }
+      if(incoming){ addLink(incoming, params.get('title') || '', ''); window.history.replaceState({}, '', window.location.pathname); }
     }catch(e){}
     // eslint-disable-next-line
   }, [links === null]);
 
+  function setThemeAndPersist(t){ setTheme(t); try{ localStorage.setItem('catch:theme', t); }catch(e){} }
+
   async function createFolder(){
     const name = window.prompt('Name this folder (e.g. AI, Recipes, Gifts):');
     if(!name || !name.trim()) return null;
-    const folder = { id:'f_'+Date.now()+'_'+Math.random().toString(36).slice(2,5), name:name.trim() };
+    const colorIdx = folders.length % RIBBON_SLOTS.length;
+    const folder = { id:'f_'+Date.now()+'_'+Math.random().toString(36).slice(2,5), name:name.trim(), colorIdx };
     try{
-      await sb('folders', { method:'POST', body: JSON.stringify(folder) });
+      await sb('folders', { method:'POST', body: JSON.stringify({ id:folder.id, name:folder.name, color_idx:colorIdx }) });
       setFolders(prev => [...prev, folder]);
       return folder.id;
     }catch(e){ console.error(e); setSyncError(true); return null; }
   }
 
-  async function handleFolderSelectChange(e){
-    if(e.target.value === '__new__'){
-      const id = await createFolder();
-      setSelectedFolder(id || '');
-    } else {
-      setSelectedFolder(e.target.value);
-    }
-  }
-
-  async function handleFolderChipNew(){
-    const id = await createFolder();
-    if(id) setFolderFilter(id);
+  async function handleFolderSelectChange(e, setter){
+    if(e.target.value === '__new__'){ const id = await createFolder(); setter(id || ''); }
+    else{ setter(e.target.value); }
   }
 
   async function addLink(raw, name, folderId){
@@ -315,8 +412,7 @@ function App(){
     if(!url) return false;
     const nextCounter = counter + 1;
     const entry = { id:'l_'+Date.now()+'_'+Math.random().toString(36).slice(2,7), url, sessionNo: nextCounter,
-      name: (name||'').trim(), folderId: folderId || null,
-      domain: domainFrom(url), addedAt: Date.now(), read: false };
+      name: (name||'').trim(), folderId: folderId || null, domain: domainFrom(url), addedAt: Date.now(), read: false };
     try{
       await sb('links', { method:'POST', body: JSON.stringify(linkToRow(entry)) });
       await sb('meta?key=eq.counter', { method:'PATCH', body: JSON.stringify({ value: String(nextCounter) }), prefer:'return=minimal' });
@@ -339,24 +435,33 @@ function App(){
     if(!target) return;
     const nextRead = !target.read;
     setLinks(links.map(l => l.id===id ? {...l, read: nextRead} : l));
-    try{
-      await sb(`links?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ read: nextRead }), prefer:'return=minimal' });
-    }catch(e){ console.error(e); setSyncError(true); }
+    try{ await sb(`links?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ read: nextRead }), prefer:'return=minimal' }); }
+    catch(e){ console.error(e); setSyncError(true); }
   }
 
   async function removeLink(id){
     const prev = links;
     setLinks(links.filter(l => l.id!==id));
-    try{
-      await sb(`links?id=eq.${id}`, { method:'DELETE', prefer:'return=minimal' });
-    }catch(e){ console.error(e); setSyncError(true); setLinks(prev); }
+    if(selectedId === id) setSelectedId(null);
+    try{ await sb(`links?id=eq.${id}`, { method:'DELETE', prefer:'return=minimal' }); }
+    catch(e){ console.error(e); setSyncError(true); setLinks(prev); }
   }
 
   async function dismissHint(){ setShowHint(false); try{ localStorage.setItem('catch:hint-dismissed','true'); }catch(e){} }
 
-  const folderById = useMemo(() => {
-    const m = {}; folders.forEach(f => m[f.id]=f); return m;
-  }, [folders]);
+  function selectBook(l){
+    if(selectedId === l.id){ setSelectedId(null); return; }
+    setSelectedId(l.id); setEditName(l.name || ''); setEditFolder(l.folderId || '');
+  }
+  async function saveEdit(id){
+    const newFolderId = editFolder || null;
+    const newName = editName.trim();
+    setLinks(links.map(l => l.id===id ? {...l, name:newName, folderId:newFolderId} : l));
+    try{ await sb(`links?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ name:newName, folder_id:newFolderId }), prefer:'return=minimal' }); }
+    catch(e){ console.error(e); setSyncError(true); }
+  }
+
+  const folderById = useMemo(() => { const m = {}; folders.forEach(f => m[f.id]=f); return m; }, [folders]);
 
   const visible = useMemo(() => {
     if(!links) return [];
@@ -367,31 +472,51 @@ function App(){
     if(query.trim()){
       const q = query.trim().toLowerCase();
       list = list.filter(l =>
-        (l.name||'').toLowerCase().includes(q) ||
-        l.domain.toLowerCase().includes(q) ||
-        l.url.toLowerCase().includes(q) ||
-        (folderById[l.folderId]?.name || '').toLowerCase().includes(q)
+        (l.name||'').toLowerCase().includes(q) || l.domain.toLowerCase().includes(q) ||
+        l.url.toLowerCase().includes(q) || (folderById[l.folderId]?.name || '').toLowerCase().includes(q)
       );
     }
+    list = [...list];
+    if(sortMode==='alphabetical') list.sort((a,b)=> displayTitle(a).localeCompare(displayTitle(b)));
+    else if(sortMode==='oldest') list.sort((a,b)=> a.addedAt - b.addedAt);
+    else list.sort((a,b)=> b.addedAt - a.addedAt);
     return list;
-  }, [links, statusFilter, folderFilter, query, folderById]);
+  }, [links, statusFilter, folderFilter, query, folderById, sortMode]);
 
+  const shelves = useMemo(() => chunk(visible, SHELF_SIZE), [visible]);
   const unreadCount = links ? links.filter(l=>!l.read).length : 0;
+  const selectedLink = selectedId ? links.find(l=>l.id===selectedId) : null;
+
+  function shelfLabel(shelfLinks, idx){
+    if(sortMode==='alphabetical'){
+      const a = displayTitle(shelfLinks[0])[0]?.toUpperCase() || '?';
+      const b = displayTitle(shelfLinks[shelfLinks.length-1])[0]?.toUpperCase() || '?';
+      return a===b ? a : `${a} – ${b}`;
+    }
+    const nums = shelfLinks.map(l=>l.sessionNo);
+    return `Sessions ${pad(Math.min(...nums))} – ${pad(Math.max(...nums))}`;
+  }
 
   return (
     <div id="root">
       <header>
-        <div className="wordmark"><Mark /><span>Session Log</span></div>
-        <h1>Catch</h1>
-        <div className="sub">Paste it, find it later. Nothing else.</div>
+        <div>
+          <div className="wordmark"><Mark /><span>Session Log</span></div>
+          <h1>Catch</h1>
+          <div className="sub">Paste it, find it later. Nothing else.</div>
+        </div>
+        <div className="header-actions">
+          <div className="theme-switch">
+            <button className={theme==='leather' ? 'active' : ''} onClick={()=>setThemeAndPersist('leather')}>Leather</button>
+            <button className={theme==='sage' ? 'active' : ''} onClick={()=>setThemeAndPersist('sage')}>Sage</button>
+          </div>
+          <button className="privacy-link" onClick={()=>setShowPrivacy(true)}>Privacy</button>
+        </div>
       </header>
 
       {syncError && (
-        <div className="sync-banner">
-          Having trouble syncing right now — check your connection. Anything you save may not appear on your other devices until this clears up.
-        </div>
+        <div className="sync-banner">Having trouble syncing right now — check your connection. Anything you save may not appear on your other devices until this clears up.</div>
       )}
-
       {showHint && (
         <div className="install-hint">
           <span>NOTE —</span>
@@ -411,7 +536,7 @@ function App(){
         <div className="detail-row">
           <input type="text" placeholder="name it (optional)…" value={nameVal}
             onChange={e=>setNameVal(e.target.value)} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
-          <select value={selectedFolder} onChange={handleFolderSelectChange}>
+          <select value={selectedFolder} onChange={e=>handleFolderSelectChange(e, setSelectedFolder)}>
             <option value="">No folder</option>
             {folders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
             <option value="__new__">+ New folder…</option>
@@ -424,68 +549,114 @@ function App(){
         <input type="text" placeholder="search the archive…" value={query} onChange={e=>setQuery(e.target.value)} />
       </div>
 
-      <div className="filters">
+      <div className="row-label">Status</div>
+      <div className="chips">
         {['all','unread','read'].map(f => (
           <button key={f} className={"filter-chip" + (statusFilter===f ? " active" : "")} onClick={()=>setStatusFilter(f)}>
             {f}{f==='unread' && unreadCount>0 ? ` · ${unreadCount}` : ''}
           </button>
         ))}
       </div>
-      <div className="filters folders">
-        <button className={"filter-chip" + (folderFilter==='all' ? " active" : "")} onClick={()=>setFolderFilter('all')}>all folders</button>
-        {folders.map(f => (
-          <button key={f.id} className={"filter-chip" + (folderFilter===f.id ? " active" : "")} onClick={()=>setFolderFilter(f.id)}>
-            {f.name}
-          </button>
+
+      <div className="row-label">Sort</div>
+      <div className="chips">
+        {[['newest','newest'],['oldest','oldest'],['alphabetical','alphabetical']].map(([v,label]) => (
+          <button key={v} className={"filter-chip" + (sortMode===v ? " active" : "")} onClick={()=>setSortMode(v)}>{label}</button>
         ))}
-        <button className="filter-chip ghost" onClick={handleFolderChipNew}>+ new</button>
       </div>
 
-      <div className="list">
-        {links === null && <div className="empty"><p>loading the archive…</p></div>}
+      <div className="row-label">Folders</div>
+      <div className="catalog">
+        <div className={"catalog-card" + (folderFilter==='all' ? " active" : "")} onClick={()=>setFolderFilter('all')}>
+          <div className="tab" style={{background:'var(--ink-faint)'}}></div>
+          <div className="fname">All</div>
+          <div className="fcount">{links ? links.length : 0}</div>
+        </div>
+        {folders.map(f => (
+          <div key={f.id} className={"catalog-card" + (folderFilter===f.id ? " active" : "")} onClick={()=>setFolderFilter(f.id)}>
+            <div className="tab" style={{background:`var(${RIBBON_SLOTS[f.colorIdx % RIBBON_SLOTS.length]})`}}></div>
+            <div className="fname">{f.name}</div>
+            <div className="fcount">{links ? links.filter(l=>l.folderId===f.id).length : 0}</div>
+          </div>
+        ))}
+        <div className="catalog-card" onClick={createFolder} style={{display:'flex', alignItems:'center', justifyContent:'center', minHeight:44}}>
+          <div className="fname" style={{opacity:0.6}}>+ new</div>
+        </div>
+      </div>
+
+      <div className="shelves">
+        {links === null && <div className="empty-archive"><p>loading the archive…</p></div>}
         {links !== null && visible.length === 0 && links.length === 0 && (
-          <div className="empty">
+          <div className="empty-archive">
             <div className="stamp">— archive empty —</div>
             <p>Nothing caught yet. Paste a link above and it becomes Session 001.</p>
           </div>
         )}
         {links !== null && visible.length === 0 && links.length > 0 && (
-          <div className="empty"><p>nothing matches that.</p></div>
-        )}
-        {visible.map(l => {
-          const folder = l.folderId ? folderById[l.folderId] : null;
-          return (
-            <div className={"entry" + (l.read ? " read" : "")} key={l.id}>
-              <div className="entry-num">
-                <span className="n">{pad(l.sessionNo)}</span>
-                <span className="tag">{l.read ? 'CLOSED' : 'OPEN'}</span>
-              </div>
-              <div className="entry-body">
-                <div className="entry-title">
-                  <a href={l.url} target="_blank" rel="noopener noreferrer">
-                    {l.name ? l.name : l.url.replace(/^https?:\/\//,'')}
-                  </a>
-                </div>
-                {l.name && <div className="entry-url">{l.url.replace(/^https?:\/\//,'')}</div>}
-                <div className="entry-meta">
-                  <span className="domain">{l.domain}</span><span>·</span><span>{timeAgo(l.addedAt)}</span>
-                  {folder && <span className="folder-pill">{folder.name}</span>}
-                </div>
-              </div>
-              <div className="entry-actions">
-                <button className={"icon-btn" + (l.read ? " on" : "")} title={l.read ? "Reopen" : "Close"} onClick={()=>toggleRead(l.id)}>
-                  {l.read ? '⟲' : '✓'}
-                </button>
-                <button className="icon-btn danger" title="Delete" onClick={()=>removeLink(l.id)}>✕</button>
-              </div>
+          <div className="shelf-block">
+            <div className="shelf-plaque"><span className="dot"></span><span>No matches</span></div>
+            <div className="empty-shelf">
+              <Cobwebs />
+              <div className="dust"></div>
+              <div className="msg">Nothing caught here yet.</div>
+              <div className="plank"></div>
             </div>
-          );
-        })}
+          </div>
+        )}
+
+        {shelves.map((shelfLinks, idx) => (
+          <div className="shelf-block" key={idx}>
+            <div className="shelf-plaque"><span className="dot"></span><span>{shelfLabel(shelfLinks, idx)}</span></div>
+            <div className="shelf">
+              <div className="plank"></div>
+              {shelfLinks.map(l => {
+                const { width, height } = bookDims(l.id);
+                const folder = l.folderId ? folderById[l.folderId] : null;
+                return (
+                  <div key={l.id}
+                    className={"book" + (l.read ? " closed" : "") + (selectedId===l.id ? " selected" : "")}
+                    style={{ width, height, background:`var(${RIBBON_SLOTS[hashStr(l.id) % 2 === 0 ? 0 : 1]})` }}
+                    onClick={()=>selectBook(l)}>
+                    {folder && <div className="ribbon" style={{background:`var(${RIBBON_SLOTS[folder.colorIdx % RIBBON_SLOTS.length]})`}}></div>}
+                    <div className="label">
+                      <span className="num">{pad(l.sessionNo)}</span>
+                      <span className="title">{displayTitle(l).slice(0,26)}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {shelfLinks.some(l => l.id === selectedId) && selectedLink && (
+              <div className="detail-panel">
+                <div className="dp-num">SESSION {pad(selectedLink.sessionNo)} · {selectedLink.read ? 'CLOSED' : 'OPEN'}</div>
+                <div className="dp-title"><a href={selectedLink.url} target="_blank" rel="noopener noreferrer">{displayTitle(selectedLink)}</a></div>
+                <div className="dp-url">{selectedLink.url.replace(/^https?:\/\//,'')} · {selectedLink.domain}</div>
+                <div className="dp-edit-row">
+                  <input type="text" placeholder="name it…" value={editName} onChange={e=>setEditName(e.target.value)} />
+                  <select value={editFolder} onChange={e=>handleFolderSelectChange(e, setEditFolder)}>
+                    <option value="">No folder</option>
+                    {folders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+                    <option value="__new__">+ New folder…</option>
+                  </select>
+                </div>
+                <div className="dp-actions">
+                  <button className="dp-save" onClick={()=>saveEdit(selectedLink.id)}>Save changes</button>
+                  <button className="dp-ghost" onClick={()=>toggleRead(selectedLink.id)}>{selectedLink.read ? 'Reopen' : 'Mark closed'}</button>
+                  <button className="dp-danger" onClick={()=>removeLink(selectedLink.id)}>Delete</button>
+                  <button className="dp-ghost" onClick={()=>setSelectedId(null)}>Close panel</button>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
 
       {links !== null && links.length > 0 && (
         <div className="count-footer">{links.length} caught · {unreadCount} open</div>
       )}
+
+      {showPrivacy && <PrivacyModal onClose={()=>setShowPrivacy(false)} />}
     </div>
   );
 }
