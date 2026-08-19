@@ -388,6 +388,8 @@ function App(){
     // eslint-disable-next-line
   }, [links === null]);
 
+  useEffect(() => { document.body.setAttribute('data-theme', theme); }, [theme]);
+
   function setThemeAndPersist(t){ setTheme(t); try{ localStorage.setItem('catch:theme', t); }catch(e){} }
 
   async function createFolder(){
