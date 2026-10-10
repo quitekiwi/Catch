@@ -267,6 +267,19 @@
     .detail-row input[type=text], .detail-row select, .dp-edit-row input[type=text], .dp-edit-row select{ min-height:44px; }
     .search-row input{ min-height:44px; }
   }
+  /* phones: the shelf comes first and the paste slot docks at the bottom, in thumb reach.
+     Name + folder only unfold once there's a link to name. */
+  @media (max-width:640px){
+    header{ padding-top:20px; }
+    .save-block{ position:fixed; left:0; right:0; bottom:0; z-index:15; order:99;
+      padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+      background:var(--bg); border-top:1px solid var(--line);
+      box-shadow:0 -10px 24px -8px rgba(0,0,0,0.5); }
+    .save-block .detail-row{ display:none; }
+    .save-block.has-text .detail-row{ display:flex; }
+    .shelves{ padding-bottom:40px; }
+    .count-footer{ position:static; background:none; padding:0 0 calc(110px + env(safe-area-inset-bottom)); }
+  }
 </style>
 </head>
 <body>
@@ -575,7 +588,7 @@ function App(){
         </div>
       )}
 
-      <div className="save-block">
+      <div className={"save-block" + (inputVal.trim() || nameVal ? " has-text" : "")}>
         <div className="save-row">
           <input ref={inputRef} type="text" inputMode="url" aria-label="Link to save" placeholder="paste a link…" value={inputVal}
             onChange={e=>setInputVal(e.target.value)} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
