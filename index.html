@@ -116,6 +116,8 @@
     border:2px solid transparent;
     clip-path: polygon(3% 1%, 78% 0, 88% 13%, 100% 15%, 99% 97%, 2% 100%, 0 5%); }
   .catalog-card.active{ border-color:var(--accent); }
+  button.catalog-card{ font:inherit; text-align:left; appearance:none; -webkit-appearance:none; }
+  .catalog-card:focus-visible{ outline:2px solid var(--accent-text); outline-offset:3px; }
   .catalog-card .tab{ position:absolute; top:-9px; left:9px; width:28px; height:10px; }
   .catalog-card .fname{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.03em; color:var(--paper-ink); text-transform:uppercase; }
   .catalog-card .fcount{ font-family:'JetBrains Mono',monospace; font-size:11px; color:color-mix(in srgb, var(--paper-ink) 72%, var(--paper)); margin-top:3px; }
@@ -150,7 +152,10 @@
   .book:nth-child(4n+2){ transform:rotate(0.6deg); }
   .book:nth-child(4n+3){ transform:rotate(-0.4deg); }
   .book:nth-child(4n+4){ transform:rotate(1deg); }
-  .book.selected{ outline:2px solid var(--title-color); outline-offset:2px; }
+  /* outline would be clipped by the spine's clip-path, so selection pulls the book off the shelf instead */
+  .book{ padding:0; font:inherit; appearance:none; -webkit-appearance:none; transition:transform 0.18s ease-out, filter 0.18s; }
+  .book.selected, .book:focus-visible{ transform:translateY(-12px) rotate(0deg); outline:none; }
+  .book:focus-visible:not(.selected){ transform:translateY(-6px); }
 
   .book .label{ position:absolute; top:36%; left:-6px; right:-6px; background:var(--paper); padding:5px 6px; text-align:center; z-index:2;
     clip-path: polygon(0% 1.5%, 25% 0%, 75% 0.5%, 100% 1.5%, 99.3% 50%, 100% 98.5%, 70% 100%, 30% 99.5%, 0% 100%, 0.7% 50%); }
@@ -180,7 +185,7 @@
 
   /* detail panel for a selected book */
   .detail-panel{ background:var(--bg-raised); border:1px solid var(--line); border-left:2px solid var(--accent);
-    padding:16px 16px 14px; margin:-6px 0 26px; }
+    padding:16px 16px 14px; margin:10px 0 26px; }
   .detail-panel .dp-num{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent-text); letter-spacing:0.1em; margin-bottom:6px; }
   .detail-panel .dp-title{ font-family:'Fraunces',serif; font-weight:650; font-size:16px; margin-bottom:4px; }
   .detail-panel .dp-title a{ color:var(--ink); text-decoration:none; }
@@ -234,6 +239,21 @@
   .modal h3{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); margin:18px 0 8px; }
   .modal-close{ margin-top:16px; background:var(--accent); color:var(--on-accent); border:none; border-radius:3px; padding:9px 18px;
     font-family:'Anton',sans-serif; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; }
+
+  /* browser surfaces carry the palette too */
+  :focus-visible{ outline:2px solid var(--accent-text); outline-offset:2px; }
+  ::selection{ background:color-mix(in srgb, var(--accent) 55%, transparent); color:var(--ink); }
+  input, select{ caret-color:var(--accent-text); }
+
+  .save-error{ font-family:'Fraunces',serif; font-style:italic; font-size:13px; color:var(--danger); }
+  .dp-saved{ font-family:'Fraunces',serif; font-style:italic; font-size:13px; color:var(--ink-dim); align-self:center; }
+  .sync-banner{ display:flex; gap:12px; align-items:center; justify-content:space-between; }
+  .sync-banner button{ font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em;
+    background:transparent; color:var(--ink); border:1px solid var(--line); border-radius:2px; padding:6px 10px; cursor:pointer; flex-shrink:0; }
+  .empty-shelf .clear-btn{ display:block; margin:0 auto 18px; position:relative; z-index:1; font-family:'JetBrains Mono',monospace; font-size:11px;
+    text-transform:uppercase; letter-spacing:0.06em; background:transparent; color:var(--accent-text); border:1px solid var(--accent-text);
+    border-radius:2px; padding:8px 14px; cursor:pointer; }
+  .install-hint .x svg{ width:12px; height:12px; display:block; }
 
   /* filter & sort live behind one toggle so the shelves come up sooner */
   .filter-toggle{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
@@ -327,7 +347,7 @@ function normalizeUrl(raw){
   let v = raw.trim();
   if(!v) return null;
   if(!/^https?:\/\//i.test(v)) v = 'https://' + v;
-  try{ new URL(v); return v; }catch(e){ return null; }
+  try{ const u = new URL(v); return (u.hostname.includes('.') || u.hostname === 'localhost') ? v : null; }catch(e){ return null; }
 }
 function pad(n){ return String(n).padStart(3,'0'); }
 function displayTitle(l){ return l.name ? l.name : l.url.replace(/^https?:\/\//,''); }
@@ -376,10 +396,18 @@ const Cobwebs = () => (
 );
 
 function PrivacyModal({ onClose }){
+  const closeRef = useRef(null);
+  useEffect(() => {
+    const prev = document.activeElement;
+    closeRef.current && closeRef.current.focus();
+    const onKey = e => { if(e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('keydown', onKey); prev && prev.focus && prev.focus(); };
+  }, []);
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={e=>e.stopPropagation()}>
-        <h2>About your data</h2>
+      <div className="modal" role="dialog" aria-modal="true" aria-labelledby="privacy-title" onClick={e=>e.stopPropagation()}>
+        <h2 id="privacy-title">About your data</h2>
         <p>Catch stores everything you save — links, names, folders — in a shared cloud database (Supabase). This is what lets the same list show up whether you're in Safari, Brave, or the home-screen icon.</p>
         <h3>Who can access it</h3>
         <p>There's no login and no account system. The app connects to the database using a key that's visible in the app's page source to anyone who looks. In practice, this means the security model is "no one else knows this address exists," not "no one else could get in." This is a deliberate tradeoff for a single-person tool, not an oversight.</p>
@@ -387,7 +415,7 @@ function PrivacyModal({ onClose }){
         <p>Nothing is encrypted per-user, nothing is sold, and there are no ads or analytics tracking you across other sites. This app talks only to its own database.</p>
         <h3>If that changes</h3>
         <p>If this app is ever shared with other people or shipped more broadly, that would require real per-user accounts and access control first — not just this notice.</p>
-        <button className="modal-close" onClick={onClose}>Close</button>
+        <button ref={closeRef} className="modal-close" onClick={onClose}>Close</button>
       </div>
     </div>
   );
@@ -414,6 +442,8 @@ function App(){
   const [editFolder, setEditFolder] = useState('');
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [saveError, setSaveError] = useState('');
+  const [savedFlash, setSavedFlash] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -458,6 +488,7 @@ function App(){
     try{
       await sb('folders', { method:'POST', body: JSON.stringify({ id:folder.id, name:folder.name, color_idx:colorIdx }) });
       setFolders(prev => [...prev, folder]);
+      setSyncError(false);
       return folder.id;
     }catch(e){ console.error(e); setSyncError(true); return null; }
   }
@@ -479,12 +510,15 @@ function App(){
       await sb('meta?key=eq.counter', { method:'PATCH', body: JSON.stringify({ value: String(nextCounter) }), prefer:'return=minimal' });
       setCounter(nextCounter);
       setLinks(prev => [entry, ...(prev || [])]);
+      setSyncError(false);
       return true;
     }catch(e){ console.error(e); setSyncError(true); return false; }
   }
 
   async function handleSaveClick(){
     if(!inputVal.trim()) return;
+    if(!normalizeUrl(inputVal)){ setSaveError("That doesn't look like a link. Try something like example.com"); return; }
+    setSaveError('');
     setSaving(true);
     const ok = await addLink(inputVal, nameVal, selectedFolder);
     setSaving(false);
@@ -496,7 +530,7 @@ function App(){
     if(!target) return;
     const nextRead = !target.read;
     setLinks(links.map(l => l.id===id ? {...l, read: nextRead} : l));
-    try{ await sb(`links?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ read: nextRead }), prefer:'return=minimal' }); }
+    try{ await sb(`links?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ read: nextRead }), prefer:'return=minimal' }); setSyncError(false); }
     catch(e){ console.error(e); setSyncError(true); }
   }
 
@@ -504,7 +538,7 @@ function App(){
     const prev = links;
     setLinks(links.filter(l => l.id!==id));
     if(selectedId === id) setSelectedId(null);
-    try{ await sb(`links?id=eq.${id}`, { method:'DELETE', prefer:'return=minimal' }); }
+    try{ await sb(`links?id=eq.${id}`, { method:'DELETE', prefer:'return=minimal' }); setSyncError(false); }
     catch(e){ console.error(e); setSyncError(true); setLinks(prev); }
   }
 
@@ -519,7 +553,10 @@ function App(){
     const newFolderId = editFolder || null;
     const newName = editName.trim();
     setLinks(links.map(l => l.id===id ? {...l, name:newName, folderId:newFolderId} : l));
-    try{ await sb(`links?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ name:newName, folder_id:newFolderId }), prefer:'return=minimal' }); }
+    try{
+      await sb(`links?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ name:newName, folder_id:newFolderId }), prefer:'return=minimal' });
+      setSyncError(false); setSavedFlash(true); setTimeout(() => setSavedFlash(false), 1800);
+    }
     catch(e){ console.error(e); setSyncError(true); }
   }
 
@@ -578,28 +615,32 @@ function App(){
       </header>
 
       {syncError && (
-        <div className="sync-banner">Having trouble syncing right now — check your connection. Anything you save may not appear on your other devices until this clears up.</div>
+        <div className="sync-banner" role="status">
+          <span>Having trouble syncing right now — check your connection. Anything you save may not appear on your other devices until this clears up.</span>
+          <button onClick={()=>window.location.reload()}>Try again</button>
+        </div>
       )}
       {showHint && (
         <div className="install-hint">
           <span>NOTE —</span>
           <span>On iPhone: Share → Add to Home Screen, so this opens full-screen like an app.</span>
-          <button className="x" aria-label="Dismiss tip" onClick={dismissHint}>✕</button>
+          <button className="x" aria-label="Dismiss tip" onClick={dismissHint}><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 2l8 8M10 2l-8 8"/></svg></button>
         </div>
       )}
 
       <div className={"save-block" + (inputVal.trim() || nameVal ? " has-text" : "")}>
         <div className="save-row">
           <input ref={inputRef} type="text" inputMode="url" aria-label="Link to save" placeholder="paste a link…" value={inputVal}
-            onChange={e=>setInputVal(e.target.value)} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
+            onChange={e=>{ setInputVal(e.target.value); setSaveError(''); }} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
           <button className="save-btn" onClick={handleSaveClick} disabled={!inputVal.trim() || saving}>
             {saving ? '···' : 'Catch'}
           </button>
         </div>
+        {saveError && <div className="save-error" role="alert">{saveError}</div>}
         <div className="detail-row">
           <input type="text" aria-label="Name (optional)" placeholder="name it (optional)…" value={nameVal}
             onChange={e=>setNameVal(e.target.value)} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
-          <select value={selectedFolder} onChange={e=>handleFolderSelectChange(e, setSelectedFolder)}>
+          <select aria-label="Folder" value={selectedFolder} onChange={e=>handleFolderSelectChange(e, setSelectedFolder)}>
             <option value="">No folder</option>
             {folders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
             <option value="__new__">+ New folder…</option>
@@ -615,15 +656,15 @@ function App(){
         </button>
       </div>
       {!showFilters && filtersActive && (
-        <div className="filter-summary">Showing {statusFilter === 'all' ? 'all' : statusFilter}, {sortMode === 'alphabetical' ? 'A–Z' : sortMode + ' first'}</div>
+        <div className="filter-summary">Showing {statusFilter === 'all' ? 'all' : statusFilter === 'unread' ? 'open' : 'closed'}, {sortMode === 'alphabetical' ? 'A–Z' : sortMode + ' first'}</div>
       )}
 
       {showFilters && <React.Fragment>
       <div className="row-label">Status</div>
       <div className="chips">
-        {['all','unread','read'].map(f => (
-          <button key={f} className={"filter-chip" + (statusFilter===f ? " active" : "")} onClick={()=>setStatusFilter(f)}>
-            {f}{f==='unread' && unreadCount>0 ? ` · ${unreadCount}` : ''}
+        {[['all','all'],['unread','open'],['read','closed']].map(([f,label]) => (
+          <button key={f} className={"filter-chip" + (statusFilter===f ? " active" : "")} aria-pressed={statusFilter===f} onClick={()=>setStatusFilter(f)}>
+            {label}{f==='unread' && unreadCount>0 ? ` · ${unreadCount}` : ''}
           </button>
         ))}
       </div>
@@ -631,28 +672,28 @@ function App(){
       <div className="row-label">Sort</div>
       <div className="chips">
         {[['newest','newest'],['oldest','oldest'],['alphabetical','alphabetical']].map(([v,label]) => (
-          <button key={v} className={"filter-chip" + (sortMode===v ? " active" : "")} onClick={()=>setSortMode(v)}>{label}</button>
+          <button key={v} className={"filter-chip" + (sortMode===v ? " active" : "")} aria-pressed={sortMode===v} onClick={()=>setSortMode(v)}>{label}</button>
         ))}
       </div>
       </React.Fragment>}
 
       <div className="row-label">Folders</div>
       <div className="catalog">
-        <div className={"catalog-card" + (folderFilter==='all' ? " active" : "")} onClick={()=>setFolderFilter('all')}>
+        <button className={"catalog-card" + (folderFilter==='all' ? " active" : "")} aria-pressed={folderFilter==='all'} onClick={()=>setFolderFilter('all')}>
           <div className="tab" style={{background:'var(--ink-faint)'}}></div>
           <div className="fname">All</div>
           <div className="fcount">{links ? links.length : 0}</div>
-        </div>
+        </button>
         {folders.map(f => (
-          <div key={f.id} className={"catalog-card" + (folderFilter===f.id ? " active" : "")} onClick={()=>setFolderFilter(f.id)}>
+          <button key={f.id} className={"catalog-card" + (folderFilter===f.id ? " active" : "")} aria-pressed={folderFilter===f.id} onClick={()=>setFolderFilter(f.id)}>
             <div className="tab" style={{background:`var(${RIBBON_SLOTS[f.colorIdx % RIBBON_SLOTS.length]})`}}></div>
             <div className="fname">{f.name}</div>
             <div className="fcount">{links ? links.filter(l=>l.folderId===f.id).length : 0}</div>
-          </div>
+          </button>
         ))}
-        <div className="catalog-card" onClick={createFolder} style={{display:'flex', alignItems:'center', justifyContent:'center', minHeight:44}}>
-          <div className="fname" style={{opacity:0.6}}>+ new</div>
-        </div>
+        <button className="catalog-card" aria-label="New folder" onClick={createFolder} style={{display:'flex', alignItems:'center', justifyContent:'center', minHeight:44}}>
+          <div className="fname" style={{opacity:0.75}}>+ new</div>
+        </button>
       </div>
 
       <div className="shelves">
@@ -669,7 +710,8 @@ function App(){
             <div className="empty-shelf">
               <Cobwebs />
               <div className="dust"></div>
-              <div className="msg">Nothing caught here yet.</div>
+              <div className="msg">Nothing on the shelves matches that.</div>
+              <button className="clear-btn" onClick={()=>{ setQuery(''); setStatusFilter('all'); setFolderFilter('all'); }}>Clear search &amp; filters</button>
               <div className="plank"></div>
             </div>
           </div>
@@ -684,16 +726,18 @@ function App(){
                 const { width, height } = bookDims(l.id);
                 const folder = l.folderId ? folderById[l.folderId] : null;
                 return (
-                  <div key={l.id}
+                  <button key={l.id}
                     className={"book" + (l.read ? " closed" : "") + (selectedId===l.id ? " selected" : "")}
                     style={{ width, height, background:`var(${RIBBON_SLOTS[hashStr(l.id) % 2 === 0 ? 0 : 1]})` }}
+                    aria-label={`Session ${pad(l.sessionNo)}, ${displayTitle(l)}, ${l.domain}, ${l.read ? 'closed' : 'open'}`}
+                    aria-expanded={selectedId===l.id}
                     onClick={()=>selectBook(l)}>
                     {folder && <div className="ribbon" style={{background:`var(${RIBBON_SLOTS[folder.colorIdx % RIBBON_SLOTS.length]})`}}></div>}
                     <div className="label">
                       <span className="num">{pad(l.sessionNo)}</span>
                       <span className="title">{displayTitle(l).slice(0,26)}</span>
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -704,8 +748,8 @@ function App(){
                 <div className="dp-title"><a href={selectedLink.url} target="_blank" rel="noopener noreferrer">{displayTitle(selectedLink)}</a></div>
                 <div className="dp-url">{selectedLink.url.replace(/^https?:\/\//,'')} · {selectedLink.domain}</div>
                 <div className="dp-edit-row">
-                  <input type="text" placeholder="name it…" value={editName} onChange={e=>setEditName(e.target.value)} />
-                  <select value={editFolder} onChange={e=>handleFolderSelectChange(e, setEditFolder)}>
+                  <input type="text" aria-label="Name" placeholder="name it…" value={editName} onChange={e=>setEditName(e.target.value)} />
+                  <select aria-label="Folder" value={editFolder} onChange={e=>handleFolderSelectChange(e, setEditFolder)}>
                     <option value="">No folder</option>
                     {folders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
                     <option value="__new__">+ New folder…</option>
@@ -713,6 +757,7 @@ function App(){
                 </div>
                 <div className="dp-actions">
                   <button className="dp-save" onClick={()=>saveEdit(selectedLink.id)}>Save changes</button>
+                  {savedFlash && <span className="dp-saved" role="status">Saved.</span>}
                   <button className="dp-ghost" onClick={()=>toggleRead(selectedLink.id)}>{selectedLink.read ? 'Reopen' : 'Mark closed'}</button>
                   <button className="dp-ghost" onClick={()=>setSelectedId(null)}>Close panel</button>
                   {confirmDelete ? (
