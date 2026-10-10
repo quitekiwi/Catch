@@ -12,17 +12,23 @@
     --bg: #1C1A17; --ink: #A69981; --accent: #8C2020; --title-color: #C1272D;
     --spine-a: #BFB493; --spine-b: #393D3C;
     --paper: #EFE6D3; --paper-ink: #2a2015;
-    --bg-raised: color-mix(in srgb, var(--bg) 85%, white 15%);
-    --ink-dim: color-mix(in srgb, var(--ink) 78%, var(--bg) 22%);
-    --ink-faint: color-mix(in srgb, var(--ink) 48%, var(--bg) 52%);
-    --line: color-mix(in srgb, var(--ink) 22%, var(--bg) 78%);
-    --shelf-wood: color-mix(in srgb, var(--bg) 55%, black 45%);
-    --danger: #a14545;
+    /* readable-on-dark variants: accent as text, text on an accent fill, session no. on paper */
+    --accent-text: #E07A72; --on-accent: var(--paper); --label-num: var(--accent);
+    --danger: #e88a82;
   }
-  body[data-theme="sage"]{
-    --bg: #16231F; --ink: #748C76; --accent: #B09C70; --title-color: #B09C70;
+  :root[data-theme="sage"]{
+    --bg: #16231F; --ink: #90A892; --accent: #B09C70; --title-color: #B09C70;
     --spine-a: #B1BFA3; --spine-b: #59523E;
     --paper: #E9EFE2; --paper-ink: #23291f;
+    --accent-text: #B09C70; --on-accent: var(--paper-ink); --label-num: #6E5E38;
+  }
+  /* derived tokens live on every themed root so they resolve against that theme's --bg/--ink */
+  :root, :root[data-theme="sage"]{
+    --bg-raised: color-mix(in srgb, var(--bg) 94%, white 6%);
+    --ink-dim: color-mix(in srgb, var(--ink) 95%, var(--bg) 5%);
+    --ink-faint: color-mix(in srgb, var(--ink) 90%, var(--bg) 10%);
+    --line: color-mix(in srgb, var(--ink) 28%, var(--bg) 72%);
+    --shelf-wood: color-mix(in srgb, var(--bg) 55%, black 45%);
   }
 
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -51,10 +57,10 @@
   .sub{ color:var(--ink-dim); font-size:15px; margin-top:8px; font-style:italic; font-weight:400; font-family:'Fraunces',serif; }
   .header-actions{ display:flex; flex-direction:column; gap:6px; align-items:flex-end; flex-shrink:0; padding-top:2px; }
   .theme-switch{ display:flex; border:1px solid var(--line); border-radius:2px; overflow:hidden; }
-  .theme-switch button{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase;
-    padding:6px 9px; border:none; background:transparent; color:var(--ink-faint); cursor:pointer; }
-  .theme-switch button.active{ background:var(--accent); color:var(--paper); }
-  .privacy-link{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase;
+  .theme-switch button{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+    padding:6px 10px; border:none; background:transparent; color:var(--ink-faint); cursor:pointer; }
+  .theme-switch button.active{ background:var(--accent); color:var(--on-accent); }
+  .privacy-link{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
     color:var(--ink-faint); background:none; border:none; cursor:pointer; padding:0; text-decoration:underline; text-underline-offset:2px; }
 
   .save-block{ padding:20px 20px 8px; display:flex; flex-direction:column; gap:8px; }
@@ -64,9 +70,9 @@
     padding:14px 14px; color:var(--ink); font-family:'JetBrains Mono',monospace; font-size:13.5px; outline:none;
   }
   .save-row input[type=text]:focus{ border-color:var(--accent); }
-  .save-row input[type=text]::placeholder{ color:var(--ink-faint); }
+  .save-row input[type=text]::placeholder{ color:var(--ink-dim); }
   .save-btn{
-    background:var(--accent); color:var(--paper); border:none; border-radius:3px; padding:0 22px;
+    background:var(--accent); color:var(--on-accent); border:none; border-radius:3px; padding:0 22px;
     font-family:'Anton',sans-serif; font-size:13px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; white-space:nowrap;
   }
   .save-btn:active{ transform:scale(0.97); }
@@ -85,7 +91,7 @@
   }
 
   .search-row{ padding:14px 20px 6px; display:flex; align-items:center; gap:8px; }
-  .search-row .lbl{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.18em; color:var(--ink-faint); text-transform:uppercase; }
+  .search-row .lbl{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.18em; color:var(--ink-faint); text-transform:uppercase; }
   .search-row input{
     flex:1; background:transparent; border:none; border-bottom:1px solid var(--line);
     padding:8px 2px; color:var(--ink-dim); font-family:'JetBrains Mono',monospace; font-size:12.5px; outline:none;
@@ -93,15 +99,15 @@
   .search-row input:focus{ border-color:var(--accent); color:var(--ink); }
   .search-row input::placeholder{ color:var(--ink-faint); }
 
-  .row-label{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.18em; color:var(--ink-faint);
+  .row-label{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.18em; color:var(--ink-faint);
     text-transform:uppercase; margin:14px 20px 8px; }
   .chips{ padding:0 20px; display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
   .filter-chip{
-    font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.08em;
-    padding:6px 11px; border-radius:2px; border:1px solid var(--line); color:var(--ink-faint);
+    font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em;
+    padding:7px 12px; border-radius:2px; border:1px solid var(--line); color:var(--ink-faint);
     background:transparent; cursor:pointer;
   }
-  .filter-chip.active{ border-color:var(--accent); color:var(--accent); background:color-mix(in srgb, var(--accent) 16%, transparent); }
+  .filter-chip.active{ border-color:var(--accent-text); color:var(--accent-text); background:color-mix(in srgb, var(--accent) 16%, transparent); }
   .filter-chip.ghost{ border-style:dashed; }
 
   /* folder catalog cards */
@@ -111,8 +117,8 @@
     clip-path: polygon(3% 1%, 78% 0, 88% 13%, 100% 15%, 99% 97%, 2% 100%, 0 5%); }
   .catalog-card.active{ border-color:var(--accent); }
   .catalog-card .tab{ position:absolute; top:-9px; left:9px; width:28px; height:10px; }
-  .catalog-card .fname{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.03em; color:var(--paper-ink); text-transform:uppercase; }
-  .catalog-card .fcount{ font-family:'JetBrains Mono',monospace; font-size:8px; color:color-mix(in srgb, var(--paper-ink) 55%, transparent); margin-top:3px; }
+  .catalog-card .fname{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.03em; color:var(--paper-ink); text-transform:uppercase; }
+  .catalog-card .fcount{ font-family:'JetBrains Mono',monospace; font-size:11px; color:color-mix(in srgb, var(--paper-ink) 72%, var(--paper)); margin-top:3px; }
 
   .shelves{ flex:1; padding:4px 20px 130px; }
 
@@ -125,7 +131,7 @@
   .shelf-plaque{ display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); padding:5px 12px;
     margin-bottom:14px; background:var(--bg-raised); }
   .shelf-plaque .dot{ width:5px; height:5px; background:var(--accent); flex-shrink:0; border-radius:50%; }
-  .shelf-plaque span{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.16em; color:var(--ink-dim); text-transform:uppercase; }
+  .shelf-plaque span{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:var(--ink-dim); text-transform:uppercase; }
 
   .shelf{ display:flex; align-items:flex-end; gap:5px; padding:20px 4px 14px; position:relative; flex-wrap:wrap; row-gap:22px; }
   .plank{ position:absolute; left:0; right:0; bottom:0; height:14px; background:var(--shelf-wood);
@@ -149,9 +155,9 @@
   .book .label{ position:absolute; top:36%; left:-6px; right:-6px; background:var(--paper); padding:5px 6px; text-align:center; z-index:2;
     clip-path: polygon(0% 1.5%, 25% 0%, 75% 0.5%, 100% 1.5%, 99.3% 50%, 100% 98.5%, 70% 100%, 30% 99.5%, 0% 100%, 0.7% 50%); }
   .book .label::before{ content:''; position:absolute; inset:0; background:var(--spine-b); opacity:0.4; mix-blend-mode:multiply; transform:translate(1.5px,-1.5px); }
-  .book .label .num{ font-family:'JetBrains Mono',monospace; font-size:8.5px; color:var(--accent); letter-spacing:0.08em; display:block; position:relative; z-index:1; }
-  .book .label .title{ font-family:'Fraunces',serif; font-weight:650; font-size:9.5px; color:var(--paper-ink); line-height:1.15; display:block; margin-top:2px; position:relative; z-index:1; }
-  .book.closed{ filter:brightness(0.7) saturate(0.65); }
+  .book .label .num{ font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; color:var(--label-num); letter-spacing:0.08em; display:block; position:relative; z-index:1; }
+  .book .label .title{ font-family:'Fraunces',serif; font-weight:650; font-size:10px; color:var(--paper-ink); line-height:1.15; display:block; margin-top:2px; position:relative; z-index:1; }
+  .book.closed{ filter:brightness(0.55) saturate(0.45); }
   .book .ribbon{ position:absolute; top:-15px; left:50%; width:9px; height:21px; margin-left:-4.5px; z-index:3;
     clip-path: polygon(0% 0%, 38% 0%, 50% 13%, 62% 0%, 100% 0%, 100% 100%, 0% 100%); }
 
@@ -175,11 +181,11 @@
   /* detail panel for a selected book */
   .detail-panel{ background:var(--bg-raised); border:1px solid var(--line); border-left:2px solid var(--accent);
     padding:16px 16px 14px; margin:-6px 0 26px; }
-  .detail-panel .dp-num{ font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--accent); letter-spacing:0.1em; margin-bottom:6px; }
+  .detail-panel .dp-num{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent-text); letter-spacing:0.1em; margin-bottom:6px; }
   .detail-panel .dp-title{ font-family:'Fraunces',serif; font-weight:650; font-size:16px; margin-bottom:4px; }
   .detail-panel .dp-title a{ color:var(--ink); text-decoration:none; }
-  .detail-panel .dp-title a:hover{ color:var(--accent); }
-  .detail-panel .dp-url{ font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-faint); margin-bottom:10px; word-break:break-all; }
+  .detail-panel .dp-title a:hover{ color:var(--accent-text); }
+  .detail-panel .dp-url{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-faint); margin-bottom:10px; word-break:break-all; }
   .dp-edit-row{ display:flex; gap:6px; margin-bottom:8px; }
   .dp-edit-row input[type=text]{
     flex:1.3; background:var(--bg); border:1px solid var(--accent); border-radius:3px;
@@ -191,10 +197,10 @@
   }
   .dp-actions{ display:flex; gap:8px; flex-wrap:wrap; }
   .dp-actions button{
-    font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em;
+    font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em;
     padding:7px 13px; border-radius:2px; cursor:pointer;
   }
-  .dp-save{ background:var(--accent); color:var(--paper); border:none; }
+  .dp-save{ background:var(--accent); color:var(--on-accent); border:none; }
   .dp-ghost{ background:transparent; color:var(--ink-dim); border:1px solid var(--line); }
   .dp-ghost:hover{ color:var(--ink); border-color:var(--ink-dim); }
   .dp-danger{ background:transparent; color:var(--danger); border:1px solid var(--danger); }
@@ -213,7 +219,7 @@
   }
 
   .count-footer{ position:fixed; bottom:0; left:0; right:0; text-align:center; padding:12px 0 calc(12px + env(safe-area-inset-bottom));
-    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint);
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint);
     background:linear-gradient(to top, var(--bg) 55%, transparent); pointer-events:none; z-index:10; }
 
   /* privacy modal */
@@ -226,8 +232,41 @@
   .modal h2{ font-family:'Anton',sans-serif; font-size:20px; text-transform:uppercase; color:var(--title-color); margin:0 0 14px; letter-spacing:0.02em; }
   .modal p{ font-size:14px; line-height:1.7; color:var(--ink-dim); margin:0 0 12px; font-family:'Fraunces',serif; }
   .modal h3{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); margin:18px 0 8px; }
-  .modal-close{ margin-top:16px; background:var(--accent); color:var(--paper); border:none; border-radius:3px; padding:9px 18px;
+  .modal-close{ margin-top:16px; background:var(--accent); color:var(--on-accent); border:none; border-radius:3px; padding:9px 18px;
     font-family:'Anton',sans-serif; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; }
+
+  /* filter & sort live behind one toggle so the shelves come up sooner */
+  .filter-toggle{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+    background:transparent; border:1px solid var(--line); border-radius:2px; color:var(--ink-dim); padding:7px 10px;
+    cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; }
+  .filter-toggle[aria-expanded="true"], .filter-toggle.on{ border-color:var(--accent-text); color:var(--accent-text); }
+  .filter-toggle .pip{ width:5px; height:5px; border-radius:50%; background:var(--accent-text); }
+  .filter-summary{ font-family:'Fraunces',serif; font-style:italic; font-size:13px; color:var(--ink-faint); padding:2px 20px 0; }
+
+  /* delete asks once, inline */
+  .dp-actions .dp-danger{ margin-left:auto; }
+  .dp-confirm{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-left:auto; }
+  .dp-confirm span{ font-family:'Fraunces',serif; font-style:italic; font-size:13px; color:var(--danger); }
+  .dp-danger-solid{ background:var(--danger); color:var(--bg); border:none; }
+
+  /* the app renders its own #root inside the mount #root; pin it to the column width */
+  #root #root{ width:100%; }
+  /* let fields shrink inside their flex rows instead of pushing the page wider */
+  #root > *{ min-width:0; }
+  .save-row input, .detail-row input, .detail-row select, .search-row input, .dp-edit-row input, .dp-edit-row select{ min-width:0; width:0; }
+
+  /* phones: 16px inputs stop iOS zoom-on-focus; touch targets reach 44px */
+  @media (max-width:640px){
+    .save-row input[type=text], .detail-row input[type=text], .detail-row select,
+    .search-row input, .dp-edit-row input[type=text], .dp-edit-row select{ font-size:16px; }
+  }
+  @media (pointer:coarse){
+    .theme-switch button, .filter-chip, .filter-toggle, .dp-actions button, .save-btn{ min-height:44px; }
+    .privacy-link{ min-height:44px; padding:0 4px; }
+    .install-hint .x{ min-width:44px; min-height:44px; margin:-12px -12px -12px auto; }
+    .detail-row input[type=text], .detail-row select, .dp-edit-row input[type=text], .dp-edit-row select{ min-height:44px; }
+    .search-row input{ min-height:44px; }
+  }
 </style>
 </head>
 <body>
@@ -360,6 +399,8 @@ function App(){
   const [selectedId, setSelectedId] = useState(null);
   const [editName, setEditName] = useState('');
   const [editFolder, setEditFolder] = useState('');
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -374,6 +415,10 @@ function App(){
       catch(e){ console.error(e); setFolders([]); setSyncError(true); }
       try{ const rows = await sb('meta?select=value&key=eq.counter'); setCounter(rows && rows[0] ? parseInt(rows[0].value, 10) : 0); }
       catch(e){ console.error(e); setCounter(0); }
+      // the add-to-home-screen tip only makes sense on iOS Safari, outside the installed app
+      const ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const installed = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+      if(!ios || installed) setShowHint(false);
       try{ if(localStorage.getItem('catch:hint-dismissed') === 'true') setShowHint(false); }catch(e){}
     })();
   }, []);
@@ -388,7 +433,7 @@ function App(){
     // eslint-disable-next-line
   }, [links === null]);
 
-  useEffect(() => { document.body.setAttribute('data-theme', theme); }, [theme]);
+  useEffect(() => { document.documentElement.setAttribute('data-theme', theme); }, [theme]);
 
   function setThemeAndPersist(t){ setTheme(t); try{ localStorage.setItem('catch:theme', t); }catch(e){} }
 
@@ -412,7 +457,8 @@ function App(){
   async function addLink(raw, name, folderId){
     const url = normalizeUrl(raw);
     if(!url) return false;
-    const nextCounter = counter + 1;
+    // the share link can save before the meta counter has loaded, so never trust it alone
+    const nextCounter = Math.max(counter, ...(links || []).map(l => l.sessionNo || 0)) + 1;
     const entry = { id:'l_'+Date.now()+'_'+Math.random().toString(36).slice(2,7), url, sessionNo: nextCounter,
       name: (name||'').trim(), folderId: folderId || null, domain: domainFrom(url), addedAt: Date.now(), read: false };
     try{
@@ -452,8 +498,9 @@ function App(){
   async function dismissHint(){ setShowHint(false); try{ localStorage.setItem('catch:hint-dismissed','true'); }catch(e){} }
 
   function selectBook(l){
+    setConfirmDelete(false);
     if(selectedId === l.id){ setSelectedId(null); return; }
-    setSelectedId(l.id); setEditName(l.name || ''); setEditFolder(l.folderId || '');
+    setSelectedId(l.id); setEditName(l.name || ''); setEditFolder(l.folderId || ''); setConfirmDelete(false);
   }
   async function saveEdit(id){
     const newFolderId = editFolder || null;
@@ -487,6 +534,7 @@ function App(){
 
   const shelves = useMemo(() => chunk(visible, SHELF_SIZE), [visible]);
   const unreadCount = links ? links.filter(l=>!l.read).length : 0;
+  const filtersActive = statusFilter !== 'all' || sortMode !== 'newest';
   const selectedLink = selectedId ? links.find(l=>l.id===selectedId) : null;
 
   function shelfLabel(shelfLinks, idx){
@@ -523,20 +571,20 @@ function App(){
         <div className="install-hint">
           <span>NOTE —</span>
           <span>On iPhone: Share → Add to Home Screen, so this opens full-screen like an app.</span>
-          <button className="x" onClick={dismissHint}>✕</button>
+          <button className="x" aria-label="Dismiss tip" onClick={dismissHint}>✕</button>
         </div>
       )}
 
       <div className="save-block">
         <div className="save-row">
-          <input ref={inputRef} type="text" inputMode="url" placeholder="paste a link…" value={inputVal}
+          <input ref={inputRef} type="text" inputMode="url" aria-label="Link to save" placeholder="paste a link…" value={inputVal}
             onChange={e=>setInputVal(e.target.value)} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
           <button className="save-btn" onClick={handleSaveClick} disabled={!inputVal.trim() || saving}>
             {saving ? '···' : 'Catch'}
           </button>
         </div>
         <div className="detail-row">
-          <input type="text" placeholder="name it (optional)…" value={nameVal}
+          <input type="text" aria-label="Name (optional)" placeholder="name it (optional)…" value={nameVal}
             onChange={e=>setNameVal(e.target.value)} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
           <select value={selectedFolder} onChange={e=>handleFolderSelectChange(e, setSelectedFolder)}>
             <option value="">No folder</option>
@@ -548,9 +596,16 @@ function App(){
 
       <div className="search-row">
         <span className="lbl">Find</span>
-        <input type="text" placeholder="search the archive…" value={query} onChange={e=>setQuery(e.target.value)} />
+        <input type="text" aria-label="Search the archive" placeholder="search the archive…" value={query} onChange={e=>setQuery(e.target.value)} />
+        <button className={"filter-toggle" + (filtersActive ? " on" : "")} aria-expanded={showFilters} onClick={()=>setShowFilters(v=>!v)}>
+          {filtersActive && <span className="pip"></span>}Filter
+        </button>
       </div>
+      {!showFilters && filtersActive && (
+        <div className="filter-summary">Showing {statusFilter === 'all' ? 'all' : statusFilter}, {sortMode === 'alphabetical' ? 'A–Z' : sortMode + ' first'}</div>
+      )}
 
+      {showFilters && <React.Fragment>
       <div className="row-label">Status</div>
       <div className="chips">
         {['all','unread','read'].map(f => (
@@ -566,6 +621,7 @@ function App(){
           <button key={v} className={"filter-chip" + (sortMode===v ? " active" : "")} onClick={()=>setSortMode(v)}>{label}</button>
         ))}
       </div>
+      </React.Fragment>}
 
       <div className="row-label">Folders</div>
       <div className="catalog">
@@ -645,8 +701,16 @@ function App(){
                 <div className="dp-actions">
                   <button className="dp-save" onClick={()=>saveEdit(selectedLink.id)}>Save changes</button>
                   <button className="dp-ghost" onClick={()=>toggleRead(selectedLink.id)}>{selectedLink.read ? 'Reopen' : 'Mark closed'}</button>
-                  <button className="dp-danger" onClick={()=>removeLink(selectedLink.id)}>Delete</button>
                   <button className="dp-ghost" onClick={()=>setSelectedId(null)}>Close panel</button>
+                  {confirmDelete ? (
+                    <div className="dp-confirm">
+                      <span>Delete for good?</span>
+                      <button className="dp-danger-solid" onClick={()=>{ setConfirmDelete(false); removeLink(selectedLink.id); }}>Yes, delete</button>
+                      <button className="dp-ghost" onClick={()=>setConfirmDelete(false)}>Keep</button>
+                    </div>
+                  ) : (
+                    <button className="dp-danger" onClick={()=>setConfirmDelete(true)}>Delete</button>
+                  )}
                 </div>
               </div>
             )}
