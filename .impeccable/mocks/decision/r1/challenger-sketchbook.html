@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — Stamp Catalogue</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..900&family=Familjen+Grotesk:wght@400;600&family=Kosugi&display=swap">
+<style>
+:root{--paper:#D8C9AE;--ink:#2B211B;--ox:#6B1E1E;--faint:rgba(43,33,27,.45)}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{background-color:var(--paper);color:var(--ink);font-family:"Familjen Grotesk",sans-serif;position:relative;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .13 0 0 0 0 .1 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='turbulence' baseFrequency='.008 .12' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .27 0 0 0 0 .18 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23f)'/%3E%3C/svg%3E")}
+.wrap{padding:14px 14px 0}
+.mast{border-top:3px solid var(--ink);border-bottom:1px solid var(--ink);padding:6px 0 5px;position:relative}
+.mast h1{margin:0;font-family:Anybody,sans-serif;font-weight:900;font-variation-settings:"wdth" 62;font-size:44px;line-height:.86;letter-spacing:-.5px;text-transform:uppercase}
+.mast h1 small{display:block;font-size:13.5px;font-weight:700;font-variation-settings:"wdth" 120;letter-spacing:2.2px;margin-top:4px}
+.issue{display:flex;justify-content:space-between;font-family:Kosugi,monospace;font-size:9.5px;letter-spacing:.6px;padding:4px 0 3px;border-bottom:3px double var(--ink)}
+.tag{font-size:11px;font-style:italic;margin:5px 0 8px;display:flex;justify-content:space-between}
+.tag b{font-family:Kosugi,monospace;font-style:normal;font-weight:400;font-size:10px}
+.seek{display:flex;gap:6px}
+.seek label{flex:1;display:flex;align-items:center;gap:6px;border:1.5px solid var(--ink);padding:0 8px;height:34px;background:rgba(255,248,232,.25)}
+.seek input{border:0;background:none;font:inherit;font-size:13px;color:var(--ink);width:100%;outline:none}
+.seek input::placeholder,.order input::placeholder{color:var(--faint)}
+button{font-family:Anybody,sans-serif;font-variation-settings:"wdth" 90;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--ink);background:none;border:1.5px solid var(--ink);cursor:pointer}
+.seek button{height:37px;padding:0 12px;font-size:12px}
+.div{display:flex;align-items:center;gap:8px;margin:12px 0 7px;font-family:Kosugi,monospace;font-size:9.5px;color:var(--ox);letter-spacing:1.2px}
+.div::before,.div::after{content:"";flex:1;height:0;border-top:1.5px solid var(--ox)}
+.div::before{flex:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px 6px}
+.c{position:relative;height:100px;text-align:center}
+.st{height:66px;margin:0 3px;border:1px solid var(--ink);outline:2px dotted var(--ink);outline-offset:2px;background:rgba(255,250,236,.3);display:flex;align-items:center;justify-content:center}
+.st svg{width:62px;height:52px;fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.code{font-family:Kosugi,monospace;font-size:10px;margin-top:7px;letter-spacing:.4px}
+.t{font-size:8.5px;line-height:1.05;margin-top:1px}
+.ring{position:absolute;left:-6px;top:-7px;width:calc(100% + 12px);height:112px;pointer-events:none;fill:none;stroke:var(--ox);stroke-width:1.6;stroke-linecap:round;opacity:.92}
+.r .st{border:1px dashed var(--faint);outline:none;background:none;font-family:Kosugi,monospace;font-size:15px;color:var(--faint)}
+.r .code{color:var(--faint);font-size:8.5px;margin-top:6px}
+.note{position:absolute;left:236px;top:178px;background:var(--paper);padding:0 4px;font-family:"Familjen Grotesk";font-style:italic;font-size:13px;color:var(--ox);transform:rotate(-6deg)}
+.arrow{position:absolute;left:338px;top:182px;width:30px;height:30px;fill:none;stroke:var(--ox);stroke-width:1.6;stroke-linecap:round}
+.order{position:absolute;left:0;right:0;bottom:0;padding:10px 14px 26px;border-top:3px double var(--ink);background:rgba(216,201,174,.85)}
+.order .hd{display:flex;justify-content:space-between;font-family:Kosugi,monospace;font-size:9px;letter-spacing:1px;margin-bottom:6px}
+.order .row{display:flex;gap:6px;align-items:stretch}
+.order label{flex:1;border:1.5px solid var(--ink);display:flex;align-items:center;padding:0 9px;height:44px;gap:8px}
+.order label span{font-family:Kosugi,monospace;font-size:9px;border-right:1px solid var(--ink);padding-right:8px;align-self:stretch;display:flex;align-items:center}
+.order input{border:0;border-bottom:1px dotted var(--ink);background:none;font:inherit;font-size:14px;color:var(--ink);width:100%;outline:none;padding:2px 0}
+.order button{padding:0 18px;font-size:15px;background:var(--ink);color:var(--paper);height:47px}
+.fine{font-size:8.5px;margin-top:6px;color:var(--faint);display:flex;justify-content:space-between}
+</style></head><body>
+<div class="wrap">
+  <header class="mast">
+    <h1>Catch<small>— Catalogue of Sessions</small></h1>
+  </header>
+  <div class="issue"><span>ISSUE Nº 01 · AUTUMN</span><span>PRINTED ON DEMAND</span><span>¥0</span></div>
+  <div class="tag"><span>Paste it, find it later. Nothing else.</span><b>4 caught · 4 open</b></div>
+  <div class="seek">
+    <label><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#2B211B" stroke-width="1.5"><path d="M6 1.2C3.2 1 1.1 3.3 1.3 6c.2 2.6 2.4 4.4 5 4.2 2.5-.3 4.1-2.5 3.9-4.9C10 2.9 8.3 1.3 6 1.2zM9.3 9.4l3.6 3.5"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+    <button type="button">Filter</button>
+  </div>
+  <div class="div">SECTION A · SESSIONS 001—016</div>
+
+  <div class="grid">
+    <div class="c">
+      <div class="st"><svg viewBox="0 0 62 52"><path d="M5 30.5l52-.8.3 13.6-52.4.5z"/><path d="M11 30.3v13M17.2 30.4l.1 12.8M23.5 30v13.2M29.6 30.2v13M36 30.1l-.2 13M42.1 30v13.1M48.3 30.2v12.9"/><path d="M14.2 30.5v7.4h3.1v-7.5M26.6 30.3l.2 7.6 3-.1v-7.4M39 30.2v7.6h3M45.4 30.3l-.1 7.4 3 .1"/><path d="M6 30.4c.2-6.2.1-9 .4-11.8l50.3-.6.4 11.6"/><circle cx="13" cy="24" r="2.3"/><circle cx="21" cy="24.2" r="2.2"/><path d="M30 22h14.5M30.5 25.8l13.8-.2M49.5 21.4l3.6 5"/></svg></div>
+      <div class="code">S-001</div><div class="t">Vir MPC<br>ypc2000.fun</div>
+      <svg class="ring" viewBox="0 0 100 112"><path d="M58 4C26 1 4 22 5 55c1 33 20 53 49 52 30-1 43-25 41-54C93 22 74 5 48 6 36 8 27 12 22 16"/></svg>
+    </div>
+    <div class="c">
+      <div class="st"><svg viewBox="0 0 62 52"><path d="M8 12.5l14.6-4.8 15.8 5.4 15.6-5 .3 31.8-15.4 5.2-16-5.6L8.4 44z"/><path d="M22.6 7.8l.4 31.5M38.4 13.2l.6 31.8"/><path d="M13 19c3 4 6 1 9 4s3 7 6 7 5-5 9-3 2 7 8 6" stroke-dasharray="2 2.4"/><path d="M45.4 30.2l3.5 3.4M48.8 30.1l-3.3 3.6"/><path d="M14.5 34.6c1-.8 2.4-.6 3 .4"/></svg></div>
+      <div class="code">S-002</div><div class="t">Map<br>terraink.app</div>
+      <svg class="ring" viewBox="0 0 100 112"><path d="M30 10C10 20 2 45 8 70c6 26 30 38 55 34 26-4 35-30 32-58C92 18 72 3 46 5 33 6 22 13 16 19"/></svg>
+    </div>
+    <div class="c">
+      <div class="st"><svg viewBox="0 0 62 52"><path d="M4.6 26.4C13 14.2 22 9.8 31.3 10c9.6.1 18.4 5 26.4 16.3-8 11.4-17 15.6-26.6 15.4C21.6 41.6 12.4 37 4.6 26.4z"/><circle cx="31" cy="26" r="9.4"/><circle cx="31.2" cy="25.8" r="3.6" fill="#2B211B"/><path d="M27.4 21.6l1.8 1.4"/><path d="M14.8 15l-2.6-4.4M22.4 11l-1.2-4.6M31 9.6V4.8M39.6 11l1.4-4.6M47.4 15.2l2.8-4.2"/><path d="M20 39.6c-1.2 4.4-.3 7.4 3 8.6"/></svg></div>
+      <div class="code">S-003</div><div class="t">EyeOfOsiris<br>osirisai.live</div>
+      <svg class="ring" viewBox="0 0 100 112"><path d="M64 6C30 0 6 20 6 52c0 34 18 54 48 54s42-24 40-54C92 22 76 7 50 6 40 6 30 10 24 15"/></svg>
+    </div>
+    <div class="c">
+      <div class="st"><svg viewBox="0 0 62 52"><path d="M3.8 22.2l53.8-.6.6 12.2L4.2 34.6z"/><path d="M8 22.2l1-6.8 44.2-.4.8 6.6"/><path d="M8.2 27.8l7.6-.1M18.4 27.6h7.8M28.6 27.8h7.6M38.8 27.6l7.6.1M49 27.8h5.6"/><path d="M7.6 31.4h46.8" stroke-dasharray="1.2 2"/><path d="M15 15.4c1.4-4 4-6.6 8-7.6M44.4 15c-.6-3.8-2.6-6.8-6.4-7.4"/><path d="M29 18.6h4"/></svg></div>
+      <div class="code">S-004</div><div class="t">Roland Studio<br>roland50.studio</div>
+      <svg class="ring" viewBox="0 0 100 112"><path d="M40 5C14 10 3 34 6 60c3 30 24 48 52 45 27-3 39-28 36-56C91 21 72 4 48 5 38 6 28 10 21 17"/></svg>
+    </div>
+    <div class="c r"><div class="st">005</div><div class="code">RESERVED</div></div>
+    <div class="c r"><div class="st">006</div><div class="code">RESERVED</div></div>
+    <div class="c r"><div class="st">007</div><div class="code">RESERVED</div></div>
+    <div class="c r"><div class="st">008</div><div class="code">RESERVED</div></div>
+    <div class="c r"><div class="st">009</div><div class="code">RESERVED</div></div>
+    <div class="c r"><div class="st">010</div><div class="code">RESERVED</div></div>
+    <div class="c r"><div class="st">011</div><div class="code">RESERVED</div></div>
+    <div class="c r"><div class="st">012</div><div class="code">RESERVED</div></div>
+    <div class="c r"><div class="st">013</div><div class="code">RESERVED</div></div>
+    <div class="c r"><div class="st">014</div><div class="code">RESERVED</div></div>
+    <div class="c r"><div class="st">015</div><div class="code">RESERVED</div></div>
+    <div class="c r"><div class="st">016</div><div class="code">RESERVED</div></div>
+  </div>
+</div>
+
+<span class="note">newest — start here</span>
+<svg class="arrow" viewBox="0 0 30 30"><path d="M2 6c12-3 20 4 22 18M18 18c2 3 4 5 6 7 1-3 3-6 5-8"/></svg>
+
+<form class="order" action="#">
+  <div class="hd"><span>ORDER FORM · NEW SESSION Nº 005</span><span>FILL IN BIRO</span></div>
+  <div class="row">
+    <label><span>LINK</span><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+  <div class="fine"><span>One link per form. No postage required.</span><span>CATCH PRESS</span></div>
+</form>
+</body></html>

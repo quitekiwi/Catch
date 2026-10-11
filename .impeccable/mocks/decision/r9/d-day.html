@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — Day (r9)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* 60-30-10: 60 khaki floor+tiles · 30 charcoal stamp faces, screen band, dock · 10 olive perforated stamp sheets, text, fine lines · taupe = faint tile pattern only · red = hand circles on khaki */
+:root{--khaki:#BFB493;--taupe:#A69981;--char:#393D3C;--olive:#403822;--red:#8C2020}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{position:relative;color:var(--olive);font-family:"Old Standard TT",serif;background-color:var(--char);
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Cpath d='M7 2.2L11.8 7 7 11.8 2.2 7z' fill='none' stroke='%23A69981' stroke-width='.8' opacity='.55'/%3E%3Ccircle cx='7' cy='7' r='1' fill='%23A69981' opacity='.5'/%3E%3C/svg%3E")}
+/* the floor */
+.floor{position:absolute;inset:14px 14px 0;background-color:var(--khaki);outline:1px solid rgba(64,56,34,.45);outline-offset:-4px;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46'%3E%3Cg fill='none' stroke='%23A69981' stroke-width='.9' opacity='.42'%3E%3Cpath d='M23 0L46 23 23 46 0 23z'/%3E%3Ccircle cx='23' cy='19' r='4'/%3E%3Ccircle cx='27' cy='23' r='4'/%3E%3Ccircle cx='23' cy='27' r='4'/%3E%3Ccircle cx='19' cy='23' r='4'/%3E%3C/g%3E%3Cg fill='%23393D3C' opacity='.13'%3E%3Cpath d='M0 0h3L0 3zM46 0v3L43 0zM0 46v-3L3 46zM46 46h-3L46 43z'/%3E%3Ccircle cx='23' cy='23' r='1.3'/%3E%3C/g%3E%3C/svg%3E");
+background-position:-2px 6px}
+.glow{position:absolute;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse 120% 80% at 50% 36%,rgba(191,180,147,0) 45%,rgba(64,56,34,.20) 100%)}
+.grain{position:absolute;inset:0;pointer-events:none;z-index:6;opacity:.55;mix-blend-mode:multiply;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .25 0 0 0 0 .22 0 0 0 0 .13 0 0 0 .32 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")}
+.in{position:relative;padding:20px 18px 0}
+/* masthead */
+.orn{display:flex;align-items:center;justify-content:center;gap:8px;height:10px}
+.orn i{width:56px;border-top:1px solid var(--olive);opacity:.55}
+.orn svg{width:10px;height:10px}
+h1{margin:6px 0 0;text-align:center;font-family:"Bodoni Moda",serif;font-variation-settings:"opsz" 96;font-weight:500;font-size:50px;line-height:1;letter-spacing:.2em;padding-left:.2em}
+.sub{text-align:center;font-variant:small-caps;font-size:13px;letter-spacing:.24em;margin-top:5px}
+.sub::before,.sub::after{content:"";display:inline-block;width:18px;border-top:1px solid var(--olive);vertical-align:middle;margin:0 9px 2px}
+.tag{text-align:center;font-style:italic;font-size:12.5px;margin:6px 0 13px;opacity:.85}
+/* search */
+.seek{display:flex;gap:8px;height:34px}
+.seek label{flex:1;display:flex;align-items:center;gap:8px;padding:0 10px;border:1px solid var(--olive);box-shadow:inset 0 0 0 3px var(--khaki),inset 0 0 0 3.8px rgba(64,56,34,.4);background:var(--khaki)}
+.seek input{border:0;background:none;font:italic 13px "Old Standard TT",serif;color:var(--olive);width:100%;outline:none;padding:0}
+input::placeholder{color:var(--olive);opacity:.55}
+.seek button{font:400 13px "Old Standard TT",serif;font-variant:small-caps;letter-spacing:.14em;color:var(--olive);background:var(--khaki);border:1px solid var(--olive);padding:0 12px;display:flex;align-items:center;gap:6px}
+.meta{display:flex;align-items:center;gap:8px;margin:13px 0 12px;font-variant:small-caps;font-size:11.5px;letter-spacing:.16em}
+.meta i{flex:1;border-top:1px solid var(--olive);opacity:.45}
+.meta b{font-weight:400;color:var(--olive)}
+/* stamp grid: three columns */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 14px}
+.c{position:relative;text-align:center;padding-top:9px}
+.st{position:relative;width:91px;height:105px;margin:0 auto;
+background:radial-gradient(circle,transparent 2.4px,var(--olive) 2.8px) -3.5px -3.5px/7px 7px;filter:drop-shadow(0 1px 1.4px rgba(64,56,34,.45))}
+.st .face{position:absolute;inset:6px;background:var(--char);border:1px solid var(--olive);display:flex;align-items:center;justify-content:center}
+.st .face::after{content:"";position:absolute;inset:2.5px;border:.6px solid rgba(191,180,147,.45)}
+.face svg{width:74px;height:62px;fill:none;stroke:var(--khaki);stroke-width:1;stroke-linecap:round;stroke-linejoin:round}
+.face em{position:absolute;right:6px;bottom:3px;font:italic 9px "Old Standard TT",serif;color:var(--khaki)}
+.ring{position:absolute;left:-13px;top:-12px;width:calc(100% + 26px);height:calc(100% + 24px);fill:none;stroke:var(--red);stroke-width:1.6;stroke-linecap:round;opacity:.9;overflow:visible}
+.code{font-family:"Bodoni Moda",serif;font-variation-settings:"opsz" 11;font-size:12px;letter-spacing:.12em;margin-top:15px;line-height:15px}
+.t{font-size:13.5px;line-height:16px;margin-top:2px}
+.t small{display:block;font-style:italic;font-size:11px;line-height:14px;opacity:.8}
+.new{display:block;font-style:italic;font-size:10.5px;line-height:12px;margin-top:1px}
+.new::before,.new::after{content:"";display:inline-block;width:9px;border-top:1px solid var(--olive);vertical-align:middle;margin:0 5px 2px;opacity:.6}
+.r .tile{width:78px;height:78px;margin:14px auto 0;border:1px solid rgba(64,56,34,.45);position:relative;display:flex;align-items:center;justify-content:center;font-family:"Bodoni Moda",serif;font-size:14px;letter-spacing:.08em}
+.r .tile span{opacity:.55;position:relative}
+.r .tile::before{content:"";position:absolute;inset:11px;border:1px solid var(--olive);transform:rotate(45deg) scale(.74);opacity:.7}
+.r .code{font-family:"Old Standard TT",serif;font-variant:small-caps;font-size:11px;letter-spacing:.2em;opacity:.6;margin-top:14px}
+.more{display:flex;align-items:center;gap:10px;margin:12px 0 0;font-style:italic;font-size:12px;opacity:.7}
+.more i{flex:1;border-top:1px dashed rgba(64,56,34,.5)}
+/* legend */
+.key{display:flex;align-items:center;gap:12px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(64,56,34,.45)}
+.key .lb{font-variant:small-caps;font-size:11px;letter-spacing:.2em}
+.ms{position:relative;flex:none;width:104px;height:50px}
+.ms .st{width:35px;height:42px;margin:4px 0 0;background-position:-3.5px -3.5px}
+.ms .st .face{inset:3px}
+.ms .st .face::after{inset:1.5px}
+.ms .face svg{width:24px;height:20px;stroke-width:1.6}
+.pm{position:absolute;left:12px;top:0;width:92px;height:50px;fill:none;stroke:var(--olive);stroke-width:1.3;stroke-linecap:round;opacity:.92}
+.pm text{fill:var(--olive);stroke:none;font-family:"Old Standard TT",serif;text-anchor:middle}
+.key p{margin:0;font-style:italic;font-size:13px;line-height:16px}
+/* docked bar */
+.dock{position:absolute;left:0;right:0;bottom:0;height:128px;z-index:4;background:var(--char);border-top:1px solid var(--olive);color:var(--khaki);padding:12px 22px 0;box-sizing:border-box}
+.dock::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--khaki);opacity:.35}
+.dock .hd{display:flex;justify-content:space-between;font-variant:small-caps;font-size:11px;letter-spacing:.2em;margin:4px 0 9px}
+.dock .row{display:flex;gap:10px;height:44px}
+.dock label{flex:1;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--khaki);padding:0 2px}
+.dock label svg{flex:none}
+.dock input{border:0;background:none;font:italic 15px "Old Standard TT",serif;color:var(--khaki);width:100%;outline:none}
+.dock input::placeholder{color:var(--khaki);opacity:.6}
+.dock button{font-family:"Bodoni Moda",serif;font-variation-settings:"opsz" 20;font-weight:600;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--olive);background:var(--khaki);border:0;outline:1px solid var(--khaki);outline-offset:3px;padding:0 18px 0 22px;margin:3px 3px 3px 0}
+</style></head><body>
+<div class="floor">
+<div class="in">
+  <div class="orn"><i></i><svg viewBox="0 0 10 10"><path d="M5 .5L9.5 5 5 9.5.5 5z" fill="none" stroke="#403822" stroke-width=".8"/><circle cx="5" cy="5" r="1.2" fill="#403822"/></svg><i></i></div>
+  <h1>CATCH</h1>
+  <div class="sub">Catalogue of Sessions</div>
+  <div class="tag">Paste it, find it later. Nothing else.</div>
+  <div class="seek">
+    <label><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#403822" stroke-width="1.1"><circle cx="6" cy="6" r="4.6"/><path d="M9.4 9.4l3.6 3.6"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+    <button type="button"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="#403822" stroke-width="1"><path d="M0 1h11M2 4.5h7M4 8h3"/></svg>Filter</button>
+  </div>
+  <div class="meta"><span>Section A · 001–007</span><i></i><b>4 caught · 4 open</b></div>
+
+  <div class="grid">
+    <div class="c">
+      <div class="st"><div class="face"><svg viewBox="0 0 62 52"><path d="M5 30.5l52-.8.3 13.6-52.4.5z"/><path d="M11 30.3v13M17.2 30.4l.1 12.8M23.5 30v13.2M29.6 30.2v13M36 30.1l-.2 13M42.1 30v13.1M48.3 30.2v12.9"/><path d="M14.2 30.5v7.4h3.1v-7.5M26.6 30.3l.2 7.6 3-.1v-7.4M39 30.2v7.6h3M45.4 30.3l-.1 7.4 3 .1"/><path d="M6 30.4c.2-6.2.1-9 .4-11.8l50.3-.6.4 11.6"/><circle cx="13" cy="24" r="2.3"/><circle cx="21" cy="24.2" r="2.2"/><path d="M30 22h14.5M30.5 25.8l13.8-.2M49.5 21.4l3.6 5"/></svg><em>1</em></div>
+        <svg class="ring" viewBox="0 0 100 112" preserveAspectRatio="none"><path d="M58 4C26 1 4 22 5 55c1 33 20 53 49 52 30-1 43-25 41-54C93 22 74 5 48 6 36 8 27 12 22 16"/></svg></div>
+      <div class="code">S-001</div><div class="t">Vir MPC<small>ypc2000.fun</small></div>
+    </div>
+    <div class="c">
+      <div class="st"><div class="face"><svg viewBox="0 0 62 52"><path d="M8 12.5l14.6-4.8 15.8 5.4 15.6-5 .3 31.8-15.4 5.2-16-5.6L8.4 44z"/><path d="M22.6 7.8l.4 31.5M38.4 13.2l.6 31.8"/><path d="M13 19c3 4 6 1 9 4s3 7 6 7 5-5 9-3 2 7 8 6" stroke-dasharray="2 2.4"/><path d="M45.4 30.2l3.5 3.4M48.8 30.1l-3.3 3.6"/><path d="M14.5 34.6c1-.8 2.4-.6 3 .4"/><path d="M12 40.5l4-1.3M29 41.6l5 1.6"/></svg><em>2</em></div>
+        <svg class="ring" viewBox="0 0 100 112" preserveAspectRatio="none"><path d="M30 10C10 20 2 45 8 70c6 26 30 38 55 34 26-4 35-30 32-58C92 18 72 3 46 5 33 6 22 13 16 19"/></svg></div>
+      <div class="code">S-002</div><div class="t">Map<small>terraink.app</small></div>
+    </div>
+    <div class="c">
+      <div class="st"><div class="face"><svg viewBox="0 0 62 52"><path d="M4.6 26.4C13 14.2 22 9.8 31.3 10c9.6.1 18.4 5 26.4 16.3-8 11.4-17 15.6-26.6 15.4C21.6 41.6 12.4 37 4.6 26.4z"/><circle cx="31" cy="26" r="9.4"/><circle cx="31.2" cy="25.8" r="3.6" fill="#BFB493"/><path d="M27.4 21.6l1.8 1.4"/><path d="M14.8 15l-2.6-4.4M22.4 11l-1.2-4.6M31 9.6V4.8M39.6 11l1.4-4.6M47.4 15.2l2.8-4.2"/><path d="M20 39.6c-1.2 4.4-.3 7.4 3 8.6"/></svg><em>3</em></div>
+        <svg class="ring" viewBox="0 0 100 112" preserveAspectRatio="none"><path d="M64 6C30 0 6 20 6 52c0 34 18 54 48 54s42-24 40-54C92 22 76 7 50 6 40 6 30 10 24 15"/></svg></div>
+      <div class="code">S-003</div><div class="t">EyeOfOsiris<small>osirisai.live</small></div>
+    </div>
+    <div class="c">
+      <div class="st"><div class="face"><svg viewBox="0 0 62 52"><path d="M3.8 22.2l53.8-.6.6 12.2L4.2 34.6z"/><path d="M8 22.2l1-6.8 44.2-.4.8 6.6"/><path d="M8.2 27.8l7.6-.1M18.4 27.6h7.8M28.6 27.8h7.6M38.8 27.6l7.6.1M49 27.8h5.6"/><path d="M7.6 31.4h46.8" stroke-dasharray="1.2 2"/><path d="M15 15.4c1.4-4 4-6.6 8-7.6M44.4 15c-.6-3.8-2.6-6.8-6.4-7.4"/><circle cx="31" cy="18.6" r="1.4"/><path d="M12 18.6h6M38 18.6h10"/></svg><em>4</em></div>
+        <svg class="ring" viewBox="0 0 100 112" preserveAspectRatio="none"><path d="M40 5C14 10 3 34 6 60c3 30 24 48 52 45 27-3 39-28 36-56C91 21 72 4 48 5 38 6 28 10 21 17"/></svg></div>
+      <div class="code">S-004</div><div class="t">Roland Studio<small>roland50.studio</small></div><span class="new">newest</span>
+    </div>
+    <div class="c r"><div class="tile"><span>005</span></div><div class="code">reserved</div></div>
+    <div class="c r"><div class="tile"><span>006</span></div><div class="code">reserved</div></div>
+  </div>
+  <div class="more"><i></i><span>007 onward · more room below</span><i></i></div>
+
+  <div class="key">
+    <div class="ms">
+      <div class="st"><div class="face"><svg viewBox="0 0 62 52"><path d="M4.6 26.4C13 14.2 22 9.8 31.3 10c9.6.1 18.4 5 26.4 16.3-8 11.4-17 15.6-26.6 15.4C21.6 41.6 12.4 37 4.6 26.4z"/><circle cx="31" cy="26" r="9.4"/></svg></div></div>
+      <svg class="pm" viewBox="0 0 92 50" aria-hidden="true"><path d="M0 14c4-3 8 3 12 0s8 3 12 0 8 3 12 0 8 3 12 0"/><path d="M0 22c4-3 8 3 12 0s8 3 12 0 8 3 12 0 8 3 12 0"/><path d="M0 30c4-3 8 3 12 0s8 3 12 0 8 3 12 0 8 3 12 0"/><path d="M0 38c4-3 8 3 12 0s8 3 12 0 8 3 12 0 8 3 12 0"/><circle cx="70" cy="25" r="19"/><circle cx="70" cy="25" r="15.5" stroke-width=".7"/><path d="M57 25h26" stroke-width=".6"/><text x="70" y="22" font-size="6.4" letter-spacing=".5">CLOSED</text><text x="70" y="32" font-size="5.4" font-style="italic">11·X·26</text></svg>
+    </div>
+    <div><div class="lb">Key</div><p>read links get postmarked</p></div>
+  </div>
+</div>
+</div>
+
+<form class="dock" action="#">
+  <div class="hd"><span>New session Nº 005</span><span>one link · nothing else</span></div>
+  <div class="row">
+    <label><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#BFB493" stroke-width="1.1" stroke-linecap="round"><path d="M6 8l2-2M5 5.4L3.6 6.8a2.3 2.3 0 003.3 3.3L8.3 8.7M9 8.6l1.4-1.4A2.3 2.3 0 007.1 3.9L5.7 5.3"/></svg><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+</form>
+<div class="glow"></div>
+<div class="grain"></div>
+</body></html>

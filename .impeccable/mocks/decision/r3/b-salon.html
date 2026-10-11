@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — Oxblood Salon</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Cinzel+Decorative:wght@700&family=Marcellus+SC&display=swap">
+<style>
+:root{--ground:#1A1519;--ox:#40101D;--tan:#D9B88F;--taupe:#AC9B86;--wine:#73303C}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{background:var(--ground);color:var(--tan);font-family:Arapey,serif;position:relative;
+background-image:radial-gradient(ellipse 420px 300px at 50% 0,rgba(64,16,29,.55),transparent 70%),radial-gradient(ellipse 380px 260px at 50% 100%,rgba(64,16,29,.4),transparent 70%)}
+.mast{position:relative;height:166px}
+.mast>svg{position:absolute;left:0;top:0}
+.ln{fill:none;stroke:var(--taupe);stroke-linecap:round;stroke-linejoin:round}
+.mast h1{position:absolute;top:44px;left:0;right:0;margin:0;text-align:center;font:700 43px/1 "Cinzel Decorative",serif;letter-spacing:5px;padding-left:5px;color:var(--tan)}
+.sub{position:absolute;top:96px;left:0;right:0;text-align:center;font:10px "Marcellus SC",serif;letter-spacing:3.4px;color:var(--taupe)}
+.tag{position:absolute;top:118px;left:0;right:0;text-align:center;font-style:italic;font-size:14.5px;color:var(--tan)}
+.count{position:absolute;top:149px;left:0;right:0;text-align:center;font:10.5px "Marcellus SC",serif;letter-spacing:2px;color:var(--taupe)}
+.seek{display:flex;gap:8px;margin:10px 16px 0}
+.seek label,.dock label{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--taupe);border-radius:16px 3px 16px 3px;padding:0 12px;height:36px}
+input{border:0;background:none;font:italic 14px Arapey,serif;color:var(--tan);width:100%;outline:none}
+input::placeholder{color:var(--taupe)}
+button{font:12px "Marcellus SC",serif;letter-spacing:2px;color:var(--tan);background:none;border:1px solid var(--taupe);border-radius:3px 16px 3px 16px;padding:0 15px;height:38px;cursor:pointer}
+.wall{position:absolute;left:0;top:218px}
+.fr{fill:#40101D;stroke:#AC9B86;stroke-width:1}
+.mat{fill:#D9B88F}
+.il{fill:none;stroke:#40101D;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.th{fill:none;stroke:#40101D;stroke-width:.5}
+.cord{fill:none;stroke:#AC9B86;stroke-width:.7}
+.pl{fill:#D9B88F;stroke:#AC9B86;stroke-width:.8}
+.n{font:9px "Marcellus SC",serif;letter-spacing:2px;fill:#40101D}
+.ti{font:13.5px Arapey,serif;fill:#40101D}
+.dm{font:italic 10.5px Arapey,serif;fill:#40101D}
+.gh{fill:none;stroke:#AC9B86;stroke-width:.8;stroke-dasharray:2 3;opacity:.55}
+.cap{font:9.5px "Marcellus SC",serif;letter-spacing:2.2px;fill:#AC9B86}
+.dock{position:absolute;left:0;right:0;bottom:0;height:150px;background:var(--ox)}
+.dock>svg{position:absolute;left:0;top:-13px}
+.dock .hd{text-align:center;font:9.5px "Marcellus SC",serif;letter-spacing:2.6px;color:var(--taupe);margin:22px 0 10px}
+.dock .row{display:flex;gap:8px;margin:0 16px}
+.dock label{height:44px;background:rgba(26,21,25,.45)}
+.dock button{height:46px;padding:0 20px;font:700 15px "Cinzel Decorative",serif;letter-spacing:1.5px;background:var(--tan);color:var(--ox);border-color:var(--tan)}
+.fine{text-align:center;font-style:italic;font-size:11px;color:var(--taupe);margin-top:10px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="ros" viewBox="0 0 24 30">
+    <path d="M12 1C19 1 23 5 23 11c0 7-5 11-8 18H9C6 22 1 18 1 11 1 5 5 1 12 1z" fill="#D9B88F" stroke="#40101D" stroke-width=".6"/>
+    <path fill="#73303C" d="M10 14L7 27l2.6-1.8L11 28l1.4-13zM14 14l3 13-2.6-1.8L13 28l-1.4-13z"/>
+    <circle cx="12" cy="11" r="7" fill="none" stroke="#73303C" stroke-width="2.6" stroke-dasharray="1.8 1.3"/>
+    <circle cx="12" cy="11" r="5.2" fill="#73303C"/><circle cx="12" cy="11" r="1.9" fill="#D9B88F"/>
+  </symbol>
+  <g id="nail"><circle r="2.6" fill="#40101D" stroke="#AC9B86" stroke-width=".8"/><circle r=".8" fill="#AC9B86"/></g>
+  <g id="half" class="ln">
+    <path stroke-width="1.4" d="M58 160C56 124 26 110 30 72 34 38 92 20 195 18"/>
+    <path stroke-width=".7" opacity=".7" d="M70 160C69 128 42 112 45 76 48 46 100 30 195 28"/>
+    <path stroke-width="1" d="M58 160C82 140 30 128 52 104 70 86 46 70 66 52"/>
+    <path stroke-width="1" d="M52 104C34 96 22 80 20 52"/>
+    <path stroke-width="1" d="M20 52c-6-6-6-14 0-20 6 6 6 14 0 20zM20 52c-8-2-13-8-13-16 6 2 11 9 13 16zM20 52c8-2 13-8 13-16-6 2-11 9-13 16z"/>
+    <path stroke-width=".8" d="M17 30c-1-4 0-7 3-9M23 30c1-4 0-7-3-9"/>
+    <path stroke-width=".9" d="M36 132c-10-3-15-11-13-20 8 3 13 11 13 20zM36 132c-4-6-8-11-13-20"/>
+    <path stroke-width=".9" d="M66 52c-2-6 2-12 8-12 3 0 4 3 2 5"/>
+    <path stroke-width=".9" d="M124 20c-8-12-26-9-23 1 2 6 10 5 9-1"/>
+    <path stroke-width=".9" d="M183 18c-14 2-26-10-38-6"/>
+  </g>
+  <pattern id="paper" width="46" height="46" patternUnits="userSpaceOnUse"><path class="ln" stroke-width=".6" opacity=".09" d="M23 30c-3-3-3-8 0-11 3 3 3 8 0 11zM23 30c-5 0-8-3-9-7 4 0 7 3 9 7zM23 30c5 0 8-3 9-7-4 0-7 3-9 7zM0 0h0M23 30v10"/></pattern>
+</defs></svg>
+
+<header class="mast">
+  <svg width="390" height="166" viewBox="0 0 390 166" aria-hidden="true">
+    <path fill="#40101D" d="M70 163V160C69 128 42 112 45 76 48 46 100 30 195 28 290 30 342 46 345 76 348 112 321 128 320 160V163Z"/>
+    <path class="ln" stroke-width="1" d="M52 163.5H338M88 166H302"/>
+    <use href="#half"/><use href="#half" transform="translate(390 0) scale(-1 1)"/>
+    <g class="ln" stroke-width="1"><path d="M195 20c-5-5-5-12 0-17 5 5 5 12 0 17zM195 20c-7-1-12-6-13-12 6 1 11 6 13 12zM195 20c7-1 12-6 13-12-6 1-11 6-13 12z"/>
+    <path stroke-width=".8" d="M150 112h34M206 112h34M195 108l4 4-4 4-4-4z"/></g>
+  </svg>
+  <h1>Catch</h1>
+  <div class="sub">The Salon of Sessions</div>
+  <div class="tag">Paste it, find it later. Nothing else.</div>
+  <div class="count">4 caught · 4 open</div>
+</header>
+
+<div class="seek">
+  <label><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#AC9B86" stroke-width="1.2" stroke-linecap="round"><circle cx="6.4" cy="6.4" r="4.9"/><path d="M10 10l4 4"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+  <button type="button">Filter</button>
+</div>
+
+<svg class="wall" width="390" height="460" viewBox="0 0 390 460" role="img" aria-label="Sessions 001 to 004 hung salon-style, all four open">
+  <rect width="390" height="460" fill="url(#paper)"/>
+  <!-- picture rail -->
+  <path class="ln" stroke-width="1.1" d="M0 12H390"/><path class="ln" stroke-width=".5" opacity=".6" d="M0 16H390"/>
+  <path class="ln" stroke-width=".8" d="M180 12c4-6 11-6 15 0 4-6 11-6 15 0M195 12v-5"/>
+  <!-- cords -->
+  <path class="cord" d="M195 16L140 84M195 16L250 84M64 16L46 50M64 16L82 50M327 16L300 64M327 16L354 64M64 222L36 236M64 222L92 236"/>
+  <use href="#nail" x="64" y="16"/><use href="#nail" x="327" y="16"/><use href="#nail" x="195" y="16"/><use href="#nail" x="64" y="222"/>
+
+  <!-- 004 arched, newest, centre -->
+  <path class="fr" d="M120 252V116a75 75 0 0 1 150 0v136z"/>
+  <path class="ln" stroke-width=".6" d="M124 248V116a71 71 0 0 1 142 0v132z"/>
+  <path class="mat" d="M130 242V116a65 65 0 0 1 130 0v126z"/>
+  <path class="th" d="M135 237V116a60 60 0 0 1 120 0v121z"/>
+  <path class="ln" stroke-width="1" d="M195 48c-4-4-4-10 0-14 4 4 4 10 0 14zM195 48c-6 0-10-4-11-9 5 0 9 4 11 9zM195 48c6 0 10-4 11-9-5 0-9 4-11 9z"/>
+  <path class="ln" stroke-width=".9" d="M120 252c-8-4-10-14-2-16 5-1 6 6 2 7M270 252c8-4 10-14 2-16-5-1-6 6-2 7"/>
+  <circle class="th" cx="195" cy="128" r="44" stroke-dasharray="1.5 3"/>
+  <g class="il" transform="translate(134 116) scale(2.1)"><path d="M3.8 22.2l53.8-.6.6 12.2L4.2 34.6z"/><path d="M8 22.2l1-6.8 44.2-.4.8 6.6"/><path d="M8.2 27.8l7.6-.1M18.4 27.6h7.8M28.6 27.8h7.6M38.8 27.6l7.6.1M49 27.8h5.6"/><path d="M7.6 31.4h46.8" stroke-dasharray="1.2 2"/><path d="M15 15.4c1.4-4 4-6.6 8-7.6M44.4 15c-.6-3.8-2.6-6.8-6.4-7.4"/><path d="M29 18.6h4"/></g>
+  <path class="th" d="M150 216c15-6 30 6 45 0s30-6 45 0"/>
+  <use href="#ros" x="246" y="70" width="24" height="30"/>
+  <path class="pl" d="M146 262h98a6 6 0 0 0 6 6v32a6 6 0 0 0-6 6h-98a6 6 0 0 0-6-6v-32a6 6 0 0 0 6-6z"/>
+  <text x="195" y="276" text-anchor="middle" class="n">Nº 004 · Newest</text>
+  <text x="195" y="291" text-anchor="middle" class="ti">Roland Studio</text>
+  <text x="195" y="303" text-anchor="middle" class="dm">roland50.studio</text>
+
+  <!-- 003 oval, upper left -->
+  <ellipse class="fr" cx="64" cy="102" rx="44" ry="56"/>
+  <ellipse class="ln" stroke-width=".6" cx="64" cy="102" rx="40" ry="52"/>
+  <ellipse class="mat" cx="64" cy="102" rx="35" ry="46"/>
+  <ellipse class="th" cx="64" cy="102" rx="31" ry="42"/>
+  <g class="il" transform="translate(36 78) scale(.9)"><path d="M4.6 26.4C13 14.2 22 9.8 31.3 10c9.6.1 18.4 5 26.4 16.3-8 11.4-17 15.6-26.6 15.4C21.6 41.6 12.4 37 4.6 26.4z"/><circle cx="31" cy="26" r="9.4"/><circle cx="31.2" cy="25.8" r="3.6" fill="#40101D"/><path d="M14.8 15l-2.6-4.4M22.4 11l-1.2-4.6M31 9.6V4.8M39.6 11l1.4-4.6M47.4 15.2l2.8-4.2"/><path d="M20 39.6c-1.2 4.4-.3 7.4 3 8.6"/></g>
+  <use href="#ros" x="88" y="44" width="22" height="28"/>
+  <rect class="pl" x="20" y="166" width="88" height="44" rx="3"/>
+  <text x="64" y="179" text-anchor="middle" class="n">Nº 003</text>
+  <text x="64" y="194" text-anchor="middle" class="ti" style="font-size:12.5px">EyeOfOsiris</text>
+  <text x="64" y="205" text-anchor="middle" class="dm">osirisai.live</text>
+
+  <!-- 002 rectangle, upper right -->
+  <rect class="fr" x="282" y="62" width="90" height="88" rx="2"/>
+  <rect class="ln" stroke-width=".6" x="286" y="66" width="82" height="80"/>
+  <rect class="mat" x="291" y="71" width="72" height="70"/>
+  <rect class="th" x="295" y="75" width="64" height="62"/>
+  <path class="ln" stroke-width=".9" d="M282 62c-5 0-7-5-4-7 3-1 4 3 1 4M372 62c5 0 7-5 4-7-3-1-4 3-1 4"/>
+  <g class="il" transform="translate(299 80)"><path d="M8 12.5l14.6-4.8 15.8 5.4 15.6-5 .3 31.8-15.4 5.2-16-5.6L8.4 44z"/><path d="M22.6 7.8l.4 31.5M38.4 13.2l.6 31.8"/><path d="M13 19c3 4 6 1 9 4s3 7 6 7 5-5 9-3 2 7 8 6" stroke-dasharray="2 2.4"/><path d="M45.4 30.2l3.5 3.4M48.8 30.1l-3.3 3.6"/></g>
+  <use href="#ros" x="355" y="52" width="22" height="28"/>
+  <rect class="pl" x="283" y="160" width="88" height="44" rx="3"/>
+  <text x="327" y="173" text-anchor="middle" class="n">Nº 002</text>
+  <text x="327" y="188" text-anchor="middle" class="ti">Map</text>
+  <text x="327" y="199" text-anchor="middle" class="dm">terraink.app</text>
+
+  <!-- 001 cusped rectangle, lower left -->
+  <path class="fr" d="M34 236h60a10 10 0 0 0 10 10v76H24v-76a10 10 0 0 0 10-10z"/>
+  <path class="mat" d="M38 244h52a6 6 0 0 0 6 6v64H32v-64a6 6 0 0 0 6-6z"/>
+  <path class="th" d="M40 248h48a4 4 0 0 0 4 4v58H36v-58a4 4 0 0 0 4-4z"/>
+  <g class="il" transform="translate(37 252) scale(.9)"><path d="M5 30.5l52-.8.3 13.6-52.4.5z"/><path d="M11 30.3v13M17.2 30.4l.1 12.8M23.5 30v13.2M29.6 30.2v13M36 30.1l-.2 13M42.1 30v13.1M48.3 30.2v12.9"/><path d="M14.2 30.5v7.4h3.1v-7.5M26.6 30.3l.2 7.6 3-.1v-7.4M39 30.2v7.6h3M45.4 30.3l-.1 7.4 3 .1"/><path d="M6 30.4c.2-6.2.1-9 .4-11.8l50.3-.6.4 11.6"/><circle cx="13" cy="24" r="2.3"/><circle cx="21" cy="24.2" r="2.2"/><path d="M30 22h14.5M30.5 25.8l13.8-.2M49.5 21.4l3.6 5"/></g>
+  <use href="#ros" x="90" y="226" width="22" height="28"/>
+  <rect class="pl" x="20" y="332" width="88" height="44" rx="3"/>
+  <text x="64" y="345" text-anchor="middle" class="n">Nº 001</text>
+  <text x="64" y="360" text-anchor="middle" class="ti">Vir MPC</text>
+  <text x="64" y="371" text-anchor="middle" class="dm">ypc2000.fun</text>
+
+  <!-- empty hooks waiting -->
+  <use href="#nail" x="327" y="232"/><rect class="gh" x="296" y="244" width="62" height="74" rx="2"/>
+  <text x="327" y="285" text-anchor="middle" class="cap">005</text>
+  <use href="#nail" x="195" y="330"/><ellipse class="gh" cx="195" cy="372" rx="28" ry="34"/>
+  <text x="195" y="376" text-anchor="middle" class="cap">006</text>
+  <use href="#nail" x="327" y="346"/><use href="#nail" x="138" y="420"/><use href="#nail" x="252" y="420"/>
+  <text x="327" y="366" text-anchor="middle" class="cap" style="font-size:8.5px">awaiting</text>
+  <text x="195" y="446" text-anchor="middle" class="cap">Sessions 001 — 004 · hung newest at centre</text>
+</svg>
+
+<form class="dock" action="#">
+  <svg width="390" height="30" viewBox="0 0 390 30" aria-hidden="true">
+    <defs><pattern id="iron" width="40" height="30" patternUnits="userSpaceOnUse"><path class="ln" stroke-width=".8" opacity=".85" d="M0 13C10 3 20 3 20 13S30 23 40 13M20 13c-4 0-5-4-2-5 2 0 3 2 1 3M0 13c4 0 5 4 2 5-2 0-3-2-1-3M40 13c-4 0-5 4-2 5 2 0 3-2 1-3"/></pattern></defs>
+    <path d="M0 13H390" stroke="#40101D" stroke-width="12"/>
+    <rect x="-5" y="0" width="400" height="30" fill="url(#iron)" transform="translate(-5 0)"/>
+    <path class="ln" stroke-width="1" fill="#40101D" d="M195 2c9 0 17 5 20 11-3 6-11 11-20 11s-17-5-20-11c3-6 11-11 20-11z"/>
+    <path class="ln" stroke-width="1" d="M195 19c-3-3-3-8 0-11 3 3 3 8 0 11zM195 19c-5 0-8-3-9-7 4 0 7 3 9 7zM195 19c5 0 8-3 9-7-4 0-7 3-9 7zM165 13h6M219 13h6"/>
+    <path class="ln" stroke-width=".6" opacity=".5" d="M0 26H390"/>
+  </svg>
+  <div class="hd">Hang a New Frame · Nº 005</div>
+  <div class="row">
+    <label><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#AC9B86" stroke-width="1.1" stroke-linecap="round"><path d="M6.5 9.5l3-3M7 4.5l1.6-1.6a2.8 2.8 0 0 1 4 4L11 8.5M9 11.5l-1.6 1.6a2.8 2.8 0 0 1-4-4L5 7.5"/></svg><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+  <div class="fine">One link at a time — kept until you need it.</div>
+</form>
+</body></html>

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — The Leather Library</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap">
+<style>
+:root{--ground:#2A403A;--sage:#748C76;--paper:#B1BFA3;--umber:#59523E;--gilt:#B09C70;--red:#8C2020}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{position:relative;color:var(--paper);font-family:"EB Garamond",serif;background-color:var(--ground);
+background-image:radial-gradient(ellipse 120% 80% at 50% 45%,transparent 55%,rgba(89,82,62,.45)),
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='390' height='844'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='turbulence' baseFrequency='.0045 .011' numOctaves='5' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .455 0 0 0 0 .549 0 0 0 0 .463 -2.4 0 0 0 .62'/%3E%3C/filter%3E%3Crect width='390' height='844' filter='url(%23m)' opacity='.55'/%3E%3C/svg%3E"),
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .455 0 0 0 0 .549 0 0 0 0 .463 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E")}
+.ceil{display:block;width:390px;height:52px}
+.mast{text-align:center;margin-top:8px}
+.mast h1{margin:0;font-family:Cinzel,serif;font-weight:500;font-size:40px;line-height:1;letter-spacing:.34em;padding-left:.34em;color:var(--gilt);text-shadow:0 1px 0 rgba(89,82,62,.9)}
+.mast .sub{font-family:Cinzel,serif;font-size:8px;letter-spacing:.42em;color:var(--gilt);margin-top:5px;opacity:.85}
+.orn{display:block;margin:6px auto 0;width:300px;height:14px}
+.tag{display:flex;justify-content:space-between;align-items:baseline;padding:8px 20px 0}
+.tag i{font-size:13.5px;letter-spacing:.01em}
+.tag b{font-family:Cinzel,serif;font-weight:500;font-size:9px;letter-spacing:.16em;color:var(--gilt)}
+.seek{display:flex;gap:8px;padding:12px 20px 0;position:relative;z-index:5}
+.seek label{flex:1;display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;border:1px solid var(--gilt);background:rgba(89,82,62,.42);box-shadow:inset 0 0 0 3px rgba(42,64,58,.9),inset 0 0 0 4px rgba(176,156,112,.35)}
+input{border:0;background:none;outline:none;width:100%;font:inherit;font-style:italic;font-size:14.5px;color:var(--paper)}
+input::placeholder{color:var(--paper);opacity:.62}
+button{font-family:Cinzel,serif;font-weight:600;letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.seek button{height:40px;padding:0 13px 0 15px;font-size:10px;color:var(--gilt);background:rgba(89,82,62,.42);border:1px solid var(--gilt)}
+.sec{display:flex;align-items:center;justify-content:center;gap:10px;margin:15px 20px 0;font-family:Cinzel,serif;font-size:8px;letter-spacing:.3em;color:var(--gilt)}
+.sec::before,.sec::after{content:"";flex:1;height:3px;border-top:1px solid var(--gilt);border-bottom:1px solid rgba(176,156,112,.45)}
+.abs{position:absolute}
+.sh{position:absolute;left:0;width:390px;height:48px;overflow:visible}
+.pq{position:absolute;height:15px;padding:0 9px;display:flex;align-items:center;background:var(--paper);border:1px solid var(--gilt);box-shadow:inset 0 0 0 1.5px var(--paper),inset 0 0 0 2.2px rgba(89,82,62,.55),0 2px 3px rgba(26,36,32,.7);font-family:Cinzel,serif;font-weight:600;font-size:8px;letter-spacing:.2em;color:var(--umber);white-space:nowrap}
+/* leather books */
+.bk{position:absolute;border-radius:4px 4px 2px 2px;box-shadow:3px 1px 5px rgba(8,12,10,.85),-1px 0 2px rgba(8,12,10,.6)}
+.lth{position:absolute;inset:0;border-radius:inherit;overflow:hidden}
+.lth svg{display:block;width:100%;height:100%}
+.wr{position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+background:radial-gradient(9px 12px at 0 0,rgba(214,198,152,.6),transparent),radial-gradient(9px 12px at 100% 0,rgba(214,198,152,.5),transparent),radial-gradient(9px 12px at 0 100%,rgba(214,198,152,.5),transparent),radial-gradient(9px 12px at 100% 100%,rgba(214,198,152,.45),transparent),
+linear-gradient(rgba(214,198,152,.28),transparent 7px,transparent calc(100% - 7px),rgba(214,198,152,.24)),
+linear-gradient(90deg,rgba(6,8,6,.62),rgba(6,8,6,.12) 15%,rgba(255,246,222,.05) 26%,rgba(255,246,222,.2) 35%,rgba(255,246,222,.06) 45%,transparent 60%,rgba(6,8,6,.2) 80%,rgba(6,8,6,.66));
+box-shadow:inset 1px 0 0 rgba(214,198,152,.22),inset -1px 0 0 rgba(214,198,152,.14)}
+.vel .wr{background:radial-gradient(9px 12px at 0 0,rgba(89,82,62,.45),transparent),radial-gradient(9px 12px at 100% 0,rgba(89,82,62,.4),transparent),radial-gradient(9px 12px at 0 100%,rgba(89,82,62,.5),transparent),radial-gradient(9px 12px at 100% 100%,rgba(89,82,62,.45),transparent),
+linear-gradient(rgba(89,82,62,.25),transparent 6px,transparent calc(100% - 6px),rgba(89,82,62,.3)),
+linear-gradient(90deg,rgba(40,36,24,.45),rgba(40,36,24,.08) 15%,rgba(255,250,232,.28) 36%,transparent 58%,rgba(40,36,24,.14) 80%,rgba(40,36,24,.5));box-shadow:inset 1px 0 0 rgba(89,82,62,.25)}
+.sp{position:relative;height:100%;box-sizing:border-box;padding:4px 0;display:flex;flex-direction:column;align-items:center}
+.fi{align-self:stretch;margin:0 4px;height:2px;border-top:.8px solid var(--gilt);border-bottom:.8px solid var(--gilt);opacity:.85}
+.bd{position:relative;align-self:stretch;margin:4px -1.5px;height:5px;flex:none;border-radius:3px;background:linear-gradient(rgba(255,240,205,.34),rgba(255,240,205,.1) 35%,rgba(0,0,0,.22) 68%,rgba(0,0,0,.5));box-shadow:0 1.2px 1.2px rgba(0,0,0,.5),0 -.6px 0 rgba(255,240,205,.12)}
+.bd::before,.bd::after{content:"";position:absolute;left:4px;right:4px;height:.8px;background:var(--gilt);opacity:.85}
+.bd::before{top:-2.6px}.bd::after{bottom:-2.6px}
+.vel .fi,.vel .bd::before,.vel .bd::after{border-color:var(--umber);background:var(--umber);opacity:.7}
+.vel .bd{background:linear-gradient(rgba(255,252,238,.5),rgba(255,252,238,.15) 35%,rgba(60,52,30,.18) 68%,rgba(60,52,30,.4));box-shadow:0 1.2px 1px rgba(60,52,30,.4)}
+.cm{height:13px;flex:none;display:flex;align-items:center}
+.cm svg{width:15px;height:11px;fill:var(--gilt);filter:drop-shadow(0 -.5px 0 rgba(0,0,0,.6))}
+.vel .cm svg{fill:var(--umber);filter:none;opacity:.85}
+.lb{align-self:stretch;margin:1px 5px;flex:none;padding:4px 0 6px;display:flex;flex-direction:column;align-items:center;gap:3px;border-radius:1.5px;color:var(--umber);
+background:radial-gradient(3px 2px at 70% 30%,rgba(140,120,80,.25),transparent),radial-gradient(ellipse at 50% 45%,#BAC7AD,#AEBBA0 70%,#9EA98D);
+box-shadow:inset 0 0 0 2px rgba(177,191,163,.0),inset 0 0 0 2.2px rgba(89,82,62,.55),inset 0 0 0 2.8px transparent,0 0 0 .6px rgba(89,82,62,.7),0 1px 1.6px rgba(0,0,0,.55)}
+.lb b{font:600 7.5px/1 Cinzel,serif;letter-spacing:.06em;white-space:nowrap;padding-top:2px}
+.lb i{width:60%;height:0;border-top:.6px solid rgba(89,82,62,.7)}
+.lb span{writing-mode:vertical-rl;font-size:14.5px;font-weight:500;line-height:1;letter-spacing:.02em}
+.vel .lb{color:#CDB98A;background:radial-gradient(ellipse at 50% 45%,#34503F,#2A403A 70%,#22352F);box-shadow:inset 0 0 0 2.2px rgba(176,156,112,.6),0 0 0 .6px #1E2E28,0 1px 1.6px rgba(0,0,0,.45)}
+.vel .lb i{border-color:rgba(176,156,112,.7)}
+.dm{flex:1;display:flex;align-items:center;justify-content:center}
+.dm span{writing-mode:vertical-rl;font-size:11px;font-style:italic;font-weight:500;letter-spacing:.03em;line-height:1;color:#C9B688;text-shadow:0 -.6px 0 rgba(0,0,0,.65),0 .6px 0 rgba(255,236,190,.18)}
+.sag .dm span{color:#E6D7A8;text-shadow:0 0 1.5px rgba(20,28,22,.9),0 -.6px 0 rgba(0,0,0,.6)}
+.vel .dm span{color:var(--umber);text-shadow:0 .6px 0 rgba(255,252,238,.4)}
+.rb{position:absolute;top:100%;margin-top:-3px;width:32px;z-index:4}
+.rb::before{content:"";position:absolute;left:13px;top:0;bottom:12px;width:6px;background:linear-gradient(90deg,#6A1717,#8C2020 45%,#A84040 58%,#7A1A1A);box-shadow:1px 1px 2px rgba(0,0,0,.5)}
+.rb b{position:absolute;bottom:0;left:0;width:32px;height:15px;background:var(--paper);clip-path:polygon(5px 0,27px 0,100% 5px,100% 100%,0 100%,0 5px);display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px;box-sizing:border-box;font:600 7px/1 Cinzel,serif;letter-spacing:.12em;color:var(--umber)}
+.rb b::before{content:"";position:absolute;top:2px;left:14px;width:4px;height:4px;border-radius:50%;background:var(--red)}
+.gh{position:absolute;width:34px;border:1px dashed rgba(177,191,163,.45);border-bottom:0;box-sizing:border-box;border-radius:3px 3px 0 0;display:flex;justify-content:center;padding-top:9px;font-family:Cinzel,serif;font-size:9px;letter-spacing:.04em;color:var(--paper);opacity:.7;background:linear-gradient(transparent 26px,rgba(177,191,163,.35) 26px 27px,transparent 27px)}
+.note{position:absolute;font-style:italic;font-size:12.5px;color:var(--paper);opacity:.85}
+.dock{position:absolute;left:0;right:0;bottom:0;padding:11px 20px 20px;background:linear-gradient(rgba(42,64,58,.94),var(--ground));border-top:1px solid var(--gilt);box-shadow:0 -1px 0 3px rgba(42,64,58,.9),0 -5px 0 0 rgba(176,156,112,.45),0 -12px 18px rgba(89,82,62,.5);z-index:6}
+.dock .hd{display:flex;justify-content:space-between;font-family:Cinzel,serif;font-size:7.5px;letter-spacing:.28em;color:var(--gilt);margin-bottom:8px}
+.dock .row{display:flex;gap:8px}
+.dock label{flex:1;display:flex;align-items:center;height:46px;padding:0 14px;border:1px solid var(--gilt);background:rgba(89,82,62,.5);box-shadow:inset 0 0 0 3px rgba(42,64,58,.9),inset 0 0 0 4px rgba(176,156,112,.35)}
+.dock label input{font-size:15.5px}
+.dock button{height:48px;padding:0 18px 0 21px;font-size:13px;color:var(--ground);background:var(--gilt);border:0;box-shadow:inset 0 0 0 3px var(--gilt),inset 0 0 0 4px var(--ground)}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="cof" width="39" height="31" patternUnits="userSpaceOnUse"><rect width="39" height="31" fill="#2A403A"/><rect x="2.5" y="2.5" width="34" height="26" fill="#59523E" stroke="#B09C70" stroke-width=".6"/><rect x="7.5" y="6.5" width="24" height="18" fill="#2A403A" stroke="#B09C70" stroke-width=".4" opacity=".9"/><circle cx="19.5" cy="15.5" r="2" fill="#B09C70"/><circle cx="19.5" cy="15.5" r="3.6" fill="none" stroke="#B09C70" stroke-width=".4"/></pattern>
+    <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#59523E" stop-opacity=".75"/><stop offset="1" stop-color="#59523E" stop-opacity="0"/></linearGradient>
+    <linearGradient id="mb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#748C76"/><stop offset=".35" stop-color="#3C5650"/><stop offset="1" stop-color="#22352F"/></linearGradient>
+    <linearGradient id="br" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7A6A46"/><stop offset=".45" stop-color="#D2C193"/><stop offset=".6" stop-color="#B09C70"/><stop offset="1" stop-color="#6E5F3F"/></linearGradient>
+    <!-- leather: pebble grain + creases, lit and multiplied over the cover colour, with a soft specular sheen -->
+    <filter id="lea" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".8 .6" numOctaves="3" seed="4" result="n"/>
+      <feTurbulence type="turbulence" baseFrequency=".07 .035" numOctaves="2" seed="11" result="c"/>
+      <feComposite in="n" in2="c" operator="arithmetic" k2=".75" k3=".45" result="h"/>
+      <feDiffuseLighting in="h" surfaceScale="1.7" diffuseConstant="1.1" lighting-color="#fff" result="l"><feDistantLight azimuth="235" elevation="56"/></feDiffuseLighting>
+      <feComposite in="l" in2="SourceGraphic" operator="arithmetic" k1="1.12" result="t"/>
+      <feSpecularLighting in="h" surfaceScale="1.7" specularConstant=".32" specularExponent="16" lighting-color="#E8DDBF" result="s"><feDistantLight azimuth="235" elevation="56"/></feSpecularLighting>
+      <feComposite in="t" in2="s" operator="arithmetic" k2="1" k3=".3"/>
+      <feComposite in2="SourceAlpha" operator="in"/>
+    </filter>
+    <symbol id="fl" viewBox="0 0 16 12"><path d="M8 .6c1.4 1.7 1.4 3.4 0 4.8-1.4-1.4-1.4-3.1 0-4.8zM8 11.4c1.4-1.7 1.4-3.4 0-4.8-1.4 1.4-1.4 3.1 0 4.8zM1.6 6c1.7-1.4 3.4-1.4 4.8 0-1.4 1.4-3.1 1.4-4.8 0zM14.4 6c-1.7-1.4-3.4-1.4-4.8 0 1.4 1.4 3.1 1.4 4.8 0z"/><circle cx="8" cy="6" r=".9"/><circle cx="4" cy="2.6" r=".55"/><circle cx="12" cy="2.6" r=".55"/><circle cx="4" cy="9.4" r=".55"/><circle cx="12" cy="9.4" r=".55"/></symbol>
+    <symbol id="shelf" viewBox="0 0 390 48">
+      <rect x="10" y="0" width="370" height="21" fill="url(#mb)"/>
+      <path d="M14 7c40 5 70-4 112 3s60 8 98-2 90 4 150-1M30 16c30-6 60 2 92-2s70-6 104 1 80 2 140-3M200 3c10 6 18 12 40 15" fill="none" stroke="#B1BFA3" stroke-width=".5" opacity=".45"/>
+      <path d="M10 .6h370M10 20.5h370" stroke="#B09C70" stroke-width="1.2"/><path d="M10 3h370" stroke="#B09C70" stroke-width=".4" opacity=".7"/>
+      <path d="M12 23.5h366" stroke="#B09C70" stroke-width="2.6" stroke-dasharray="1.8 2.6" opacity=".75"/>
+      <g fill="none" stroke="#B09C70" stroke-width="1.1" stroke-linecap="round"><path d="M30 21v4c0 9 3 15 10 19 6 3 12-1 10-6-1.6-4-7-3-6 1M30 25c8 0 12 4 13 9"/><path d="M360 21v4c0 9-3 15-10 19-6 3-12-1-10-6 1.6-4 7-3 6 1M360 25c-8 0-12 4-13 9"/></g>
+      <circle cx="30" cy="44" r="1.4" fill="#B09C70"/><circle cx="360" cy="44" r="1.4" fill="#B09C70"/>
+    </symbol>
+  </defs>
+</svg>
+
+<svg class="ceil" viewBox="0 0 390 52" aria-hidden="true">
+  <rect x="-5" y="0" width="400" height="31" fill="url(#cof)" transform="translate(-4 0)"/><rect width="390" height="31" fill="url(#shade)"/>
+  <path d="M0 33.5h390" stroke="#B09C70" stroke-width="1"/><path d="M0 38.5h390" stroke="#B09C70" stroke-width="4" stroke-dasharray="2.4 3.1" opacity=".8"/>
+  <path d="M0 42.5h390" stroke="#B09C70" stroke-width=".6"/><path d="M0 45.5h390" stroke="#59523E" stroke-width="2.5"/><path d="M0 48h390" stroke="#B09C70" stroke-width=".4" opacity=".55"/>
+</svg>
+
+<header class="mast">
+  <h1>CATCH</h1>
+  <svg class="orn" viewBox="0 0 300 14" fill="none" stroke="#B09C70" stroke-linecap="round" aria-hidden="true">
+    <path d="M12 7h112M176 7h112" stroke-width=".7"/><path d="M124 7c6 0 9-5 15-5 4 0 4 4 1.5 4.6M176 7c-6 0-9 5-15 5-4 0-4-4-1.5-4.6" stroke-width=".8"/>
+    <path d="M150 2.2l4.8 4.8-4.8 4.8-4.8-4.8z" fill="#B09C70" stroke="none"/><path d="M12 7c-4 0-6-3-4-4.4 1.6-1 3 .6 2 1.6M288 7c4 0 6 3 4 4.4-1.6 1-3-.6-2-1.6" stroke-width=".7"/>
+  </svg>
+  <div class="sub">THE LIBRARY OF THE COLLECTION</div>
+</header>
+<div class="tag"><i>Paste it, find it later. Nothing else.</i><b>4 CAUGHT · 4 OPEN</b></div>
+<div class="seek">
+  <label><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#B09C70" stroke-width="1.1" stroke-linecap="round"><circle cx="6.3" cy="6.3" r="4.6"/><path d="M9.8 9.8l4 4"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+  <button type="button">Filter</button>
+</div>
+<div class="sec">SHELF I · THE BOUND SESSIONS</div>
+
+<!-- shelf A: baseline y=530 -->
+<svg class="sh" style="top:530px" viewBox="0 0 390 48" aria-hidden="true"><use href="#shelf"/></svg>
+<div class="pq" style="top:533px;right:16px">Nº 001 – 004</div>
+
+<!-- simple brass bookend -->
+<svg class="abs" style="left:24px;top:436px;width:40px;height:95px" viewBox="0 0 40 95" aria-hidden="true">
+  <path d="M27 6a5 5 0 0 1 10 0v84H27z" fill="url(#br)" stroke="#6E5F3F" stroke-width=".7"/>
+  <path d="M29.5 8a2.5 2.5 0 0 1 5 0v76h-5z" fill="none" stroke="#E2D3A4" stroke-width=".5" opacity=".6"/>
+  <path d="M2 89h38v5H4z" fill="url(#br)" stroke="#6E5F3F" stroke-width=".7"/><path d="M4 89.6h33" stroke="#E2D3A4" stroke-width=".5" opacity=".7"/>
+  <circle cx="32" cy="20" r="1.3" fill="#6E5F3F"/><circle cx="32" cy="76" r="1.3" fill="#6E5F3F"/>
+</svg>
+
+<div class="bk umb" style="left:64px;top:296px;width:54px;height:234px">
+  <div class="lth"><svg preserveAspectRatio="none"><rect width="100%" height="100%" fill="#59523E" filter="url(#lea)"/></svg></div><i class="wr"></i>
+  <div class="sp"><i class="fi"></i><i class="bd"></i><span class="cm"><svg><use href="#fl"/></svg></span><i class="bd"></i>
+    <div class="lb"><b>Nº 001</b><i></i><span>Vir MPC</span></div><i class="bd"></i>
+    <div class="dm"><span>ypc2000.fun</span></div><i class="bd"></i><span class="cm"><svg><use href="#fl"/></svg></span><i class="bd"></i><i class="fi"></i></div>
+  <i class="rb" style="height:52px;left:4px"><b>OPEN</b></i>
+</div>
+
+<div class="bk vel" style="left:121px;top:326px;width:46px;height:204px">
+  <div class="lth"><svg preserveAspectRatio="none"><rect width="100%" height="100%" fill="#B1BFA3" filter="url(#lea)"/></svg></div><i class="wr"></i>
+  <div class="sp"><i class="fi"></i><i class="bd"></i><span class="cm"><svg><use href="#fl"/></svg></span><i class="bd"></i>
+    <div class="lb"><b>Nº 002</b><i></i><span>Map</span></div><i class="bd"></i>
+    <div class="dm"><span>terraink.app</span></div><i class="bd"></i><span class="cm"><svg><use href="#fl"/></svg></span><i class="bd"></i><i class="fi"></i></div>
+  <i class="rb" style="height:42px;left:7px"><b>OPEN</b></i>
+</div>
+
+<div class="bk sag" style="left:170px;top:290px;width:50px;height:240px">
+  <div class="lth"><svg preserveAspectRatio="none"><rect width="100%" height="100%" fill="#748C76" filter="url(#lea)"/></svg></div><i class="wr"></i>
+  <div class="sp"><i class="fi"></i><i class="bd"></i><span class="cm"><svg><use href="#fl"/></svg></span><i class="bd"></i>
+    <div class="lb"><b>Nº 003</b><i></i><span style="font-size:13.5px">EyeOfOsiris</span></div><i class="bd"></i>
+    <div class="dm"><span>osirisai.live</span></div><i class="bd"></i><span class="cm"><svg><use href="#fl"/></svg></span><i class="bd"></i><i class="fi"></i></div>
+  <i class="rb" style="height:56px;left:9px"><b>OPEN</b></i>
+</div>
+
+<div class="bk grn" style="left:223px;top:262px;width:62px;height:268px;transform:rotate(3.5deg);transform-origin:100% 100%">
+  <div class="lth"><svg preserveAspectRatio="none"><rect width="100%" height="100%" fill="#2A403A" filter="url(#lea)"/></svg></div><i class="wr"></i>
+  <div class="sp"><i class="fi"></i><i class="bd"></i><span class="cm"><svg><use href="#fl"/></svg></span><i class="bd"></i>
+    <div class="lb"><b style="font-size:8px">Nº 004</b><i></i><span>Roland Studio</span></div><i class="bd"></i>
+    <div class="dm"><span>roland50.studio</span></div><i class="bd"></i><span class="cm"><svg><use href="#fl"/></svg></span><i class="bd"></i><i class="fi"></i></div>
+  <i class="rb" style="height:46px;left:14px"><b>OPEN</b></i>
+</div>
+
+<!-- shelf B: baseline y=690, waiting -->
+<div class="note" style="left:28px;top:628px;width:190px">room on the shelf for<br>the volumes still to come…</div>
+<div class="gh" style="left:254px;top:590px;height:100px">005</div>
+<div class="gh" style="left:296px;top:604px;height:86px">006</div>
+<div class="gh" style="left:338px;top:596px;height:94px">007</div>
+<svg class="sh" style="top:690px" viewBox="0 0 390 48" aria-hidden="true"><use href="#shelf"/></svg>
+<div class="pq" style="top:693px;left:50%;transform:translateX(-50%)">005 – 016 · TO COME</div>
+
+<form class="dock" action="#">
+  <div class="hd"><span>NEW ACQUISITION</span><span>TO SHELVE AS Nº 005</span></div>
+  <div class="row">
+    <label><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+</form>
+</body></html>

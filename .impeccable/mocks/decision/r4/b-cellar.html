@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — The Cellar</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Cinzel+Decorative:wght@700&family=Marcellus+SC&display=swap">
+<style>
+:root{--ground:#1A1519;--ox:#40101D;--tan:#D9B88F;--taupe:#AC9B86;--wine:#73303C}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{background:var(--ground);color:var(--tan);font-family:Arapey,serif;position:relative;
+background-image:radial-gradient(ellipse 420px 300px at 50% 0,rgba(64,16,29,.55),transparent 70%),radial-gradient(ellipse 380px 260px at 50% 100%,rgba(64,16,29,.4),transparent 70%)}
+.mast{position:relative;height:166px}
+.mast>svg{position:absolute;left:0;top:0}
+.ln{fill:none;stroke:var(--taupe);stroke-linecap:round;stroke-linejoin:round}
+.mast h1{position:absolute;top:44px;left:0;right:0;margin:0;text-align:center;font:700 43px/1 "Cinzel Decorative",serif;letter-spacing:5px;padding-left:5px;color:var(--tan)}
+.sub{position:absolute;top:96px;left:0;right:0;text-align:center;font:10px "Marcellus SC",serif;letter-spacing:3.4px;color:var(--taupe)}
+.tag{position:absolute;top:118px;left:0;right:0;text-align:center;font-style:italic;font-size:14.5px;color:var(--tan)}
+.count{position:absolute;top:149px;left:0;right:0;text-align:center;font:10.5px "Marcellus SC",serif;letter-spacing:2px;color:var(--taupe)}
+.seek{display:flex;gap:8px;margin:10px 16px 0}
+.seek label,.dock label{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--taupe);border-radius:16px 3px 16px 3px;padding:0 12px;height:36px}
+input{border:0;background:none;font:italic 14px Arapey,serif;color:var(--tan);width:100%;outline:none}
+input::placeholder{color:var(--taupe)}
+button{font:12px "Marcellus SC",serif;letter-spacing:2px;color:var(--tan);background:none;border:1px solid var(--taupe);border-radius:3px 16px 3px 16px;padding:0 15px;height:38px;cursor:pointer}
+.cellar{position:absolute;left:0;top:222px}
+.mc{font-family:"Marcellus SC",serif}
+.ill{fill:none;stroke:#40101D;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.dock{position:absolute;left:0;right:0;bottom:0;height:150px;background:var(--ox)}
+.dock>svg{position:absolute;left:0;top:-13px}
+.dock .hd{text-align:center;font:9.5px "Marcellus SC",serif;letter-spacing:2.6px;color:var(--taupe);margin:22px 0 10px}
+.dock .row{display:flex;gap:8px;margin:0 16px}
+.dock label{height:44px;background:rgba(26,21,25,.45)}
+.dock button{height:46px;padding:0 20px;font:700 15px "Cinzel Decorative",serif;letter-spacing:1.5px;background:var(--tan);color:var(--ox);border-color:var(--tan)}
+.fine{text-align:center;font-style:italic;font-size:11px;color:var(--taupe);margin-top:10px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="glass" x1="0" x2="1"><stop offset="0" stop-color="#1A1519"/><stop offset=".22" stop-color="#2B2227"/><stop offset=".5" stop-color="#1A1519"/><stop offset="1" stop-color="#120E11"/></linearGradient>
+  <radialGradient id="lamp" cx=".5" cy=".42" r=".5"><stop offset="0" stop-color="#D9B88F" stop-opacity=".26"/><stop offset=".55" stop-color="#D9B88F" stop-opacity=".07"/><stop offset="1" stop-color="#D9B88F" stop-opacity="0"/></radialGradient>
+  <g id="bdx">
+    <path fill="url(#glass)" stroke="#AC9B86" stroke-opacity=".45" stroke-width=".7" d="M22 0H34V4H33V50C33 64 56 70 56 88V184Q56 190 50 190H6Q0 190 0 184V88C0 70 23 64 23 50V4H22Z"/>
+    <path fill="none" stroke="#AC9B86" stroke-opacity=".38" stroke-width="1.6" stroke-linecap="round" d="M7 96V180M25.5 40V50"/>
+    <path fill="#73303C" d="M21.6 0H34.4V5H33.4V36H22.6V5H21.6Z"/><path stroke="#40101D" stroke-width=".8" d="M22.6 32H33.4M21.6 5H34.4"/>
+  </g>
+  <g id="bgy">
+    <path fill="url(#glass)" stroke="#AC9B86" stroke-opacity=".45" stroke-width=".7" d="M22 0H34V4H33V40C34 70 56 86 56 112V184Q56 190 50 190H6Q0 190 0 184V112C0 86 22 70 23 40V4H22Z"/>
+    <path fill="none" stroke="#AC9B86" stroke-opacity=".38" stroke-width="1.6" stroke-linecap="round" d="M5 118V180M12 82C9 86 7 90 6 96"/>
+    <path fill="#73303C" d="M21.6 0H34.4V5H33.4V34H22.6V5H21.6Z"/><path stroke="#40101D" stroke-width=".8" d="M22.6 30H33.4M21.6 5H34.4"/>
+  </g>
+  <g id="lab"><path fill="#D9B88F" d="M4 112C4 106 14 104 28 100 42 104 52 106 52 112V180H4Z"/>
+    <path fill="none" stroke="#40101D" stroke-width=".5" d="M6.5 113C7 108.5 16 106.5 28 103 40 106.5 49 108.5 49.5 113V177.5H6.5Z"/>
+    <path fill="none" stroke="#40101D" stroke-width=".5" d="M17 133c4 2 7-1 11 0s7 2 11 0"/></g>
+  <g id="seal"><path fill="#73303C" d="M0-6.2c1.6 0 2.4 1.2 3.8 1.4 1.4.8 1.2 2.2 2.2 3.4.4 1.6-.6 2.6-.6 4-.8 1.4-2.2 1.4-3.2 2.6-1.4.6-2.6-.2-4-.2-1.4-.8-1.8-2-3-3-.4-1.4.4-2.6.2-4 .8-1.4 2.2-1.6 3.4-2.6.4-.6.8-1.6 1.2-1.6z"/>
+    <circle r="3" fill="none" stroke="#40101D" stroke-width=".7"/><path fill="none" stroke="#40101D" stroke-width=".6" stroke-linecap="round" d="M0 1.6c-1-.8-1-2.2 0-3.2 1 1 1 2.4 0 3.2z"/></g>
+  <g id="half" class="ln">
+    <path stroke-width="1.4" d="M58 160C56 124 26 110 30 72 34 38 92 20 195 18"/>
+    <path stroke-width=".7" opacity=".7" d="M70 160C69 128 42 112 45 76 48 46 100 30 195 28"/>
+    <path stroke-width="1" d="M58 160C82 140 30 128 52 104 70 86 46 70 66 52"/>
+    <path stroke-width="1" d="M52 104C34 96 22 80 20 52"/>
+    <path stroke-width="1" d="M20 52c-6-6-6-14 0-20 6 6 6 14 0 20zM20 52c-8-2-13-8-13-16 6 2 11 9 13 16zM20 52c8-2 13-8 13-16-6 2-11 9-13 16z"/>
+    <path stroke-width=".8" d="M17 30c-1-4 0-7 3-9M23 30c1-4 0-7-3-9"/>
+    <path stroke-width=".9" d="M36 132c-10-3-15-11-13-20 8 3 13 11 13 20zM36 132c-4-6-8-11-13-20"/>
+    <path stroke-width=".9" d="M66 52c-2-6 2-12 8-12 3 0 4 3 2 5"/>
+    <path stroke-width=".9" d="M124 20c-8-12-26-9-23 1 2 6 10 5 9-1"/>
+    <path stroke-width=".9" d="M183 18c-14 2-26-10-38-6"/>
+  </g>
+  <g id="arch" class="ln">
+    <path stroke-width="1.5" d="M6 458V128C6 70 52 40 118 30 152 25 172 10 195 6"/>
+    <path stroke-width=".7" opacity=".7" d="M15 458V132C15 80 58 52 120 41 154 35 174 22 195 18"/>
+    <path stroke-width="1" d="M6 150C30 140 26 104 44 92 60 82 76 92 70 104 65 112 54 106 58 100"/>
+    <path stroke-width=".9" d="M44 92C40 74 54 58 72 52M118 30c-10-10-30-6-26 6 3 7 12 4 10-2"/>
+    <path stroke-width=".9" d="M6 300c14-6 16-22 6-28M6 300c10 8 8 22-2 26"/>
+  </g>
+  <g id="ghost" fill="none" stroke="#AC9B86" opacity=".45" stroke-width=".9" stroke-dasharray="2 3" stroke-linecap="round">
+    <path d="M22 0H34V4H33V50C33 64 56 70 56 88V184Q56 190 50 190H6Q0 190 0 184V88C0 70 23 64 23 50V4H22Z"/><path d="M4 112C4 106 14 104 28 100 42 104 52 106 52 112V180H4Z"/></g>
+</defs></svg>
+
+<header class="mast">
+  <svg width="390" height="166" viewBox="0 0 390 166" aria-hidden="true">
+    <path fill="#40101D" d="M70 163V160C69 128 42 112 45 76 48 46 100 30 195 28 290 30 342 46 345 76 348 112 321 128 320 160V163Z"/>
+    <path class="ln" stroke-width="1" d="M52 163.5H338M88 166H302"/>
+    <use href="#half"/><use href="#half" transform="translate(390 0) scale(-1 1)"/>
+    <g class="ln" stroke-width="1"><path d="M195 20c-5-5-5-12 0-17 5 5 5 12 0 17zM195 20c-7-1-12-6-13-12 6 1 11 6 13 12zM195 20c7-1 12-6 13-12-6 1-11 6-13 12z"/>
+    <path stroke-width=".8" d="M150 112h34M206 112h34M195 108l4 4-4 4-4-4z"/></g>
+  </svg>
+  <h1>Catch</h1>
+  <div class="sub">Catalogue of Sessions</div>
+  <div class="tag">Paste it, find it later. Nothing else.</div>
+  <div class="count">4 caught · 4 open</div>
+</header>
+
+<div class="seek">
+  <label><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#AC9B86" stroke-width="1.2" stroke-linecap="round"><circle cx="6.4" cy="6.4" r="4.9"/><path d="M10 10l4 4"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+  <button type="button">Filter</button>
+</div>
+
+<svg class="cellar" width="390" height="458" viewBox="0 0 390 458" role="img" aria-label="Wine display of four sessions, Nº 004 newest at centre">
+  <path fill="#40101D" opacity=".62" d="M6 458V128C6 70 52 40 118 30 152 25 172 10 195 6 218 10 238 25 272 30 338 40 384 70 384 128V458Z"/>
+  <ellipse cx="195" cy="190" rx="170" ry="190" fill="url(#lamp)"/>
+  <use href="#arch"/><use href="#arch" transform="translate(390 0) scale(-1 1)"/>
+  <g class="ln" stroke-width="1"><path d="M195 22c-4-4-4-10 0-14 4 4 4 10 0 14zM195 22c-6-1-10-5-11-10 5 1 9 5 11 10zM195 22c6-1 10-5 11-10-5 1-9 5-11 10z"/><path stroke-width=".7" d="M112 40l-6-10M278 40l6-10"/></g>
+  <!-- chalk plaque -->
+  <rect x="88" y="38" width="214" height="27" rx="4" fill="#1A1519" stroke="#AC9B86" stroke-width="1"/>
+  <rect x="92" y="41.5" width="206" height="20" rx="2.5" fill="none" stroke="#D9B88F" stroke-opacity=".4" stroke-width=".5"/>
+  <text x="195" y="55.5" text-anchor="middle" class="mc" font-size="9.4" letter-spacing=".6" fill="#D9B88F">Carte des Sessions · 001 – 004</text>
+  <!-- shelf shadows -->
+  <g fill="#120E11" opacity=".7"><ellipse cx="41" cy="330" rx="32" ry="3.5"/><ellipse cx="111" cy="330" rx="32" ry="3.5"/><ellipse cx="279" cy="330" rx="32" ry="3.5"/><ellipse cx="195" cy="300" rx="44" ry="4"/></g>
+  <!-- 001 Vir MPC -->
+  <g transform="translate(13 140)"><use href="#bdx"/><use href="#lab"/>
+    <text x="28" y="115" text-anchor="middle" class="mc" font-size="6.2" letter-spacing="1.4" fill="#40101D">Cuvée</text>
+    <text x="28" y="127" text-anchor="middle" class="mc" font-size="10" fill="#40101D">Nº 001</text>
+    <g class="ill" transform="translate(16.6 133.6) scale(.37)"><path d="M3.8 22.2l53.8-.6.6 12.2L4.2 34.6z"/><path d="M8 22.2l1-6.8 44.2-.4.8 6.6"/><path d="M8.2 27.8l7.6-.1M18.4 27.6h7.8M28.6 27.8h7.6M38.8 27.6l7.6.1M49 27.8h5.6"/></g>
+    <text x="28" y="156" text-anchor="middle" font-family="Arapey" font-size="10" fill="#1A1519">Vir MPC</text>
+    <text x="28" y="165" text-anchor="middle" font-family="Arapey" font-style="italic" font-size="7.6" fill="#40101D">ypc2000.fun</text>
+    <use href="#seal" transform="translate(28 173)"/></g>
+  <!-- 002 Map -->
+  <g transform="translate(83 140)"><use href="#bgy"/><use href="#lab"/>
+    <text x="28" y="115" text-anchor="middle" class="mc" font-size="6.2" letter-spacing="1.4" fill="#40101D">Cuvée</text>
+    <text x="28" y="127" text-anchor="middle" class="mc" font-size="10" fill="#40101D">Nº 002</text>
+    <g class="ill" transform="translate(19.6 131) scale(.37)"><path d="M8 12.5l14.6-4.8 15.8 5.4 15.6-5 .3 31.8-15.4 5.2-16-5.6L8.4 44z"/><path d="M22.6 7.8l.4 31.5M38.4 13.2l.6 31.8"/></g>
+    <text x="28" y="156" text-anchor="middle" font-family="Arapey" font-size="10" fill="#1A1519">Map</text>
+    <text x="28" y="165" text-anchor="middle" font-family="Arapey" font-style="italic" font-size="7.6" fill="#40101D">terraink.app</text>
+    <use href="#seal" transform="translate(28 173)"/></g>
+  <!-- 003 EyeOfOsiris -->
+  <g transform="translate(251 140)"><use href="#bdx"/><use href="#lab"/>
+    <text x="28" y="115" text-anchor="middle" class="mc" font-size="6.2" letter-spacing="1.4" fill="#40101D">Cuvée</text>
+    <text x="28" y="127" text-anchor="middle" class="mc" font-size="10" fill="#40101D">Nº 003</text>
+    <g class="ill" transform="translate(16.6 131.4) scale(.37)"><path d="M4.6 26.4C13 14.2 22 9.8 31.3 10c9.6.1 18.4 5 26.4 16.3-8 11.4-17 15.6-26.6 15.4C21.6 41.6 12.4 37 4.6 26.4z"/><circle cx="31" cy="26" r="9.4"/><circle cx="31.2" cy="25.8" r="3.6" fill="#40101D"/></g>
+    <text x="28" y="156" text-anchor="middle" font-family="Arapey" font-size="9.4" fill="#1A1519">EyeOfOsiris</text>
+    <text x="28" y="165" text-anchor="middle" font-family="Arapey" font-style="italic" font-size="7.6" fill="#40101D">osirisai.live</text>
+    <use href="#seal" transform="translate(28 173)"/></g>
+  <!-- 005 reserved -->
+  <g transform="translate(321 140)"><use href="#ghost"/>
+    <text x="28" y="140" text-anchor="middle" class="mc" font-size="11" letter-spacing="1" fill="#AC9B86" opacity=".6">Nº 005</text>
+    <text x="28" y="153" text-anchor="middle" font-family="Arapey" font-style="italic" font-size="8.5" fill="#AC9B86" opacity=".6">réservé</text></g>
+  <!-- shelf + ironwork brackets -->
+  <rect x="10" y="330" width="370" height="7" fill="#40101D" stroke="#AC9B86" stroke-width=".9"/>
+  <path class="ln" stroke-width=".5" opacity=".6" d="M10 341H380"/>
+  <g class="ln" stroke-width="1"><path d="M40 337C40 352 62 354 64 345 66 338 56 337 57 343"/><path d="M350 337C350 352 328 354 326 345 324 338 334 337 333 343"/></g>
+  <!-- hero 004 on pedestal under the lamp -->
+  <path fill="#40101D" stroke="#AC9B86" stroke-width="1" d="M150 330V318C150 310 158 306 160 300H230C232 306 240 310 240 318V330Z"/>
+  <path class="ln" stroke-width=".8" d="M162 316c10-6 22 6 33 0 11-6 23 6 33 0M195 322v4"/>
+  <g transform="translate(156 72)"><use href="#bdx" transform="scale(1.4 1.2)"/>
+    <path fill="#D9B88F" d="M5 128C5 120 20 117 39 112 58 117 73 120 73 128V214H5Z"/>
+    <path fill="none" stroke="#40101D" stroke-width=".6" d="M8 129C8 122.5 21 120 39 115.5 57 120 70 122.5 70 129V211H8Z"/>
+    <text x="39" y="130" text-anchor="middle" class="mc" font-size="7.4" letter-spacing="2" fill="#40101D">Cuvée</text>
+    <text x="39" y="146" text-anchor="middle" class="mc" font-size="14" letter-spacing=".5" fill="#40101D">Nº 004</text>
+    <g class="ill" style="stroke-width:2" transform="translate(20.4 141) scale(.6)"><path d="M5 30.5l52-.8.3 13.6-52.4.5z"/><path d="M11 30.3v13M17.2 30.4l.1 12.8M23.5 30v13.2M29.6 30.2v13M36 30.1l-.2 13M42.1 30v13.1M48.3 30.2v12.9"/><path d="M14.2 30.5v7.4h3.1v-7.5M26.6 30.3l.2 7.6 3-.1v-7.4M39 30.2v7.6h3M45.4 30.3l-.1 7.4 3 .1"/><path d="M6 30.4c.2-6.2.1-9 .4-11.8l50.3-.6.4 11.6"/><circle cx="13" cy="24" r="2.3"/><circle cx="21" cy="24.2" r="2.2"/><path d="M30 22h14.5M30.5 25.8l13.8-.2"/></g>
+    <text x="39" y="185" text-anchor="middle" font-family="Arapey" font-size="12" fill="#1A1519">Roland Studio</text>
+    <text x="39" y="196" text-anchor="middle" font-family="Arapey" font-style="italic" font-size="9" fill="#40101D">roland50.studio</text>
+    <use href="#seal" transform="translate(39 207) scale(1.25)"/></g>
+  <!-- lower diamond rack, empty slots -->
+  <g class="ln" stroke-width=".8" opacity=".55"><path d="M13 403L39 353 65 403 91 353 117 403 143 353 169 403 195 353 221 403 247 353 273 403 299 353 325 403 351 353 377 403"/><path d="M13 403L39 453 65 403 91 453 117 403 143 453 169 403 195 453 221 403 247 453 273 403 299 453 325 403 351 453 377 403"/></g>
+  <g fill="none" stroke="#AC9B86" stroke-width=".8" stroke-dasharray="1.6 2.6" opacity=".5"><circle cx="39" cy="403" r="15"/><circle cx="91" cy="403" r="15"/><circle cx="143" cy="403" r="15"/><circle cx="195" cy="403" r="15"/><circle cx="247" cy="403" r="15"/><circle cx="299" cy="403" r="15"/><circle cx="351" cy="403" r="15"/></g>
+  <g class="mc" font-size="8.6" text-anchor="middle" fill="#AC9B86" opacity=".6"><text x="39" y="406">006</text><text x="91" y="406">007</text><text x="143" y="406">008</text><text x="195" y="406">009</text><text x="247" y="406">010</text><text x="299" y="406">011</text><text x="351" y="406">012</text></g>
+</svg>
+
+<form class="dock" action="#">
+  <svg width="390" height="30" viewBox="0 0 390 30" aria-hidden="true">
+    <defs><pattern id="iron" width="40" height="30" patternUnits="userSpaceOnUse"><path class="ln" stroke-width=".8" opacity=".85" d="M0 13C10 3 20 3 20 13S30 23 40 13M20 13c-4 0-5-4-2-5 2 0 3 2 1 3M0 13c4 0 5 4 2 5-2 0-3-2-1-3M40 13c-4 0-5 4-2 5 2 0 3-2 1-3"/></pattern></defs>
+    <rect x="0" y="0" width="390" height="30" fill="none"/>
+    <path d="M0 13H390" stroke="#40101D" stroke-width="12"/>
+    <rect x="-5" y="0" width="400" height="30" fill="url(#iron)" transform="translate(-5 0)"/>
+    <path class="ln" stroke-width="1" fill="#40101D" d="M195 2c9 0 17 5 20 11-3 6-11 11-20 11s-17-5-20-11c3-6 11-11 20-11z"/>
+    <path class="ln" stroke-width="1" d="M195 19c-3-3-3-8 0-11 3 3 3 8 0 11zM195 19c-5 0-8-3-9-7 4 0 7 3 9 7zM195 19c5 0 8-3 9-7-4 0-7 3-9 7zM165 13h6M219 13h6"/>
+    <path class="ln" stroke-width=".6" opacity=".5" d="M0 26H390"/>
+  </svg>
+  <div class="hd">Uncork a new session · Nº 005</div>
+  <div class="row">
+    <label><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#AC9B86" stroke-width="1.1" stroke-linecap="round"><path d="M6.5 9.5l3-3M7 4.5l1.6-1.6a2.8 2.8 0 0 1 4 4L11 8.5M9 11.5l-1.6 1.6a2.8 2.8 0 0 1-4-4L5 7.5"/></svg><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+  <div class="fine">One link at a time — kept until you need it.</div>
+</form>
+</body></html>

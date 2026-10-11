@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — The Big Steppers</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=Old+Standard+TT:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#401B0E;--brown:#592C12;--tob:#8C704D;--khaki:#BFAD8A;--silver:#CDD2CE;--wine:#73303C}
+*{box-sizing:border-box}
+html,body{margin:0;width:390px;height:844px;overflow:hidden;background:var(--deep);color:var(--khaki);font-family:"Old Standard TT",serif}
+.stage{position:relative;width:390px;height:844px;overflow:hidden;
+  background:
+    radial-gradient(ellipse 62% 46% at 50% 52%,rgba(205,210,206,.20),rgba(205,210,206,0) 70%),
+    radial-gradient(ellipse 120% 70% at 50% 100%,rgba(140,112,77,.25),rgba(64,27,14,0) 60%),
+    var(--deep)}
+.beam{position:absolute;left:50%;top:150px;width:360px;height:520px;transform:translateX(-50%);
+  background:linear-gradient(to bottom,rgba(205,210,206,.16),rgba(205,210,206,.05) 70%,rgba(205,210,206,0));
+  clip-path:polygon(44% 0,56% 0,100% 100%,0 100%);pointer-events:none}
+.arch{position:absolute;inset:0 0 auto 0;height:236px}
+.title{position:absolute;top:58px;left:0;right:0;text-align:center}
+.title .eyebrow{font:italic 12px "Old Standard TT",serif;letter-spacing:.06em;color:var(--khaki);opacity:.9}
+.title h1{margin:6px 0 4px;font:600 46px/1 "Bodoni Moda",serif;letter-spacing:.26em;padding-left:.26em;color:var(--silver)}
+.title .sub{font:italic 13px "Bodoni Moda",serif;color:var(--khaki)}
+.meta{position:absolute;top:246px;left:24px;right:24px;display:flex;justify-content:space-between;align-items:baseline;font-size:12px}
+.meta i{font-style:italic}
+.meta b{font-weight:400;letter-spacing:.14em;font-size:11px;text-transform:uppercase}
+.search{position:absolute;top:272px;left:24px;right:24px;display:flex;gap:10px}
+.search label{flex:1;display:flex;align-items:center;gap:8px;height:44px;padding:0 12px;border:1px solid var(--tob);background:rgba(89,44,18,.55)}
+.search input{all:unset;flex:1;font:italic 14px "Old Standard TT",serif;color:var(--khaki)}
+.search input::placeholder{color:var(--khaki);opacity:.85}
+.search button{all:unset;height:44px;padding:0 16px;border:1px solid var(--tob);font:11px "Old Standard TT",serif;letter-spacing:.2em;text-transform:uppercase;color:var(--khaki);display:flex;align-items:center}
+.act-label{position:absolute;top:334px;left:24px;right:24px;display:flex;align-items:center;gap:10px;font:11px "Old Standard TT",serif;letter-spacing:.2em;text-transform:uppercase;color:var(--khaki)}
+.act-label::before,.act-label::after{content:"";flex:1;height:1px;background:var(--tob)}
+.grid{position:absolute;top:360px;left:18px;right:18px;display:grid;grid-template-columns:repeat(4,1fr);row-gap:10px}
+.cell{text-align:center}
+.st{position:relative;width:66px;height:80px;margin:0 auto;filter:drop-shadow(0 3px 4px rgba(20,8,3,.6))}
+.st .paper{position:absolute;inset:0;background:var(--silver)}
+.st .paper::after{content:"";position:absolute;inset:-3px;border:5px dotted var(--deep)}
+.st .face{position:absolute;inset:6px;border:1px solid var(--brown);
+  background:linear-gradient(160deg,#CDD2CE,#BFAD8A);display:flex;align-items:center;justify-content:center}
+.st svg.d{width:50px;height:42px;fill:none;stroke:var(--deep);stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round}
+.st em{position:absolute;bottom:2px;left:0;right:0;font:italic 7.5px "Old Standard TT",serif;color:var(--brown)}
+.ring{position:absolute;left:-8px;top:-8px;width:82px;height:96px;fill:none;stroke:var(--wine);stroke-width:1.6;stroke-linecap:round}
+.cap{margin-top:12px;line-height:1.25}
+.cap .act{font:italic 11px "Bodoni Moda",serif;color:var(--khaki)}
+.cap .t{font:600 12px "Bodoni Moda",serif;color:var(--silver)}
+.cap .d{font:11px "Old Standard TT",serif;color:var(--khaki)}
+.res .st{border:1px dashed rgba(191,173,138,.45);filter:none;display:flex;align-items:center;justify-content:center;font:italic 13px "Bodoni Moda",serif;color:rgba(191,173,138,.75)}
+.res .cap .act{opacity:.75}
+.planks{position:absolute;left:0;right:0;top:640px;height:62px}
+.lights{position:absolute;top:690px;left:30px;right:30px;display:flex;justify-content:space-between}
+.lights i{width:22px;height:8px;border-radius:11px 11px 0 0;background:var(--tob);box-shadow:0 -10px 22px 6px rgba(205,210,206,.18)}
+.dock{position:absolute;left:0;right:0;bottom:0;height:136px;background:var(--brown);border-top:3px double var(--tob);padding:14px 20px 0}
+.dock .row1{display:flex;justify-content:space-between;font:11px "Old Standard TT",serif;letter-spacing:.16em;text-transform:uppercase;color:var(--khaki)}
+.dock .row1 em{font-style:italic;text-transform:none;letter-spacing:.02em;font-size:12px}
+.dock form{display:flex;gap:10px;margin-top:12px}
+.dock input{all:unset;flex:1;height:48px;padding:0 14px;background:var(--deep);border:1px solid var(--tob);font:italic 15px "Old Standard TT",serif;color:var(--khaki)}
+.dock input::placeholder{color:var(--khaki);opacity:.85}
+.dock button{all:unset;height:48px;padding:0 20px;background:var(--khaki);color:var(--deep);font:600 15px "Bodoni Moda",serif;letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;box-shadow:inset 0 0 0 3px var(--khaki),inset 0 0 0 4px var(--brown)}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 85% 75% at 50% 48%,rgba(64,27,14,0) 55%,rgba(30,12,5,.75) 100%)}
+</style></head>
+<body><div class="stage">
+<div class="beam"></div>
+
+<svg class="arch" viewBox="0 0 390 236" aria-hidden="true">
+  <defs>
+    <linearGradient id="fold" x1="0" x2="1">
+      <stop offset="0" stop-color="#401B0E"/><stop offset=".35" stop-color="#592C12"/><stop offset=".55" stop-color="#8C704D" stop-opacity=".55"/><stop offset=".75" stop-color="#592C12"/><stop offset="1" stop-color="#401B0E"/>
+    </linearGradient>
+    <pattern id="folds" width="18" height="236" patternUnits="userSpaceOnUse"><rect width="18" height="236" fill="url(#fold)"/></pattern>
+  </defs>
+  <!-- proscenium -->
+  <path d="M0 0h390v236h-14V56Q195 10 14 56v180H0z" fill="#592C12"/>
+  <path d="M14 236V56Q195 10 376 56v180" fill="none" stroke="#8C704D" stroke-width="3"/>
+  <path d="M22 236V62Q195 20 368 62v174" fill="none" stroke="#8C704D" stroke-width=".8"/>
+  <!-- curtains drawn back -->
+  <path d="M22 62Q60 52 96 46C80 110 66 170 74 236H22z" fill="url(#folds)"/>
+  <path d="M368 62Q330 52 294 46c16 64 30 124 22 190h52z" fill="url(#folds)"/>
+  <path d="M60 150q14 6 24 0" stroke="#8C704D" stroke-width="2" fill="none"/>
+  <path d="M306 150q14 6 24 0" stroke="#8C704D" stroke-width="2" fill="none"/>
+  <!-- scalloped valance -->
+  <path d="M30 58Q195 18 360 58v14q-15 12-30 0q-15 12-30 0q-15 12-30 0q-15 12-30 0q-15 12-30 0q-15 12-30 0q-15 12-30 0q-15 12-30 0q-15 12-30 0q-15 12-30 0q-15 12-30 0z" fill="#592C12" stroke="#8C704D" stroke-width=".8"/>
+  <!-- cartouche ornament -->
+  <path d="M170 16q25-12 50 0q-25 8-50 0z" fill="#8C704D"/>
+  <circle cx="195" cy="16" r="3" fill="#BFAD8A"/>
+</svg>
+
+<div class="title">
+  <div class="eyebrow">Now presenting</div>
+  <h1>CATCH</h1>
+  <div class="sub">A Catalogue of Sessions — in Four Acts</div>
+</div>
+
+<div class="meta"><i>Paste it, find it later. Nothing else.</i><b>4 caught · 4 open</b></div>
+
+<div class="search">
+  <label><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#BFAD8A" stroke-width="1.1" stroke-linecap="round"><circle cx="6.3" cy="6.3" r="4.6"/><path d="M9.8 9.8l4 4"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+  <button type="button">Filter</button>
+</div>
+
+<div class="act-label">The Programme · Acts I – VIII</div>
+
+<div class="grid">
+  <div class="cell"><div class="st"><div class="paper"></div><div class="face">
+    <svg class="d" viewBox="0 0 62 52"><path d="M3.8 22.2l53.8-.6.6 12.2L4.2 34.6z" fill="#8C704D" fill-opacity=".35"/><path d="M8 22.2l1-6.8 44.2-.4.8 6.6"/><path d="M8.2 27.8l7.6-.1M18.4 27.6h7.8M28.6 27.8h7.6M38.8 27.6l7.6.1M49 27.8h5.6" stroke-width="2"/><path d="M7.6 31.4h46.8" stroke-dasharray="1.2 2"/><circle cx="16" cy="18.6" r="1.3"/><circle cx="22" cy="18.6" r="1.3"/><path d="M29 18.6h12"/></svg><em>S·004</em></div>
+    <svg class="ring" viewBox="0 0 80 92"><path d="M30 5C11 10 3 28 5 50c2 24 15 38 36 37 22-1 33-19 32-44C72 20 59 4 39 4 30 5 23 9 18 15"/></svg></div>
+    <div class="cap"><div class="act">Act IV</div><div class="t">Roland Studio</div><div class="d">roland50.studio</div></div></div>
+  <div class="cell"><div class="st"><div class="paper"></div><div class="face">
+    <svg class="d" viewBox="0 0 62 52"><path d="M4.6 26.4C13 14.2 22 9.8 31.3 10c9.6.1 18.4 5 26.4 16.3-8 11.4-17 15.6-26.6 15.4C21.6 41.6 12.4 37 4.6 26.4z" fill="#8C704D" fill-opacity=".3"/><circle cx="31" cy="26" r="9.4" fill="#BFAD8A"/><circle cx="31.2" cy="25.8" r="3.6" fill="#401B0E"/><path d="M14.8 15l-2.6-4.4M22.4 11l-1.2-4.6M31 9.6V4.8M39.6 11l1.4-4.6M47.4 15.2l2.8-4.2"/></svg><em>S·003</em></div>
+    <svg class="ring" viewBox="0 0 80 92"><path d="M50 6C20 1 4 22 5 48c1 27 16 40 37 39 22-1 33-18 32-43C73 20 60 5 38 5 30 6 23 10 18 16"/></svg></div>
+    <div class="cap"><div class="act">Act III</div><div class="t">EyeOfOsiris</div><div class="d">osirisai.live</div></div></div>
+  <div class="cell"><div class="st"><div class="paper"></div><div class="face">
+    <svg class="d" viewBox="0 0 62 52"><path d="M8 12.5l14.6-4.8 15.8 5.4 15.6-5 .3 31.8-15.4 5.2-16-5.6L8.4 44z"/><path d="M22.6 7.8l.4 31.5 15.4 5.6.6-31.8z" fill="#8C704D" fill-opacity=".35"/><path d="M13 19c3 4 6 1 9 4s3 7 6 7 5-5 9-3 2 7 8 6" stroke-dasharray="1.6 2.2"/><path d="M45.4 30.2l3.5 3.4M48.8 30.1l-3.3 3.6"/></svg><em>S·002</em></div>
+    <svg class="ring" viewBox="0 0 80 92"><path d="M24 9C8 18 3 36 6 56c4 20 18 32 37 30 20-2 31-20 30-44C72 20 58 4 38 5 28 6 20 11 15 18"/></svg></div>
+    <div class="cap"><div class="act">Act II</div><div class="t">Map</div><div class="d">terraink.app</div></div></div>
+  <div class="cell"><div class="st"><div class="paper"></div><div class="face">
+    <svg class="d" viewBox="0 0 62 52"><path d="M5 30.5l52-.8.3 13.6-52.4.5z" fill="#8C704D" fill-opacity=".3"/><path d="M11 30.3v13M17.2 30.4l.1 12.8M23.5 30v13.2M29.6 30.2v13M36 30.1l-.2 13M42.1 30v13.1M48.3 30.2v12.9"/><path d="M6 30.4c.2-6.2.1-9 .4-11.8l50.3-.6.4 11.6"/><circle cx="13" cy="24" r="2.3"/><circle cx="21" cy="24.2" r="2.2"/><path d="M30 22h14.5M30.5 25.8l13.8-.2"/></svg><em>S·001</em></div>
+    <svg class="ring" viewBox="0 0 80 92"><path d="M44 5C17 2 4 24 5 49c1 25 15 39 36 38 21-1 33-17 32-43C72 19 58 3 36 5 28 6 22 10 17 16"/></svg></div>
+    <div class="cap"><div class="act">Act I</div><div class="t">Vir MPC</div><div class="d">ypc2000.fun</div></div></div>
+
+  <div class="cell res"><div class="st">V</div><div class="cap"><div class="act">Act V</div></div></div>
+  <div class="cell res"><div class="st">VI</div><div class="cap"><div class="act">Act VI</div></div></div>
+  <div class="cell res"><div class="st">VII</div><div class="cap"><div class="act">Act VII</div></div></div>
+  <div class="cell res"><div class="st">VIII</div><div class="cap"><div class="act">Act VIII</div></div></div>
+</div>
+
+<svg class="planks" viewBox="0 0 390 62" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0 62L40 0h310l40 62z" fill="#592C12"/>
+  <g stroke="#401B0E" stroke-width="1"><path d="M0 62L40 0M55 62L74 0M110 62L118 0M165 62L162 0M195 62V0M225 62L228 0M280 62L272 0M335 62L316 0M390 62L350 0"/><path d="M14 40h362M27 20h336" stroke="#8C704D" stroke-opacity=".35"/></g>
+</svg>
+<div class="lights"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+<div class="dock">
+  <div class="row1"><span>Next on stage</span><em>Act V · No. 005</em></div>
+  <form><input type="url" placeholder="paste a link…" aria-label="Link to save"><button type="submit">Catch</button></form>
+</div>
+
+<div class="grain"></div><div class="vig"></div>
+</div></body></html>

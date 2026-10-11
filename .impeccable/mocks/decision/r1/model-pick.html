@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — Shoebox Archive</title>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Bodoni+Moda:ital,opsz,wght@1,6..96,500&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#151311;--green:#1F3B2F;--ox:#6B1E1E;--gold:#C79A3B;--sepia:#D9C3B0;--umber:#2B211B;--paper:#E6D5C1}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{background:var(--umber);color:var(--sepia);font-family:'Special Elite',monospace;position:relative}
+*{box-sizing:border-box}
+.abs{position:absolute}
+.head{top:46px;left:0;width:390px;text-align:center}
+.title{font-family:Gloock,serif;font-size:46px;letter-spacing:.32em;margin-right:-.32em;color:var(--gold);line-height:1}
+.rule{width:150px;margin:8px auto 7px;border-top:1px solid rgba(199,154,59,.55);border-bottom:1px solid rgba(199,154,59,.25);height:3px}
+.tag{font-size:11px;letter-spacing:.06em;color:var(--sepia)}
+.count{font-size:9.5px;letter-spacing:.22em;color:rgba(217,195,176,.6);margin-top:5px}
+.search{top:146px;left:24px;width:342px;height:36px;display:flex;gap:8px}
+.field{flex:1;background:var(--sepia);color:rgba(21,19,17,.6);font-size:12.5px;display:flex;align-items:center;gap:8px;padding:0 12px;border:1px solid var(--ink);box-shadow:inset 0 0 0 3px var(--sepia),inset 0 0 0 4px rgba(21,19,17,.35)}
+.filter{width:78px;border:1px solid var(--gold);color:var(--gold);font-size:11px;letter-spacing:.18em;display:flex;align-items:center;justify-content:center;gap:6px}
+.wall{top:196px;left:0;width:390px;height:470px;background:
+ repeating-linear-gradient(90deg,rgba(0,0,0,.09) 0 1px,transparent 1px 39px),
+ radial-gradient(ellipse at 50% 30%,#2a4a3b 0%,var(--green) 55%,#16291f 100%)}
+.wall:after{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(var(--ink),transparent)}
+.frame{top:204px;left:125px;width:140px;height:108px;padding:9px;background:linear-gradient(135deg,#e2bd68,var(--gold) 30%,#7d5a1d 60%,#d9ad55 85%,#8c6623);box-shadow:0 10px 18px rgba(0,0,0,.55),inset 0 0 0 2px #6e4f1a,inset 0 0 0 4px #e8c879}
+.frame svg{display:block;box-shadow:inset 0 0 8px #000}
+.plaque{top:317px;left:170px;width:50px;height:11px;background:linear-gradient(#d8b261,#8f6a27);color:var(--ink);font-size:6px;letter-spacing:.2em;text-align:center;line-height:11px}
+.box{width:86px;height:84px}
+.lid{position:absolute;left:-3px;top:0;width:92px;height:20px;box-shadow:0 3px 4px rgba(0,0,0,.45);background-image:linear-gradient(rgba(255,255,255,.12),rgba(0,0,0,.15))}
+.body{position:absolute;left:0;top:20px;width:86px;height:64px;background-image:linear-gradient(90deg,rgba(0,0,0,.18),transparent 15%,transparent 85%,rgba(0,0,0,.22));border-bottom:1px solid rgba(0,0,0,.4)}
+.lbl{position:absolute;left:50%;top:22px;transform:translateX(-50%);width:44px;height:20px;background:var(--paper);color:var(--ink);font-size:10px;text-align:center;line-height:21px;box-shadow:0 1px 2px rgba(0,0,0,.4),inset 0 0 0 2px var(--paper),inset 0 0 0 3px rgba(21,19,17,.3)}
+.ox .lid,.ox .body{background-color:var(--ox)} .oc .lid,.oc .body{background-color:var(--gold)} .se .lid,.se .body{background-color:var(--sepia)} .um .lid,.um .body{background-color:#3a2c22}
+.card{left:117px;width:156px;height:78px;background:var(--paper);color:var(--ink);padding:7px 10px;box-shadow:0 -2px 6px rgba(0,0,0,.35),0 1px 0 rgba(0,0,0,.2);
+ background-image:repeating-linear-gradient(transparent 0 50px,rgba(31,59,47,.18) 50px 51px,transparent 51px 62px),linear-gradient(transparent 21px,rgba(107,30,30,.6) 21px 22px,transparent 22px)}
+.no{font-size:10px;letter-spacing:.12em;display:flex;justify-content:space-between;align-items:center;height:12px}
+.stamp{color:var(--ox);border:1.5px solid var(--ox);font-size:8px;letter-spacing:.2em;padding:1px 3px 0;transform:rotate(-7deg);opacity:.85;border-radius:2px}
+.t{font-family:'Bodoni Moda',serif;font-style:italic;font-size:15.5px;margin-top:5px;line-height:1.1}
+.d{font-size:9.5px;color:rgba(21,19,17,.65);margin-top:1px}
+.allbox{top:556px;left:111px;width:168px;height:96px}
+.alllid{top:526px;left:108px;width:174px;height:24px;background:var(--ox);transform:rotate(-9deg);transform-origin:right bottom;box-shadow:0 -3px 6px rgba(0,0,0,.4);background-image:linear-gradient(rgba(255,255,255,.1),rgba(0,0,0,.2))}
+.allfront{position:absolute;inset:0;background:var(--sepia);background-image:linear-gradient(90deg,rgba(0,0,0,.2),transparent 12%,transparent 88%,rgba(0,0,0,.25)),linear-gradient(rgba(0,0,0,.25),transparent 14px);border-top:3px solid #b9a08b}
+.alllbl{position:absolute;left:44px;top:30px;width:80px;height:38px;background:var(--paper);color:var(--ink);text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.4),inset 0 0 0 3px var(--paper),inset 0 0 0 4px var(--ink)}
+.alllbl b{display:block;font-weight:400;font-size:15px;letter-spacing:.3em;margin-right:-.3em;padding-top:5px}
+.alllbl i{font-style:normal;font-size:7.5px;letter-spacing:.14em}
+.shelf{top:652px;left:0;width:390px;height:14px;background:linear-gradient(#4a382b,var(--umber) 60%,#120e0b);box-shadow:0 6px 12px rgba(0,0,0,.6)}
+.floor{top:666px;left:0;width:390px;height:68px;background:linear-gradient(var(--ink),var(--umber))}
+.cap{top:684px;width:390px;text-align:center;font-size:9px;letter-spacing:.3em;color:rgba(199,154,59,.65)}
+.dock{top:740px;left:0;width:390px;height:104px;background:var(--ink);border-top:1px solid rgba(199,154,59,.4);padding:14px 20px 0;display:flex;gap:10px}
+.paste{flex:1;height:50px;background:var(--paper);color:rgba(21,19,17,.55);font-size:14px;display:flex;align-items:center;padding:0 14px;box-shadow:inset 0 0 0 4px var(--paper),inset 0 0 0 5px var(--ink),inset 0 0 0 7px var(--paper),inset 0 0 0 8px rgba(21,19,17,.35)}
+.catch{width:96px;height:50px;background:var(--ox);color:var(--gold);font-family:Gloock,serif;font-size:19px;letter-spacing:.08em;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 3px var(--ox),inset 0 0 0 4px var(--gold),0 3px 0 #3d1010}
+.home{top:828px;left:130px;width:130px;height:5px;border-radius:3px;background:rgba(217,195,176,.5)}
+.status{top:14px;left:28px;right:28px;display:flex;justify-content:space-between;font-size:12px;color:rgba(217,195,176,.7)}
+.grain{top:0;left:0;width:390px;height:844px;pointer-events:none;mix-blend-mode:multiply;opacity:.35}
+.vig{inset:0;pointer-events:none;background:radial-gradient(ellipse 75% 62% at 50% 46%,transparent 55%,rgba(21,19,17,.62) 100%),linear-gradient(rgba(199,154,59,.05),rgba(107,30,30,.06))}
+</style></head><body>
+<div class="abs status"><span>9:41</span><span>●●● ▮</span></div>
+<header class="abs head"><div class="title">CATCH</div><div class="rule"></div><div class="tag">Paste it, find it later. Nothing else.</div><div class="count">4 CAUGHT · 4 OPEN</div></header>
+<div class="abs search"><div class="field"><svg width="13" height="13" viewBox="0 0 13 13"><circle cx="5.5" cy="5.5" r="4.2" fill="none" stroke="#151311" stroke-width="1.4"/><path d="M8.6 8.6 12 12" stroke="#151311" stroke-width="1.6"/></svg>search the archive…</div><div class="filter"><svg width="10" height="9" viewBox="0 0 10 9"><path d="M0 1h10M2 4.5h6M4 8h2" stroke="#C79A3B" stroke-width="1.3"/></svg>FILTER</div></div>
+<div class="abs wall"></div>
+<div class="abs frame"><svg width="122" height="90" viewBox="0 0 122 90">
+<defs><filter id="oil"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3.5"/></filter>
+<radialGradient id="bg" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#4b3a2a"/><stop offset="1" stop-color="#151311"/></radialGradient></defs>
+<g filter="url(#oil)"><rect width="122" height="90" fill="url(#bg)"/>
+<path d="M0 66 Q40 60 122 64 V90 H0Z" fill="#2B211B"/><path d="M8 64 Q30 52 58 70 Q40 84 6 82Z" fill="#6B1E1E"/><path d="M14 68 Q32 62 50 72" stroke="#8c3a2c" stroke-width="2" fill="none"/>
+<path d="M68 30 Q60 30 61 40 L58 66 Q72 72 86 66 L82 40 Q83 30 75 30 Z" fill="#1F3B2F"/><ellipse cx="71.5" cy="30" rx="6" ry="2" fill="#2f5544"/><path d="M64 42 L62 62" stroke="#3d6a55" stroke-width="2"/>
+<circle cx="44" cy="58" r="9" fill="#C79A3B"/><circle cx="41" cy="55" r="3" fill="#e7c47a"/><path d="M44 49 q2-5 6-6" stroke="#2B211B" stroke-width="1.5" fill="none"/>
+<path d="M92 60 q4-14 9-12 q6 2 2 14 q-5 6-11-2Z" fill="#D9C3B0"/><path d="M95 56 q3-5 6-4" stroke="#fff3e0" stroke-width="1.5" fill="none" opacity=".7"/>
+<circle cx="30" cy="66" r="4" fill="#9c2d24"/></g></svg></div>
+<div class="abs plaque">STILL LIFE · 004</div>
+<!-- left stack -->
+<div class="abs box ox" style="top:388px;left:16px"><div class="lid"></div><div class="body"><div class="lbl">—</div></div></div>
+<div class="abs box oc" style="top:476px;left:16px"><div class="lid"></div><div class="body"><div class="lbl">—</div></div></div>
+<div class="abs box um" style="top:566px;left:16px;height:86px"><div class="lid"></div><div class="body"><div class="lbl">—</div></div></div>
+<!-- right stack -->
+<div class="abs box ox" style="top:388px;left:288px"><div class="lid"></div><div class="body"><div class="lbl">—</div></div></div>
+<div class="abs box oc" style="top:476px;left:288px"><div class="lid"></div><div class="body"><div class="lbl">—</div></div></div>
+<div class="abs box um" style="top:566px;left:288px;height:86px"><div class="lid"></div><div class="body"><div class="lbl">—</div></div></div>
+<!-- the ALL box: lid behind, cards rising, front panel -->
+<div class="abs alllid"></div>
+<div class="abs card" style="top:334px;transform:rotate(-3deg)"><div class="no">No. 004<span class="stamp">OPEN</span></div><div class="t">Roland Studio</div><div class="d">roland50.studio</div></div>
+<div class="abs card" style="top:388px;transform:rotate(2deg)"><div class="no">No. 003<span class="stamp">OPEN</span></div><div class="t">EyeOfOsiris</div><div class="d">osirisai.live</div></div>
+<div class="abs card" style="top:442px;transform:rotate(-1.5deg)"><div class="no">No. 002<span class="stamp">OPEN</span></div><div class="t">Map</div><div class="d">terraink.app</div></div>
+<div class="abs card" style="top:496px;transform:rotate(1deg)"><div class="no">No. 001<span class="stamp">OPEN</span></div><div class="t">Vir MPC</div><div class="d">ypc2000.fun</div></div>
+<div class="abs allbox"><div class="allfront"><div class="alllbl"><b>ALL</b><i>4 SESSIONS</i></div></div></div>
+<div class="abs shelf"></div>
+<div class="abs floor"></div>
+<div class="abs cap">— THE ARCHIVE · ROOM I —</div>
+<div class="abs dock"><div class="paste">paste a link…</div><div class="catch">Catch</div></div>
+<div class="abs home"></div>
+<svg class="abs grain" viewBox="0 0 390 844"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .45  0 0 0 0 .35  0 0 0 .9 0"/></filter><rect width="390" height="844" filter="url(#g)"/></svg>
+<div class="abs vig"></div>
+</body></html>

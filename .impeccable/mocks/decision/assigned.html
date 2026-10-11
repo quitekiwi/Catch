@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>Catch · The Handscroll</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Shippori+Mincho+B1:wght@400;600;700&family=Zen+Antique&display=swap" rel="stylesheet">
+<style>
+:root{--washi:#22304A;--gofun:#EEE8DA;--ochre:#C8963E;--sumi:#14161C;--seal:#D2402A}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{position:relative;background:var(--washi);color:var(--gofun);font-family:"Shippori Mincho B1",serif;
+  background-image:radial-gradient(circle at 78% 34%,rgba(238,232,218,.09),transparent 55%),radial-gradient(ellipse at 20% 100%,rgba(20,22,28,.55),transparent 60%)}
+.grain{position:absolute;inset:0;pointer-events:none}
+.abs{position:absolute}
+.mark{top:44px;left:24px;margin:0;font:400 44px/1 "Yuji Syuku",serif;letter-spacing:.02em;color:var(--gofun)}
+.vol{top:60px;right:24px;font-size:11px;letter-spacing:.18em;color:var(--ochre);text-transform:uppercase}
+.tag{top:102px;left:26px;margin:0;font-size:13px;letter-spacing:.03em;color:rgba(238,232,218,.78)}
+.row{top:146px;left:20px;right:20px;display:flex;gap:10px}
+.field{position:relative;flex:1}
+.field svg{position:absolute;left:12px;top:13px}
+input{font:inherit;box-sizing:border-box;outline:none}
+.search{width:100%;height:42px;padding:0 12px 0 36px;border-radius:3px;font-size:14px;color:var(--gofun);
+  background:rgba(238,232,218,.06);border:1px solid rgba(238,232,218,.32)}
+.search::placeholder{color:rgba(238,232,218,.55);font-style:italic}
+.search:focus{border-color:var(--gofun);background:rgba(238,232,218,.1)}
+button{font:inherit;cursor:pointer}
+.filter{height:42px;padding:0 14px;display:flex;align-items:center;gap:7px;border-radius:3px;font-size:13px;font-weight:600;
+  letter-spacing:.06em;color:var(--ochre);background:transparent;border:1px solid rgba(200,150,62,.65)}
+.filter:hover{background:rgba(200,150,62,.1)}
+.band{top:226px;left:0}
+.count{top:604px;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.32em;color:var(--ochre);text-transform:uppercase}
+.count:before,.count:after{content:"";display:inline-block;width:34px;height:1px;background:rgba(200,150,62,.5);vertical-align:middle;margin:0 12px}
+.stand{left:0;right:0;bottom:0;height:104px;background:linear-gradient(rgba(20,22,28,0),rgba(20,22,28,.6) 40%);border-top:1px solid rgba(200,150,62,.28)}
+.stand form{position:absolute;top:20px;left:20px;right:20px;display:flex;gap:10px}
+.paste{flex:1;height:48px;padding:0 14px;border-radius:2px;border:0;font-size:15px;color:var(--sumi);background:var(--gofun);
+  box-shadow:inset 0 0 0 1px rgba(20,22,28,.15),0 6px 18px rgba(0,0,0,.28)}
+.paste::placeholder{color:#6B6559;font-style:italic}
+.paste:focus{box-shadow:inset 0 0 0 2px var(--ochre),0 6px 18px rgba(0,0,0,.28)}
+.catch{height:48px;padding:0 20px;border-radius:2px;font:400 19px/1 "Yuji Syuku",serif;color:var(--gofun);background:var(--sumi);
+  border:1px solid rgba(200,150,62,.7);box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.catch:hover{background:#000}
+</style>
+</head>
+<body>
+<svg class="grain" width="390" height="844" aria-hidden="true">
+  <filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".75 .045" numOctaves="3" seed="11"/>
+    <feColorMatrix values="0 0 0 0 .93 0 0 0 0 .91 0 0 0 0 .85 .7 0 0 0 -.3"/></filter>
+  <rect width="390" height="844" filter="url(#g)" opacity=".35"/>
+  <g fill="none" stroke="#EEE8DA" stroke-linecap="round" opacity=".09">
+    <path d="M150 662 h90M118 680 h150M170 698 h48M136 716 h30M232 716 h22" stroke-width="2.4"/>
+  </g>
+</svg>
+
+<h1 class="abs mark">Catch</h1>
+<div class="abs vol">Scroll I · 001–004</div>
+<p class="abs tag">Paste it, find it later. Nothing else.</p>
+<div class="abs row" role="search">
+  <label class="field"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#EEE8DA" stroke-width="1.5" stroke-linecap="round" opacity=".7" aria-hidden="true"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg>
+    <input class="search" type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+  <button class="filter" type="button"><svg width="14" height="12" viewBox="0 0 14 12" stroke="#C8963E" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M1 2h12M3 6h8M5.5 10h3"/></svg>Filter</button>
+</div>
+
+<svg class="abs band" width="390" height="350" viewBox="0 0 390 350" role="img" aria-label="The archive scroll: four open sessions, newest on the right">
+  <defs>
+    <filter id="wet" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="10" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation="1.3"/></filter>
+    <filter id="dry" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="2" seed="9" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".5"/></filter>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter>
+    <filter id="stamp" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="2" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.8" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feColorMatrix in="n" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 9 0 0 0 -2.5" result="m"/><feComposite in="d" in2="m" operator="in"/></filter>
+    <filter id="fibre"><feTurbulence type="fractalNoise" baseFrequency=".9 .05" numOctaves="2" seed="7"/>
+      <feColorMatrix values="0 0 0 0 .93 0 0 0 0 .91 0 0 0 0 .85 .8 0 0 0 -.32"/></filter>
+    <linearGradient id="roll" x1="0" x2="1"><stop offset="0" stop-color="#1A2538"/><stop offset=".55" stop-color="#3A4A66"/><stop offset="1" stop-color="#141C2B"/></linearGradient>
+    <linearGradient id="wood" x1="0" x2="1"><stop offset="0" stop-color="#3A2414"/><stop offset=".45" stop-color="#9A6A3A"/><stop offset="1" stop-color="#2A190E"/></linearGradient>
+    <linearGradient id="fade" x1="0" x2="1"><stop offset="0" stop-color="#22304A"/><stop offset="1" stop-color="#22304A" stop-opacity="0"/></linearGradient>
+  </defs>
+
+  <!-- scroll paper -->
+  <rect x="-4" y="26" width="356" height="284" fill="#14161C" opacity=".45" filter="url(#soft)"/>
+  <rect x="-4" y="20" width="352" height="284" fill="#273652"/>
+  <rect x="-4" y="20" width="352" height="284" filter="url(#fibre)" opacity=".55"/>
+  <rect x="-4" y="20" width="352" height="7" fill="#C8963E" opacity=".5"/><rect x="-4" y="297" width="352" height="7" fill="#C8963E" opacity=".5"/>
+  <path d="M-4 30.5H348M-4 293.5H348" stroke="#EEE8DA" stroke-width=".6" opacity=".35"/>
+
+  <!-- 001 · oldest, nearly sunk into the paper -->
+  <g opacity=".34" filter="url(#dry)" fill="none" stroke="#EEE8DA">
+    <circle cx="30" cy="190" r="7"/><circle cx="30" cy="190" r="13" opacity=".7"/><circle cx="30" cy="190" r="20" opacity=".45"/>
+    <circle cx="30" cy="190" r="2.5" fill="#14161C" stroke="none"/><path d="M-6 150 C4 140 12 146 20 138" stroke="#14161C" stroke-width="3"/>
+  </g>
+  <!-- 002 · terrain -->
+  <g opacity=".55">
+    <path d="M50 196 C64 158 80 146 104 156 L104 210 L50 210Z" fill="#EEE8DA" opacity=".2" filter="url(#wet)"/>
+    <path d="M50 228 C58 196 68 186 77 200 C86 176 95 168 104 186 L104 236 L50 236Z" fill="#14161C" opacity=".55" filter="url(#wet)"/>
+    <path d="M56 230 C70 214 84 220 100 202" fill="none" stroke="#C8963E" stroke-width="1.2" stroke-dasharray="2 3"/>
+    <circle cx="96" cy="128" r="6" fill="#C8963E" opacity=".6" filter="url(#dry)"/>
+  </g>
+  <!-- 003 · lantern-eye -->
+  <g opacity=".8">
+    <circle cx="157" cy="160" r="42" fill="#C8963E" opacity=".28" filter="url(#soft)"/>
+    <path d="M157 68V126" stroke="#14161C" stroke-width="1.2"/>
+    <ellipse cx="157" cy="160" rx="23" ry="33" fill="#C8963E" opacity=".78" filter="url(#wet)"/>
+    <g fill="none" stroke="#14161C" stroke-width="1" opacity=".55" filter="url(#dry)"><ellipse cx="157" cy="160" rx="23" ry="33"/>
+      <path d="M135 144 Q157 150 179 144M135 177 Q157 183 179 177"/></g>
+    <rect x="147" y="124" width="20" height="6" fill="#14161C"/><rect x="147" y="190" width="20" height="6" fill="#14161C"/>
+    <path d="M143 160 Q157 148 171 160 Q157 172 143 160Z" fill="#EEE8DA" opacity=".9" filter="url(#dry)"/><circle cx="157" cy="160" r="4.6" fill="#14161C"/>
+    <ellipse cx="152" cy="256" rx="40" ry="7" fill="#14161C" opacity=".3" filter="url(#soft)"/>
+  </g>
+  <!-- 004 · newest: moon over a wet wave -->
+  <g>
+    <circle cx="284" cy="100" r="64" fill="#EEE8DA" opacity=".1" filter="url(#soft)"/>
+    <circle cx="284" cy="100" r="46" fill="#EEE8DA" opacity=".92" filter="url(#wet)"/>
+    <circle cx="276" cy="94" r="30" fill="#C8963E" opacity=".16" filter="url(#wet)"/>
+    <ellipse cx="276" cy="172" rx="72" ry="16" fill="#C8963E" opacity=".38" filter="url(#soft)"/>
+    <path d="M232 214 C252 176 268 168 282 184 C298 158 318 150 346 178 L346 236 L232 236Z" fill="#14161C" opacity=".4" filter="url(#wet)"/>
+    <path d="M232 297 C238 252 262 218 296 214 C326 211 344 232 336 252 C330 268 308 266 309 251 C310 240 324 242 322 252 C340 262 346 280 346 297Z" fill="#14161C" opacity=".92" filter="url(#wet)"/>
+    <path d="M250 290 C258 258 280 236 306 232" fill="none" stroke="#22304A" stroke-width="6" opacity=".5" filter="url(#dry)"/>
+    <g fill="none" stroke="#EEE8DA" stroke-linecap="round" filter="url(#dry)"><path d="M262 238 C278 220 304 214 326 222" stroke-width="2.4"/>
+      <path d="M270 252 C284 238 300 234 312 238" stroke-width="1.2" opacity=".7"/></g>
+    <g fill="#EEE8DA"><circle cx="330" cy="208" r="2"/><circle cx="321" cy="200" r="1.4"/><circle cx="338" cy="198" r="1.2"/><circle cx="312" cy="206" r="1"/></g>
+  </g>
+
+  <!-- paper slips: titles brushed vertically -->
+  <g font-family="Shippori Mincho B1,serif" font-weight="600" fill="#14161C">
+    <g opacity=".72"><rect x="4" y="120" width="14" height="50" fill="#EEE8DA" filter="url(#dry)"/><text transform="translate(7.5 125) rotate(90)" font-size="9.5">Vir MPC</text></g>
+    <g opacity=".82"><rect x="52" y="98" width="16" height="38" fill="#EEE8DA" filter="url(#dry)"/><text transform="translate(56 106) rotate(90)" font-size="11">Map</text></g>
+    <g opacity=".92"><rect x="113" y="80" width="20" height="112" fill="#EEE8DA" filter="url(#dry)"/><text transform="translate(118 88) rotate(90)" font-size="12.5">EyeOfOsiris</text></g>
+    <rect x="200" y="38" width="26" height="150" fill="#EEE8DA" filter="url(#dry)"/><text transform="translate(206 47) rotate(90)" font-size="15.5" font-weight="700">Roland Studio</text>
+  </g>
+
+  <!-- hanko: vermilion, open sessions only -->
+  <g font-family="Zen Antique,serif" fill="#22304A" text-anchor="middle">
+    <g transform="translate(3 176)" opacity=".85"><rect width="17" height="17" rx="1" fill="#D2402A" filter="url(#stamp)"/><rect x="1.8" y="1.8" width="13.4" height="13.4" fill="none" stroke="#22304A" stroke-width=".8"/><text x="8.5" y="11.4" font-size="6.6">001</text></g>
+    <g transform="translate(51 142)" opacity=".9"><rect width="20" height="20" rx="1" fill="#D2402A" filter="url(#stamp)"/><rect x="2" y="2" width="16" height="16" fill="none" stroke="#22304A" stroke-width=".9"/><text x="10" y="13.4" font-size="7.8">002</text></g>
+    <g transform="translate(111 198)"><rect width="24" height="24" rx="1.2" fill="#D2402A" filter="url(#stamp)"/><rect x="2.4" y="2.4" width="19.2" height="19.2" fill="none" stroke="#22304A" stroke-width="1"/><text x="12" y="16" font-size="9.4">003</text></g>
+    <g transform="translate(198 196) rotate(-2 15 15)"><rect width="30" height="30" rx="1.4" fill="#D2402A" filter="url(#stamp)"/><rect x="3" y="3" width="24" height="24" fill="none" stroke="#22304A" stroke-width="1.2"/><text x="15" y="20" font-size="11.8">004</text></g>
+  </g>
+
+  <!-- scroll continues off the left; rolled end + wooden rod on the right -->
+  <rect x="-4" y="20" width="22" height="284" fill="url(#fade)" opacity=".6"/>
+  <rect x="344" y="15" width="15" height="294" rx="3" fill="url(#roll)"/>
+  <rect x="358" y="4" width="12" height="318" rx="3" fill="url(#wood)"/>
+  <ellipse cx="364" cy="4" rx="7.5" ry="3" fill="#C8963E"/><ellipse cx="364" cy="322" rx="7.5" ry="3" fill="#C8963E"/>
+  <path d="M368 206 C382 232 372 258 384 292" fill="none" stroke="#C8963E" stroke-width="1.4" opacity=".75"/>
+
+  <!-- domains, under each scene -->
+  <g font-family="Shippori Mincho B1,serif" fill="#EEE8DA" font-size="10" letter-spacing=".02em">
+    <text x="2" y="330" font-size="9" opacity=".55">ypc2000.fun</text>
+    <text x="80" y="330" font-size="9" text-anchor="middle" opacity=".62">terraink.app</text>
+    <text x="150" y="330" text-anchor="middle" opacity=".72">osirisai.live</text>
+    <text x="272" y="330" text-anchor="middle" font-size="11" opacity=".88">roland50.studio</text>
+  </g>
+</svg>
+
+<div class="abs count">4 caught · 4 open</div>
+
+<div class="abs stand">
+  <form action="#" method="get">
+    <input class="paste" type="url" placeholder="paste a link…" aria-label="Paste a link">
+    <button class="catch" type="submit">Catch</button>
+  </form>
+</div>
+</body>
+</html>

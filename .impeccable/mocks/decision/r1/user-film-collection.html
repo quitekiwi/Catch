@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — The Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400;1,6..96,500&family=Bebas+Neue&family=Syncopate:wght@400;700&family=Italiana&family=Courier+Prime:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--umber:#1A1410;--tobacco:#6E5644;--sepia:#D9C3B0;--ox:#6B1E1E;--green:#1F3B2F;--gold:#C79A3B;--ink:#0f0b08}
+*{box-sizing:border-box}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{position:relative;background:var(--umber);color:var(--sepia);font-family:"Courier Prime",monospace;
+ background-image:radial-gradient(120% 60% at 42% 34%,rgba(199,154,59,.20),rgba(110,86,68,.10) 38%,transparent 66%),linear-gradient(#211913,#1A1410 60%,#140f0b)}
+.grain{position:absolute;inset:0;pointer-events:none;z-index:20;opacity:.22;mix-blend-mode:overlay}
+.vig{position:absolute;inset:0;pointer-events:none;z-index:19;background:radial-gradient(90% 75% at 50% 45%,transparent 55%,rgba(8,5,3,.75))}
+header{position:absolute;top:50px;left:24px;right:24px}
+.mark{display:flex;justify-content:space-between;align-items:baseline;font-family:"Syncopate";font-weight:700;font-size:10px;letter-spacing:.42em;color:var(--gold)}
+.mark span:last-child{font-family:"Courier Prime";font-weight:400;letter-spacing:.06em;font-size:11px;color:var(--tobacco)}
+h1{margin:6px 0 0;font:italic 400 38px/1 "Bodoni Moda",serif;letter-spacing:-.01em;color:var(--sepia)}
+h1 b{font-weight:400;font-style:normal;font-family:"Italiana";font-size:15px;letter-spacing:.3em;vertical-align:middle;color:var(--tobacco);margin-right:8px}
+.tag{margin:6px 0 0;font:italic 11.5px "Courier Prime";color:#a8917c}
+.search{position:absolute;top:150px;left:24px;right:24px;display:flex;gap:8px}
+.search label{flex:1;display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;border:1px solid rgba(217,195,176,.28);border-radius:2px;background:rgba(15,11,8,.45);font-size:13px;color:#8f7a68}
+.search .f{height:38px;padding:0 14px;display:flex;align-items:center;gap:6px;border:1px solid var(--gold);color:var(--gold);font:700 9.5px "Syncopate";letter-spacing:.18em;border-radius:2px}
+.hero{position:absolute;top:208px;left:24px;right:24px;height:300px}
+.cover{position:absolute;left:4px;top:0;width:206px;height:292px;transform:rotate(-2.2deg);background:#e2cdb8;padding:9px;box-shadow:0 26px 34px -10px rgba(0,0,0,.8),0 0 0 1px rgba(0,0,0,.4),0 0 60px rgba(199,154,59,.18)}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,240,210,.18),transparent 40%,rgba(0,0,0,.12))}
+.cover svg{display:block;width:188px;height:176px}
+.ct{display:flex;justify-content:space-between;align-items:flex-end;margin-top:9px;color:var(--umber)}
+.ct h2{margin:0;font:400 23px/1 "Gloock",serif;letter-spacing:-.01em}
+.ct .no{font:400 30px/0.8 "Bebas Neue";color:var(--ox)}
+.cline{margin-top:6px;border-top:1px solid var(--umber);padding-top:5px;display:flex;justify-content:space-between;font:700 7px "Syncopate";letter-spacing:.2em;color:var(--umber)}
+.cband{position:absolute;right:9px;top:9px;background:var(--ox);color:var(--sepia);font:400 11px "Bebas Neue";letter-spacing:.16em;padding:3px 6px 1px}
+.notes{position:absolute;left:226px;top:14px;right:0;font-size:11px;line-height:1.5;color:#b9a28d}
+.notes .k{font:700 7.5px "Syncopate";letter-spacing:.24em;color:var(--gold);display:block;margin-top:14px}
+.notes .k:first-child{margin-top:0}
+.notes em{font:italic 15px/1.2 "Bodoni Moda",serif;color:var(--sepia);display:block}
+.notes .open{display:inline-block;margin-top:4px;padding:2px 7px;border:1px solid var(--sepia);color:var(--sepia);font-size:10px;letter-spacing:.12em}
+.shelf{position:absolute;left:0;right:0;top:530px;height:212px}
+.row{position:absolute;left:18px;right:18px;bottom:16px;height:196px;display:flex;align-items:flex-end;gap:3px}
+.sp{position:relative;height:184px;width:34px;display:flex;flex-direction:column;align-items:center;padding:8px 0;box-shadow:inset -3px 0 4px rgba(0,0,0,.35),inset 2px 0 2px rgba(255,235,200,.08)}
+.sp .n{font:400 15px/1 "Bebas Neue";letter-spacing:.04em}
+.sp .t{writing-mode:vertical-rl;transform:rotate(180deg);margin:10px 0 auto;white-space:nowrap}
+.sp svg{width:16px;height:16px;margin-top:6px}
+.s3{background:var(--ox);color:var(--sepia);height:192px;width:38px}
+.s3 .t{font:400 19px "Bebas Neue";letter-spacing:.16em}
+.s2{background:var(--green);color:#cdb995;height:178px;width:36px;border-top:4px solid var(--gold)}
+.s2 .t{font:700 10px "Syncopate";letter-spacing:.5em}
+.s1{background:#cfb79f;color:var(--umber);height:188px;width:37px;border-top:14px solid var(--umber)}
+.s1 .n{margin-top:-2px}
+.s1 .t{font:400 17px "Gloock",serif}
+.gap{width:38px;height:192px;background:linear-gradient(90deg,#080503,#120d09 70%,#1b140f);position:relative}
+.gap span{position:absolute;bottom:8px;left:0;right:0;text-align:center;font:400 12px "Bebas Neue";color:#4a3a2d;letter-spacing:.1em}
+.b{height:var(--h);width:var(--w);background:repeating-linear-gradient(90deg,rgba(0,0,0,.12) 0 1px,transparent 1px 5px),linear-gradient(90deg,#3a2c21,#4a392b 50%,#33261c);opacity:var(--o,1);box-shadow:inset -2px 0 3px rgba(0,0,0,.4)}
+.lean{transform:rotate(7deg);transform-origin:bottom left;margin-left:8px}
+.board{position:absolute;left:8px;right:8px;bottom:0;height:16px;background:repeating-linear-gradient(178deg,rgba(0,0,0,.18) 0 1px,transparent 1px 4px),linear-gradient(#5b4535,#3b2c21 60%,#21180f);box-shadow:0 14px 22px rgba(0,0,0,.7)}
+.shelf-label{position:absolute;left:24px;right:24px;top:510px;display:flex;justify-content:space-between;font:700 7.5px "Syncopate";letter-spacing:.3em;color:var(--tobacco)}
+.dock{position:absolute;left:0;right:0;bottom:0;height:94px;padding:16px 18px 30px;background:linear-gradient(transparent,rgba(10,7,5,.9) 30%);display:flex;gap:8px;z-index:5}
+.dock label{flex:1;height:48px;display:flex;align-items:center;gap:10px;padding:0 14px;background:#e2cdb8;color:#7d6553;font-size:13.5px;border-radius:2px;box-shadow:inset 0 1px 3px rgba(0,0,0,.25)}
+.dock label i{font:400 16px "Bebas Neue";font-style:normal;color:var(--ox);letter-spacing:.06em}
+.dock .catch{height:48px;padding:0 20px;display:flex;align-items:center;background:var(--ox);color:var(--sepia);font:italic 500 20px "Bodoni Moda",serif;border-radius:2px;box-shadow:0 0 0 1px var(--gold) inset}
+</style></head><body>
+<header>
+ <div class="mark"><span>CATCH</span><span>4 caught · 4 open</span></div>
+ <h1><b>THE</b>Collection</h1>
+ <p class="tag">Paste it, find it later. Nothing else.</p>
+</header>
+<div class="search">
+ <label><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#8f7a68" stroke-width="1.4"><circle cx="6" cy="6" r="4.5"/><path d="M9.5 9.5 13 13"/></svg>search the archive…</label>
+ <div class="f"><svg width="11" height="10" viewBox="0 0 11 10" fill="none" stroke="#C79A3B" stroke-width="1.3"><path d="M0 1.5h11M2 5h7M4 8.5h3"/></svg>FILTER</div>
+</div>
+<section class="hero">
+ <div class="cover">
+  <svg viewBox="0 0 188 176" aria-label="Sepia still: a vintage synthesizer under a hanging lamp">
+   <defs>
+    <radialGradient id="pool" cx="50%" cy="58%" r="60%"><stop offset="0" stop-color="#d9b88f"/><stop offset=".45" stop-color="#8a6a4f"/><stop offset="1" stop-color="#1A1410"/></radialGradient>
+    <linearGradient id="cone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3dcb4" stop-opacity=".55"/><stop offset="1" stop-color="#f3dcb4" stop-opacity="0"/></linearGradient>
+    <filter id="g"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .1 0 0 0 0 .08 0 0 0 0 .06 0 0 0 .55 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+   </defs>
+   <rect width="188" height="176" fill="url(#pool)"/>
+   <path d="M94 0v34" stroke="#1A1410" stroke-width="1.2"/>
+   <path d="M78 46 Q94 28 110 46Z" fill="#1A1410"/>
+   <polygon points="80,46 108,46 172,132 16,132" fill="url(#cone)"/>
+   <ellipse cx="94" cy="47" rx="6" ry="2.4" fill="#fff3d8"/>
+   <rect x="0" y="132" width="188" height="44" fill="#2a1f17"/>
+   <path d="M0 132h188" stroke="#0e0a07" stroke-width="2"/>
+   <g transform="translate(26 104)">
+    <path d="M0 28 L8 4 H128 L136 28Z" fill="#1A1410"/>
+    <rect x="10" y="7" width="116" height="9" fill="#3a2c21"/>
+    <g fill="#d9c3b0">
+     <circle cx="18" cy="11.5" r="2.4"/><circle cx="30" cy="11.5" r="2.4"/><circle cx="42" cy="11.5" r="2.4"/><circle cx="54" cy="11.5" r="2.4"/>
+     <rect x="68" y="9" width="2" height="6"/><rect x="76" y="9" width="2" height="6"/><rect x="84" y="9" width="2" height="6"/><rect x="92" y="9" width="2" height="6"/>
+     <circle cx="112" cy="11.5" r="3.2" fill="#6B1E1E"/>
+    </g>
+    <rect x="6" y="19" width="124" height="8" fill="#e8d5bf"/>
+    <path d="M14 19v8M22 19v8M30 19v8M38 19v8M46 19v8M54 19v8M62 19v8M70 19v8M78 19v8M86 19v8M94 19v8M102 19v8M110 19v8M118 19v8M126 19v8" stroke="#1A1410" stroke-width=".7"/>
+    <path d="M12 19h3v5h-3zM20 19h3v5h-3zM36 19h3v5h-3zM44 19h3v5h-3zM52 19h3v5h-3zM68 19h3v5h-3zM76 19h3v5h-3zM92 19h3v5h-3zM100 19h3v5h-3zM108 19h3v5h-3zM124 19h3v5h-3z" fill="#1A1410"/>
+   </g>
+   <path d="M148 132 l6 -40 h10 l6 40" fill="#1A1410" opacity=".85"/>
+   <rect width="188" height="176" filter="url(#g)"/>
+   <rect width="188" height="176" fill="none" stroke="#1A1410" stroke-width="3"/>
+  </svg>
+  <span class="cband">NEW</span>
+  <div class="ct"><h2>Roland<br>Studio</h2><span class="no">004</span></div>
+  <div class="cline"><span>SESSION 004</span><span>CATCH</span></div>
+ </div>
+ <aside class="notes">
+  <span class="k">SPINE NO.</span><em>Session 004</em>
+  <span class="k">A LINK FROM</span>roland50.studio
+  <span class="k">PROGRAMME</span>Newest in the<br>collection. Pulled<br>from the shelf.
+  <span class="k">STATUS</span><span class="open">● OPEN</span>
+ </aside>
+</section>
+<div class="shelf-label"><span>THE SHELF</span><span>001 — 004</span></div>
+<section class="shelf">
+ <div class="row">
+  <div class="gap"><span>004</span></div>
+  <div class="sp s3"><span class="n">003</span><span class="t">EyeOfOsiris</span><svg viewBox="0 0 16 16" fill="none" stroke="#C79A3B" stroke-width="1.2"><path d="M1 8q7-7 14 0q-7 7-14 0z"/><circle cx="8" cy="8" r="2" fill="#C79A3B"/></svg></div>
+  <div class="sp s2"><span class="n" style="color:#C79A3B">002</span><span class="t">MAP</span><svg viewBox="0 0 16 16" fill="none" stroke="#cdb995" stroke-width="1.1"><circle cx="8" cy="8" r="6"/><path d="M8 2v12M2 8h12M8 4l1.5 4L8 12 6.5 8z" fill="#cdb995"/></svg></div>
+  <div class="sp s1"><span class="n" style="color:#6B1E1E">001</span><span class="t">Vir MPC</span><svg viewBox="0 0 16 16" fill="#1F3B2F"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5" fill="#6B1E1E"/></svg></div>
+  <div class="b" style="--h:176px;--w:28px"></div>
+  <div class="b" style="--h:188px;--w:24px;--o:.9"></div>
+  <div class="b" style="--h:170px;--w:30px;--o:.8"></div>
+  <div class="b" style="--h:182px;--w:22px;--o:.7"></div>
+  <div class="b" style="--h:174px;--w:26px;--o:.6"></div>
+  <div class="b" style="--h:186px;--w:24px;--o:.5"></div>
+  <div class="b lean" style="--h:178px;--w:26px;--o:.45"></div>
+ </div>
+ <div class="board"></div>
+</section>
+<div class="dock">
+ <label><i>+</i>paste a link…</label>
+ <div class="catch">Catch</div>
+</div>
+<div class="vig"></div>
+<svg class="grain" width="390" height="844"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="390" height="844" filter="url(#n)"/></svg>
+</body></html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>Catch</title>
+<style>
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+*{box-sizing:border-box}
+body{background:#FFFFFF;color:#16181D;font-family:-apple-system,"SF Pro Text",system-ui,sans-serif;-webkit-font-smoothing:antialiased;position:relative}
+.status{height:47px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 6px 34px;font-size:15px;font-weight:600;letter-spacing:-.2px}
+.status i{font-style:normal;font-size:12px;letter-spacing:1px}
+header{padding:10px 16px 0}
+h1{margin:0;font-size:34px;font-weight:700;letter-spacing:-.6px;line-height:41px}
+.meta{margin:2px 0 0;font-size:13px;color:#6B7079}
+.search{margin-top:14px;height:36px;border-radius:10px;background:#F1F2F4;display:flex;align-items:center;gap:7px;padding:0 10px;font-size:17px;color:#8A8F98}
+.search svg{flex:none}
+.seg{margin-top:14px;height:32px;border-radius:9px;background:#F1F2F4;padding:2px;display:flex}
+.seg span{flex:1;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#16181D;border-radius:7px}
+.seg .on{background:#FFFFFF;font-weight:600;box-shadow:0 1px 3px rgba(22,24,29,.12),0 0 0 .5px rgba(22,24,29,.06)}
+.label{margin:22px 16px 6px;font-size:13px;font-weight:600;color:#6B7079;text-transform:uppercase;letter-spacing:.3px}
+ul{list-style:none;margin:0;padding:0}
+li{display:flex;align-items:center;gap:12px;padding:0 16px;height:68px;position:relative}
+li+li::before{content:"";position:absolute;top:0;left:68px;right:0;height:.5px;background:#E2E4E8}
+.fav{width:40px;height:40px;border-radius:10px;background:#EEF2FC;color:#3B6FE0;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;flex:none}
+.txt{flex:1;min-width:0}
+.t{font-size:17px;font-weight:600;letter-spacing:-.3px;line-height:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d{font-size:14px;color:#6B7079;line-height:19px}
+.dot{width:9px;height:9px;border-radius:50%;background:#3B6FE0;flex:none}
+.bar{position:absolute;left:0;right:0;bottom:0;padding:10px 16px 34px;background:rgba(255,255,255,.96);border-top:.5px solid #E2E4E8;display:flex;gap:10px}
+.field{flex:1;height:44px;border-radius:12px;background:#F1F2F4;display:flex;align-items:center;padding:0 14px;font-size:17px;color:#8A8F98}
+.add{height:44px;padding:0 20px;border-radius:12px;background:#3B6FE0;color:#FFFFFF;font-size:17px;font-weight:600;display:flex;align-items:center}
+</style>
+</head>
+<body>
+<div class="status"><span>9:41</span><i>&#9679;&#9679;&#9679; &#9646;</i></div>
+<header>
+  <h1>Catch</h1>
+  <p class="meta">4 saved · 4 unread</p>
+  <div class="search">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#8A8F98" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="5.2"/><path d="M11 11l3.5 3.5"/></svg>
+    Search
+  </div>
+  <div class="seg"><span class="on">All</span><span>Unread</span><span>Read</span></div>
+</header>
+<div class="label">Newest</div>
+<ul>
+  <li><div class="fav">R</div><div class="txt"><div class="t">Roland Studio</div><div class="d">roland50.studio</div></div><span class="dot" aria-label="Unread"></span></li>
+  <li><div class="fav">E</div><div class="txt"><div class="t">EyeOfOsiris</div><div class="d">osirisai.live</div></div><span class="dot" aria-label="Unread"></span></li>
+  <li><div class="fav">M</div><div class="txt"><div class="t">Map</div><div class="d">terraink.app</div></div><span class="dot" aria-label="Unread"></span></li>
+  <li><div class="fav">V</div><div class="txt"><div class="t">Vir MPC</div><div class="d">ypc2000.fun</div></div><span class="dot" aria-label="Unread"></span></li>
+</ul>
+<div class="bar">
+  <div class="field">Paste a link…</div>
+  <div class="add">Add</div>
+</div>
+</body>
+</html>

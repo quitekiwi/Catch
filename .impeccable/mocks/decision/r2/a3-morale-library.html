@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — The Reading Room</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+:root{--deep:#401B0E;--brown:#592C12;--tob:#8C704D;--khaki:#BFAD8A;--silver:#CDD2CE;--wine:#73303C}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{position:relative;background:var(--deep);color:var(--khaki);font-family:"Old Standard TT",serif;
+background-image:radial-gradient(ellipse 90% 52% at 52% 50%,rgba(140,112,77,.38),transparent 72%)}
+body::before{content:"";position:absolute;inset:0;z-index:30;pointer-events:none;background:radial-gradient(ellipse 88% 76% at 52% 50%,transparent 50%,rgba(64,27,14,.38) 78%,rgba(64,27,14,.8) 100%)}
+body::after{content:"";position:absolute;inset:0;z-index:31;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .75 0 0 0 0 .68 0 0 0 0 .54 0 0 0 .9 -.3'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)'/%3E%3C/svg%3E")}
+.shelf{position:absolute;left:0;top:0;width:390px;height:150px;display:block}
+.label{position:absolute;left:79px;top:30px;width:232px;height:86px;box-sizing:border-box;padding-top:13px;text-align:center;
+background:radial-gradient(ellipse at 50% 30%,#6b3a1c,var(--brown) 60%,#4a2210);border-radius:5px;
+box-shadow:0 4px 10px rgba(64,27,14,.9),inset 0 0 0 4px var(--brown),inset 0 0 0 5px var(--tob),inset 0 0 0 8px var(--brown),inset 0 0 0 8.6px rgba(140,112,77,.7)}
+.label h1{margin:0;font-family:"Libre Caslon Display",serif;font-weight:400;font-size:40px;line-height:1;letter-spacing:.3em;padding-left:.3em;
+background:linear-gradient(#CDD2CE,#BFAD8A 40%,#8C704D 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 #401B0E)}
+.label p{margin:6px 0 0;font-family:"IM Fell English SC",serif;font-size:11.5px;letter-spacing:.12em;color:var(--khaki)}
+.label p span{color:var(--tob)}
+.label svg{position:absolute;left:50%;top:-7px;margin-left:-9px}
+.bar{position:absolute;top:158px;left:22px;right:22px;display:flex;justify-content:space-between;align-items:baseline}
+.bar i{font-family:"IM Fell English",serif;font-size:14px;color:var(--khaki)}
+.bar b{font-family:"IM Fell English SC",serif;font-weight:400;font-size:12px;letter-spacing:.1em;color:var(--silver)}
+.seek{position:absolute;top:184px;left:22px;right:22px;display:flex;gap:8px}
+.seek label{flex:1;display:flex;align-items:center;gap:9px;height:38px;padding:0 12px;border:1px solid var(--tob);background:rgba(89,44,18,.75);box-shadow:inset 0 1px 3px rgba(64,27,14,.9)}
+input{border:0;background:none;outline:none;width:100%;padding:0;font-family:"IM Fell English",serif;font-style:italic;font-size:15px;color:var(--khaki)}
+input::placeholder{color:var(--khaki);opacity:.72}
+button{font-family:"IM Fell English SC",serif;cursor:pointer;letter-spacing:.12em}
+.seek button{height:40px;padding:0 14px;font-size:14px;color:var(--khaki);background:var(--brown);border:1px solid var(--tob)}
+.album{position:absolute;top:236px;left:12px;width:366px;height:484px;box-sizing:border-box;padding:9px 9px 9px 13px;border-radius:3px 6px 6px 3px;
+background:linear-gradient(90deg,#401B0E,var(--brown) 4%,#6b3a1c 50%,var(--brown));box-shadow:0 10px 22px rgba(64,27,14,.95),inset 0 0 0 2px var(--brown),inset 0 0 0 2.6px var(--tob)}
+.page{position:relative;height:100%;box-sizing:border-box;padding:12px 10px 0;color:var(--deep);
+background:radial-gradient(ellipse 70% 46% at 56% 30%,rgba(205,210,206,.55),transparent 70%),radial-gradient(ellipse 120% 90% at 55% 34%,var(--khaki) 48%,#a8946f 78%,var(--tob) 100%);
+box-shadow:inset 7px 0 10px -6px rgba(64,27,14,.75),inset 0 0 0 6px transparent,inset 0 0 0 6.6px rgba(89,44,18,.7),inset 0 0 0 9px transparent,inset 0 0 0 9.4px rgba(89,44,18,.45)}
+.page::before{content:"";position:absolute;right:0;top:6%;bottom:6%;width:2px;background:linear-gradient(transparent,var(--silver),transparent);opacity:.8}
+.ph{display:flex;align-items:center;gap:8px;margin:6px 8px 4px;font-family:"IM Fell English SC",serif;font-size:12px;letter-spacing:.14em;color:var(--brown)}
+.ph::before,.ph::after{content:"";flex:1;height:3px;border-top:.8px solid var(--brown);border-bottom:.5px solid var(--tob)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.c{position:relative;text-align:center;height:150px;padding-top:14px;box-sizing:border-box}
+.m{position:relative;width:60px;height:72px;margin:0 auto;filter:drop-shadow(1px 2px 1.4px rgba(64,27,14,.55))}
+.st{position:absolute;inset:0;background:radial-gradient(circle,transparent 1.35px,var(--silver) 1.75px) -2.5px -2.5px/5px 5px}
+.pp{position:absolute;inset:2.5px;background:linear-gradient(160deg,#dfe2dd,var(--silver) 60%,#bfc2b8);box-shadow:inset 0 0 0 2px var(--silver),inset 0 0 0 2.6px var(--brown)}
+.pp svg{position:absolute;left:3px;top:6px;width:49px;height:42px;fill:none;stroke:var(--brown);stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.pp em{position:absolute;left:0;right:0;bottom:4px;font-style:normal;font-family:"IM Fell English SC",serif;font-size:7.5px;letter-spacing:.12em;color:var(--deep)}
+.m::after{content:"";position:absolute;inset:-3px;background:linear-gradient(135deg,var(--tob) 6.5px,transparent 6.6px) 0 0/13px 13px no-repeat,linear-gradient(225deg,var(--tob) 6.5px,transparent 6.6px) 100% 0/13px 13px no-repeat,linear-gradient(45deg,var(--tob) 6.5px,transparent 6.6px) 0 100%/13px 13px no-repeat,linear-gradient(315deg,var(--tob) 6.5px,transparent 6.6px) 100% 100%/13px 13px no-repeat;filter:drop-shadow(0 .6px .4px rgba(64,27,14,.7))}
+.ring{position:absolute;left:3px;top:2px;width:80px;height:92px;fill:none;stroke:var(--wine);stroke-width:1.6;stroke-linecap:round;opacity:.92}
+.no{margin-top:8px;font-family:"IM Fell English SC",serif;font-size:10.5px;letter-spacing:.1em;color:var(--brown)}
+.nm{font-family:"IM Fell English",serif;font-style:italic;font-size:13px;line-height:1.05;color:var(--deep)}
+.dm{font-size:9px;letter-spacing:.02em;color:var(--brown);margin-top:1px}
+.r{height:116px;padding-top:10px}
+.r .m{filter:none}.r .m::after{display:none}
+.r .st{background:none;border:.7px solid rgba(89,44,18,.38);box-shadow:inset 0 0 0 3px transparent,inset 0 0 0 3.5px rgba(89,44,18,.16)}
+.r .st::before{content:"";position:absolute;left:8px;right:8px;top:50%;border-top:.5px solid rgba(89,44,18,.18)}
+.r .no{margin-top:5px;font-family:"IM Fell English",serif;font-style:italic;letter-spacing:.04em;color:rgba(89,44,18,.62)}
+.foot{position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:"IM Fell English",serif;font-style:italic;font-size:11px;color:var(--brown)}
+.dock{position:absolute;left:0;right:0;bottom:0;height:112px;box-sizing:border-box;padding:18px 18px 26px;z-index:5;
+background:linear-gradient(#6b3a1c,var(--brown) 30%,var(--deep));border-top:5px solid var(--tob);
+box-shadow:0 -1px 0 0 var(--silver),0 -2px 0 0 #6b5236,0 -12px 22px rgba(64,27,14,.9),inset 0 1px 0 rgba(205,210,206,.35)}
+.dock::before{content:"";position:absolute;left:18px;right:18px;top:7px;border-top:.6px dashed rgba(140,112,77,.8)}
+.dock .hd{display:flex;justify-content:space-between;font-family:"IM Fell English SC",serif;font-size:11px;letter-spacing:.12em;color:var(--khaki);margin:2px 0 7px}
+.dock .hd span+span{color:var(--silver)}
+.row{display:flex;gap:9px}
+.row label{flex:1;display:flex;align-items:center;height:46px;padding:0 14px;background:var(--deep);border:1px solid var(--tob);box-shadow:inset 0 2px 5px rgba(0,0,0,.45)}
+.row label input{font-size:16px}
+.row button{height:48px;padding:0 20px;font-size:17px;color:var(--deep);border:1px solid #6b5236;background:linear-gradient(#CDD2CE,var(--khaki) 35%,var(--tob));box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 2px 3px rgba(64,27,14,.8)}
+</style></head><body>
+<svg class="shelf" viewBox="0 0 390 150" aria-hidden="true">
+<defs><linearGradient id="dk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#401B0E" stop-opacity=".6"/><stop offset=".55" stop-color="#401B0E" stop-opacity="0"/><stop offset="1" stop-color="#401B0E" stop-opacity=".55"/></linearGradient>
+<linearGradient id="sd" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#401B0E" stop-opacity=".85"/><stop offset=".3" stop-color="#401B0E" stop-opacity="0"/><stop offset=".7" stop-color="#401B0E" stop-opacity="0"/><stop offset="1" stop-color="#401B0E" stop-opacity=".85"/></linearGradient></defs>
+<rect width="390" height="150" fill="#401B0E"/>
+<rect x="0" y="12" width="16" height="124" fill="#592C12"/><rect x="17" y="9" width="15" height="127" fill="#592C12"/><rect x="33" y="6" width="13" height="130" fill="#6b3a1c"/><rect x="47" y="12" width="12" height="124" fill="#592C12"/><rect x="60" y="18" width="16" height="118" fill="#4a2210"/><rect x="77" y="6" width="14" height="130" fill="#592C12"/><rect x="92" y="6" width="16" height="130" fill="#5e3418"/><rect x="109" y="9" width="18" height="127" fill="#4a2210"/><rect x="128" y="6" width="20" height="130" fill="#401B0E"/><rect x="149" y="18" width="22" height="118" fill="#4a2210"/><rect x="172" y="12" width="15" height="124" fill="#592C12"/><rect x="188" y="12" width="12" height="124" fill="#592C12"/><rect x="201" y="18" width="18" height="118" fill="#5e3418"/><rect x="220" y="9" width="12" height="127" fill="#6b3a1c"/><rect x="233" y="18" width="22" height="118" fill="#592C12"/><rect x="256" y="9" width="14" height="127" fill="#592C12"/><rect x="271" y="6" width="18" height="130" fill="#592C12"/><rect x="290" y="18" width="18" height="118" fill="#4a2210"/><rect x="309" y="9" width="20" height="127" fill="#5e3418"/><rect x="330" y="9" width="22" height="127" fill="#5e3418"/><rect x="353" y="9" width="18" height="127" fill="#592C12"/><rect x="372" y="10" width="20" height="126" fill="#4a2210"/>
+<g fill="none" stroke="#8C704D"><path d="M0 26h390M0 30.5h390M0 116h390M0 120.5h390" stroke-width=".9" opacity=".75"/><path d="M0 28.2h390M0 118.2h390" stroke-width="1.6" stroke-dasharray="1 2.4" opacity=".6"/><path d="M0 104h390" stroke-width=".5" opacity=".45"/></g>
+<g fill="#401B0E" stroke="#8C704D" stroke-width=".5" opacity=".9"><rect x="3" y="40" width="10" height="13"/><rect x="36" y="40" width="7" height="13"/><rect x="95" y="40" width="10" height="13"/><rect x="236" y="40" width="16" height="13"/><rect x="333" y="40" width="16" height="13"/><rect x="356" y="40" width="12" height="13"/></g>
+<path d="M17 0v136M33 0v136M47 0v136M60 0v136M77 0v136M92 0v136M109 0v136M128 0v136M149 0v136M172 0v136M188 0v136M201 0v136M220 0v136M233 0v136M256 0v136M271 0v136M290 0v136M309 0v136M330 0v136M353 0v136M372 0v136" stroke="#401B0E" stroke-width="1.6"/>
+<rect width="390" height="136" fill="url(#dk)"/><rect width="390" height="150" fill="url(#sd)"/>
+<rect y="136" width="390" height="14" fill="#592C12"/><path d="M0 136.5h390" stroke="#8C704D" stroke-width="1"/><path d="M0 149h390" stroke="#401B0E" stroke-width="2"/>
+</svg>
+
+<div class="label">
+  <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M9 1l4 4-4 4-4-4z" fill="#8C704D"/><path d="M0 5h4M14 5h4" stroke="#8C704D" stroke-width=".8"/></svg>
+  <h1>CATCH</h1>
+  <p>A Catalogue of Sessions <span>·</span> Volume I</p>
+</div>
+
+<div class="bar"><i>Paste it, find it later. Nothing else.</i><b>4 caught · 4 open</b></div>
+<div class="seek">
+  <label><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#BFAD8A" stroke-width="1.1" stroke-linecap="round"><circle cx="6.3" cy="6.3" r="4.6"/><path d="M9.8 9.8l4 4"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+  <button type="button">Filter</button>
+</div>
+
+<div class="album"><div class="page">
+  <div class="ph">Plate I · Sessions 001 – 012</div>
+  <div class="grid">
+    <div class="c"><div class="m"><div class="st"><div class="pp">
+      <svg viewBox="0 0 62 52"><path d="M3.8 22.2l53.8-.6.6 12.2L4.2 34.6z" fill="#8C704D" fill-opacity=".35"/><path d="M8 22.2l1-6.8 44.2-.4.8 6.6"/><path d="M8.2 27.8l7.6-.1M18.4 27.6h7.8M28.6 27.8h7.6M38.8 27.6l7.6.1M49 27.8h5.6" stroke-width="2"/><path d="M7.6 31.4h46.8" stroke-dasharray="1.2 2"/><path d="M15 15.4c1.4-4 4-6.6 8-7.6M44.4 15c-.6-3.8-2.6-6.8-6.4-7.4"/><circle cx="16" cy="18.6" r="1.3"/><circle cx="22" cy="18.6" r="1.3"/><path d="M29 18.6h12"/></svg><em>S·004</em></div></div></div>
+      <svg class="ring" viewBox="0 0 80 92"><path d="M30 5C11 10 3 28 5 50c2 24 15 38 36 37 22-1 33-19 32-44C72 20 59 4 39 4 30 5 23 9 18 15"/></svg>
+      <div class="no">S-004</div><div class="nm">Roland Studio</div><div class="dm">roland50.studio</div></div>
+    <div class="c"><div class="m"><div class="st"><div class="pp">
+      <svg viewBox="0 0 62 52"><path d="M4.6 26.4C13 14.2 22 9.8 31.3 10c9.6.1 18.4 5 26.4 16.3-8 11.4-17 15.6-26.6 15.4C21.6 41.6 12.4 37 4.6 26.4z" fill="#8C704D" fill-opacity=".3"/><circle cx="31" cy="26" r="9.4" fill="#BFAD8A"/><circle cx="31.2" cy="25.8" r="3.6" fill="#401B0E"/><path d="M27.4 21.6l1.8 1.4"/><path d="M14.8 15l-2.6-4.4M22.4 11l-1.2-4.6M31 9.6V4.8M39.6 11l1.4-4.6M47.4 15.2l2.8-4.2"/><path d="M20 39.6c-1.2 4.4-.3 7.4 3 8.6"/></svg><em>S·003</em></div></div></div>
+      <svg class="ring" viewBox="0 0 80 92"><path d="M50 6C20 1 4 22 5 48c1 27 16 40 37 39 22-1 33-18 32-43C73 20 60 5 38 5 30 6 23 10 18 16"/></svg>
+      <div class="no">S-003</div><div class="nm">EyeOfOsiris</div><div class="dm">osirisai.live</div></div>
+    <div class="c"><div class="m"><div class="st"><div class="pp">
+      <svg viewBox="0 0 62 52"><path d="M8 12.5l14.6-4.8 15.8 5.4 15.6-5 .3 31.8-15.4 5.2-16-5.6L8.4 44z"/><path d="M22.6 7.8l.4 31.5 15.4 5.6.6-31.8z" fill="#8C704D" fill-opacity=".35"/><path d="M13 19c3 4 6 1 9 4s3 7 6 7 5-5 9-3 2 7 8 6" stroke-dasharray="1.6 2.2"/><path d="M45.4 30.2l3.5 3.4M48.8 30.1l-3.3 3.6" stroke="#73303C" stroke-width="1.5"/><path d="M14.5 34.6c1-.8 2.4-.6 3 .4"/></svg><em>S·002</em></div></div></div>
+      <svg class="ring" viewBox="0 0 80 92"><path d="M24 9C8 18 3 36 6 56c4 20 18 32 37 30 20-2 31-20 30-44C72 20 58 4 38 5 28 6 20 11 15 18"/></svg>
+      <div class="no">S-002</div><div class="nm">Map</div><div class="dm">terraink.app</div></div>
+    <div class="c"><div class="m"><div class="st"><div class="pp">
+      <svg viewBox="0 0 62 52"><path d="M5 30.5l52-.8.3 13.6-52.4.5z" fill="#8C704D" fill-opacity=".3"/><path d="M11 30.3v13M17.2 30.4l.1 12.8M23.5 30v13.2M29.6 30.2v13M36 30.1l-.2 13M42.1 30v13.1M48.3 30.2v12.9"/><path d="M14.2 30.5v7.4h3.1v-7.5M26.6 30.3l.2 7.6 3-.1v-7.4M39 30.2v7.6h3M45.4 30.3l-.1 7.4 3 .1" fill="#592C12"/><path d="M6 30.4c.2-6.2.1-9 .4-11.8l50.3-.6.4 11.6"/><circle cx="13" cy="24" r="2.3"/><circle cx="21" cy="24.2" r="2.2"/><path d="M30 22h14.5M30.5 25.8l13.8-.2M49.5 21.4l3.6 5"/></svg><em>S·001</em></div></div></div>
+      <svg class="ring" viewBox="0 0 80 92"><path d="M44 5C17 2 4 24 5 49c1 25 15 39 36 38 21-1 33-17 32-43C72 19 58 3 36 5 28 6 22 10 17 16"/></svg>
+      <div class="no">S-001</div><div class="nm">Vir MPC</div><div class="dm">ypc2000.fun</div></div>
+    <div class="c r"><div class="m"><div class="st"></div></div><div class="no">no. 005</div></div>
+    <div class="c r"><div class="m"><div class="st"></div></div><div class="no">no. 006</div></div>
+    <div class="c r"><div class="m"><div class="st"></div></div><div class="no">no. 007</div></div>
+    <div class="c r"><div class="m"><div class="st"></div></div><div class="no">no. 008</div></div>
+    <div class="c r"><div class="m"><div class="st"></div></div><div class="no">no. 009</div></div>
+    <div class="c r"><div class="m"><div class="st"></div></div><div class="no">no. 010</div></div>
+    <div class="c r"><div class="m"><div class="st"></div></div><div class="no">no. 011</div></div>
+    <div class="c r"><div class="m"><div class="st"></div></div><div class="no">no. 012</div></div>
+  </div>
+  <div class="foot">— leaf one of the album —</div>
+</div></div>
+
+<form class="dock" action="#">
+  <div class="hd"><span>A new session</span><span>to mount as Nº 005</span></div>
+  <div class="row">
+    <label><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+</form>
+</body></html>

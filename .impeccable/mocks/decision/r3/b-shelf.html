@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — Oxblood Nouveau · Bookshelf</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Cinzel+Decorative:wght@700&family=Marcellus+SC&display=swap">
+<style>
+:root{--ground:#1A1519;--ox:#40101D;--tan:#D9B88F;--taupe:#AC9B86;--wine:#73303C}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{background:var(--ground);color:var(--tan);font-family:Arapey,serif;position:relative;
+background-image:radial-gradient(ellipse 420px 300px at 50% 0,rgba(64,16,29,.55),transparent 70%),radial-gradient(ellipse 380px 260px at 50% 100%,rgba(64,16,29,.4),transparent 70%)}
+.mast{position:relative;height:166px}
+.mast>svg{position:absolute;left:0;top:0}
+.ln{fill:none;stroke:var(--taupe);stroke-linecap:round;stroke-linejoin:round}
+.mast h1{position:absolute;top:44px;left:0;right:0;margin:0;text-align:center;font:700 43px/1 "Cinzel Decorative",serif;letter-spacing:5px;padding-left:5px;color:var(--tan)}
+.sub{position:absolute;top:96px;left:0;right:0;text-align:center;font:10px "Marcellus SC",serif;letter-spacing:3.4px;color:var(--taupe)}
+.tag{position:absolute;top:118px;left:0;right:0;text-align:center;font-style:italic;font-size:14.5px;color:var(--tan)}
+.count{position:absolute;top:149px;left:0;right:0;text-align:center;font:10.5px "Marcellus SC",serif;letter-spacing:2px;color:var(--taupe)}
+.seek{display:flex;gap:8px;margin:8px 16px 0}
+.seek label,.dock label{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--taupe);border-radius:16px 3px 16px 3px;padding:0 12px;height:36px}
+input{border:0;background:none;font:italic 14px Arapey,serif;color:var(--tan);width:100%;outline:none}
+input::placeholder{color:var(--taupe)}
+button{font:12px "Marcellus SC",serif;letter-spacing:2px;color:var(--tan);background:none;border:1px solid var(--taupe);border-radius:3px 16px 3px 16px;padding:0 15px;height:38px;cursor:pointer}
+.plq{position:absolute;top:222px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:8px}
+.plq b{font:400 11px "Marcellus SC",serif;letter-spacing:2.2px;color:var(--ox);background:var(--tan);padding:5px 14px 4px;border-radius:12px 2px 12px 2px;box-shadow:0 0 0 2px var(--ground),0 0 0 3px var(--taupe)}
+.row{position:absolute;left:48px;display:flex;align-items:flex-end;gap:3px}
+.r1{top:256px;height:192px}.r2{top:524px;height:104px;left:54px;gap:5px}
+.bk{position:relative;box-sizing:border-box;border-radius:3px 3px 1px 1px;box-shadow:inset 3px 0 0 rgba(26,21,25,.28),inset -2px 0 0 rgba(26,21,25,.2)}
+.bk::before,.bk::after{content:"";position:absolute;left:4px;right:4px;height:3px;border-top:1px solid;border-bottom:1px solid;opacity:.7}
+.bk::before{top:4px}.bk::after{bottom:7px}
+.ox{background:var(--ox);color:var(--tan)}.ox::before,.ox::after{border-color:var(--taupe)}
+.tp{background:var(--taupe);color:var(--ox)}.tp::before,.tp::after{border-color:var(--ox)}
+.tn{background:var(--tan);color:var(--ox)}.tn::before,.tn::after{border-color:var(--ox)}
+.gilt{background:linear-gradient(var(--ox),var(--ox)) padding-box;border:2px solid var(--tan)}
+.lab{position:absolute;top:13px;left:7px;right:7px;height:24px;background:var(--tan);border-radius:8px 1px 8px 1px;font:11px/25px "Marcellus SC",serif;letter-spacing:1px;color:var(--ox);padding-left:5px;box-shadow:inset 0 0 0 1px var(--ox)}
+.tn .lab{box-shadow:inset 0 0 0 1px var(--ox),0 0 0 2px var(--tan),0 0 0 3px var(--ox)}
+.rib{position:absolute;top:-4px;right:9px;width:7px;height:38px;background:var(--wine);clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%)}
+.ti{position:absolute;top:46px;left:0;right:0;bottom:16px;display:flex;justify-content:center}
+.ti div{writing-mode:vertical-rl;white-space:nowrap;line-height:1.05}
+.ti b{display:block;font:400 16.5px Arapey,serif;letter-spacing:.4px}
+.ti i{display:block;font-size:11px;opacity:.9;margin-right:2px}
+.ox .ti i{color:var(--taupe);opacity:1}
+.gh{box-sizing:border-box;border:1px dashed rgba(172,155,134,.45);border-radius:3px 3px 1px 1px;font:9.5px "Marcellus SC",serif;letter-spacing:1px;color:var(--taupe);text-align:center;padding-top:9px;opacity:.75}
+.room{position:absolute;top:566px;left:258px;width:118px;font:italic 12.5px/1.25 Arapey,serif;color:var(--taupe)}
+.room span{display:block;font:9px "Marcellus SC",serif;font-style:normal;letter-spacing:1.8px;margin-bottom:3px}
+.shelf{position:absolute;left:0}
+.dock{position:absolute;left:0;right:0;bottom:0;height:150px;background:var(--ox)}
+.dock>svg{position:absolute;left:0;top:-13px}
+.dock .hd{text-align:center;font:9.5px "Marcellus SC",serif;letter-spacing:2.6px;color:var(--taupe);margin:22px 0 10px}
+.dock .rw{display:flex;gap:8px;margin:0 16px}
+.dock label{height:44px;background:rgba(26,21,25,.45)}
+.dock button{height:46px;padding:0 20px;font:700 15px "Cinzel Decorative",serif;letter-spacing:1.5px;background:var(--tan);color:var(--ox);border-color:var(--tan)}
+.fine{text-align:center;font-style:italic;font-size:11px;color:var(--taupe);margin-top:10px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="half" class="ln">
+    <path stroke-width="1.4" d="M58 160C56 124 26 110 30 72 34 38 92 20 195 18"/>
+    <path stroke-width=".7" opacity=".7" d="M70 160C69 128 42 112 45 76 48 46 100 30 195 28"/>
+    <path stroke-width="1" d="M58 160C82 140 30 128 52 104 70 86 46 70 66 52"/>
+    <path stroke-width="1" d="M52 104C34 96 22 80 20 52"/>
+    <path stroke-width="1" d="M20 52c-6-6-6-14 0-20 6 6 6 14 0 20zM20 52c-8-2-13-8-13-16 6 2 11 9 13 16zM20 52c8-2 13-8 13-16-6 2-11 9-13 16z"/>
+    <path stroke-width=".8" d="M17 30c-1-4 0-7 3-9M23 30c1-4 0-7-3-9"/>
+    <path stroke-width=".9" d="M36 132c-10-3-15-11-13-20 8 3 13 11 13 20zM36 132c-4-6-8-11-13-20"/>
+    <path stroke-width=".9" d="M66 52c-2-6 2-12 8-12 3 0 4 3 2 5"/>
+    <path stroke-width=".9" d="M124 20c-8-12-26-9-23 1 2 6 10 5 9-1"/>
+    <path stroke-width=".9" d="M183 18c-14 2-26-10-38-6"/>
+  </g>
+  <g id="brk" class="ln" stroke-width="1.1">
+    <path d="M0 0C0 14 4 24 14 30 22 35 30 30 28 23 26 17 18 19 20 24"/>
+    <path stroke-width=".8" d="M0 0C6 6 16 6 22 0M6 3c-3 10-1 18 4 22"/>
+    <path stroke-width=".8" d="M14 30c-2 5-1 10 3 12-1-5 1-9-3-12z"/>
+  </g>
+  <g id="shelf">
+    <rect x="10" y="0" width="370" height="10" rx="1" fill="#40101D" stroke="#AC9B86" stroke-width="1"/>
+    <path d="M12 1.2H378" stroke="#D9B88F" stroke-width="1"/>
+    <path class="ln" stroke-width=".6" opacity=".6" d="M14 13.5H376"/>
+    <use href="#brk" transform="translate(30 10)"/><use href="#brk" transform="translate(360 10) scale(-1 1)"/>
+    <path class="ln" stroke-width=".9" d="M195 22c-4-4-4-9 0-12 4 3 4 8 0 12zM195 22c-5 0-8-3-9-6 4 0 7 2 9 6zM195 22c5 0 8-3 9-6-4 0-7 2-9 6zM172 14c8 0 14 2 18 6M218 14c-8 0-14 2-18 6"/>
+  </g>
+  <g id="bend">
+    <path d="M2 108V6C2 2 5 0 9 1c12 4 20 16 16 30-4 12-14 16-10 30 3 10 12 14 10 26-1 8-6 12-6 15H2z" fill="#40101D" stroke="#AC9B86" stroke-width="1"/>
+    <path class="ln" stroke-width=".9" d="M8 98c4-10-6-18 0-30s14-14 10-28C15 28 7 22 7 12"/>
+    <path class="ln" stroke-width=".9" d="M9 30c-3-3-3-7 0-10 3 3 3 7 0 10zM9 30c-4 0-6-2-7-5 3 0 6 2 7 5zM9 30c4 0 6-2 7-5-3 0-6 2-7 5z"/>
+    <path fill="#40101D" stroke="#AC9B86" stroke-width="1" d="M0 108h30v4H0z"/>
+  </g>
+</defs></svg>
+
+<header class="mast">
+  <svg width="390" height="166" viewBox="0 0 390 166" aria-hidden="true">
+    <path fill="#40101D" d="M70 163V160C69 128 42 112 45 76 48 46 100 30 195 28 290 30 342 46 345 76 348 112 321 128 320 160V163Z"/>
+    <path class="ln" stroke-width="1" d="M52 163.5H338M88 166H302"/>
+    <use href="#half"/><use href="#half" transform="translate(390 0) scale(-1 1)"/>
+    <g class="ln" stroke-width="1"><path d="M195 20c-5-5-5-12 0-17 5 5 5 12 0 17zM195 20c-7-1-12-6-13-12 6 1 11 6 13 12zM195 20c7-1 12-6 13-12-6 1-11 6-13 12z"/>
+    <path stroke-width=".8" d="M150 112h34M206 112h34M195 108l4 4-4 4-4-4z"/></g>
+  </svg>
+  <h1>Catch</h1>
+  <div class="sub">Library of Sessions</div>
+  <div class="tag">Paste it, find it later. Nothing else.</div>
+  <div class="count">4 caught · 4 open</div>
+</header>
+
+<div class="seek">
+  <label><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#AC9B86" stroke-width="1.2" stroke-linecap="round"><circle cx="6.4" cy="6.4" r="4.9"/><path d="M10 10l4 4"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+  <button type="button">Filter</button>
+</div>
+
+<div class="plq">
+  <svg width="60" height="14" viewBox="0 0 60 14" aria-hidden="true"><path class="ln" stroke-width=".9" d="M0 7h36c8 0 10-6 15-5 4 1 3 6-1 5M42 7h14"/></svg>
+  <b>Sessions 001 – 004</b>
+  <svg width="60" height="14" viewBox="0 0 60 14" aria-hidden="true" style="transform:scaleX(-1)"><path class="ln" stroke-width=".9" d="M0 7h36c8 0 10-6 15-5 4 1 3 6-1 5M42 7h14"/></svg>
+</div>
+
+<svg class="shelf" style="top:336px;left:14px" width="32" height="112" viewBox="0 0 32 112" aria-hidden="true"><use href="#bend"/></svg>
+<div class="row r1">
+  <div class="bk ox" style="width:56px;height:162px"><div class="lab">001</div><span class="rib"></span><div class="ti"><div><b>Vir MPC</b><i>ypc2000.fun</i></div></div></div>
+  <div class="bk tp" style="width:50px;height:148px"><div class="lab">002</div><span class="rib"></span><div class="ti"><div><b>Map</b><i>terraink.app</i></div></div></div>
+  <div class="bk tn" style="width:60px;height:184px"><div class="lab">003</div><span class="rib"></span><div class="ti"><div><b>EyeOfOsiris</b><i>osirisai.live</i></div></div></div>
+  <div class="bk ox gilt" style="width:58px;height:172px"><div class="lab">004</div><span class="rib"></span><div class="ti"><div><b>Roland Studio</b><i>roland50.studio</i></div></div></div>
+  <div class="gh" style="width:44px;height:150px;margin-left:6px">005</div>
+</div>
+<svg class="shelf" style="top:336px;left:344px;transform:scaleX(-1)" width="32" height="112" viewBox="0 0 32 112" aria-hidden="true"><use href="#bend"/></svg>
+<svg class="shelf" style="top:448px" width="390" height="56" viewBox="0 0 390 56" aria-hidden="true"><use href="#shelf"/></svg>
+
+<svg class="shelf" style="top:516px;left:14px" width="32" height="112" viewBox="0 0 32 112" aria-hidden="true"><use href="#bend"/></svg>
+<div class="row r2">
+  <div class="gh" style="width:40px;height:96px">006</div>
+  <div class="gh" style="width:46px;height:88px">007</div>
+  <div class="gh" style="width:38px;height:100px">008</div>
+  <div class="gh" style="width:44px;height:92px">009</div>
+</div>
+<div class="room"><span>Shelf II · Vacant</span>Room on the shelf for every link still to come.</div>
+<svg class="shelf" style="top:628px" width="390" height="56" viewBox="0 0 390 56" aria-hidden="true"><use href="#shelf"/></svg>
+
+<form class="dock" action="#">
+  <svg width="390" height="30" viewBox="0 0 390 30" aria-hidden="true">
+    <defs><pattern id="iron" width="40" height="30" patternUnits="userSpaceOnUse"><path class="ln" stroke-width=".8" opacity=".85" d="M0 13C10 3 20 3 20 13S30 23 40 13M20 13c-4 0-5-4-2-5 2 0 3 2 1 3M0 13c4 0 5 4 2 5-2 0-3-2-1-3M40 13c-4 0-5 4-2 5 2 0 3-2 1-3"/></pattern></defs>
+    <path d="M0 13H390" stroke="#40101D" stroke-width="12"/>
+    <rect x="-5" y="0" width="400" height="30" fill="url(#iron)" transform="translate(-5 0)"/>
+    <path class="ln" stroke-width="1" fill="#40101D" d="M195 2c9 0 17 5 20 11-3 6-11 11-20 11s-17-5-20-11c3-6 11-11 20-11z"/>
+    <path class="ln" stroke-width="1" d="M195 19c-3-3-3-8 0-11 3 3 3 8 0 11zM195 19c-5 0-8-3-9-7 4 0 7 3 9 7zM195 19c5 0 8-3 9-7-4 0-7 3-9 7zM165 13h6M219 13h6"/>
+    <path class="ln" stroke-width=".6" opacity=".5" d="M0 26H390"/>
+  </svg>
+  <div class="hd">New Session · Nº 005</div>
+  <div class="rw">
+    <label><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#AC9B86" stroke-width="1.1" stroke-linecap="round"><path d="M6.5 9.5l3-3M7 4.5l1.6-1.6a2.8 2.8 0 0 1 4 4L11 8.5M9 11.5l-1.6 1.6a2.8 2.8 0 0 1-4-4L5 7.5"/></svg><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+  <div class="fine">One link at a time — shelved until you need it.</div>
+</form>
+</body></html>

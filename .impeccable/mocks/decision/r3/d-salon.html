@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — Dispatch Salon</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+:root{--khaki:#BFB493;--taupe:#A69981;--char:#393D3C;--olive:#403822;--red:#8C2020}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{position:relative;color:var(--olive);font-family:"Old Standard TT",serif;background-color:var(--char);
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Cpath d='M7 2.2L11.8 7 7 11.8 2.2 7z' fill='none' stroke='%23A69981' stroke-width='.8' opacity='.55'/%3E%3Ccircle cx='7' cy='7' r='1' fill='%23A69981' opacity='.5'/%3E%3C/svg%3E")}
+.floor{position:absolute;inset:14px 14px 0;background-color:var(--khaki);outline:1px solid var(--taupe);outline-offset:-4px;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46'%3E%3Cg fill='none' stroke='%23A69981' stroke-width='.9' opacity='.42'%3E%3Cpath d='M23 0L46 23 23 46 0 23z'/%3E%3Ccircle cx='23' cy='19' r='4'/%3E%3Ccircle cx='27' cy='23' r='4'/%3E%3Ccircle cx='23' cy='27' r='4'/%3E%3Ccircle cx='19' cy='23' r='4'/%3E%3C/g%3E%3Cg fill='%23393D3C' opacity='.13'%3E%3Cpath d='M0 0h3L0 3zM46 0v3L43 0zM0 46v-3L3 46zM46 46h-3L46 43z'/%3E%3Ccircle cx='23' cy='23' r='1.3'/%3E%3C/g%3E%3C/svg%3E");
+background-position:-2px 6px}
+.glow{position:absolute;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse 120% 80% at 50% 46%,rgba(191,180,147,0) 45%,rgba(64,56,34,.20) 100%)}
+.grain{position:absolute;inset:0;pointer-events:none;z-index:6;opacity:.55;mix-blend-mode:multiply;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .25 0 0 0 0 .22 0 0 0 0 .13 0 0 0 .32 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")}
+.in{position:relative;padding:20px 18px 0}
+.orn{display:flex;align-items:center;justify-content:center;gap:8px;height:10px}
+.orn i{width:56px;border-top:1px solid var(--taupe)}
+.orn svg{width:10px;height:10px}
+h1{margin:6px 0 0;text-align:center;font-family:"Bodoni Moda",serif;font-variation-settings:"opsz" 96;font-weight:500;font-size:50px;line-height:1;letter-spacing:.2em;padding-left:.2em}
+.sub{text-align:center;font-variant:small-caps;font-size:13px;letter-spacing:.24em;margin-top:5px}
+.sub::before,.sub::after{content:"";display:inline-block;width:18px;border-top:1px solid var(--olive);vertical-align:middle;margin:0 9px 2px}
+.tag{text-align:center;font-style:italic;font-size:12.5px;margin:6px 0 13px;opacity:.85}
+.seek{display:flex;gap:8px;height:34px}
+.seek label{flex:1;display:flex;align-items:center;gap:8px;padding:0 10px;border:1px solid var(--olive);box-shadow:inset 0 0 0 3px var(--khaki),inset 0 0 0 3.8px var(--taupe);background:var(--khaki)}
+.seek input{border:0;background:none;font:italic 13px "Old Standard TT",serif;color:var(--olive);width:100%;outline:none;padding:0}
+input::placeholder{color:var(--olive);opacity:.6}
+.seek button{font:400 13px "Old Standard TT",serif;font-variant:small-caps;letter-spacing:.14em;color:var(--olive);background:var(--khaki);border:1px solid var(--olive);padding:0 12px;display:flex;align-items:center;gap:6px}
+.meta{display:flex;align-items:center;gap:8px;margin:13px 0 0;font-variant:small-caps;font-size:11.5px;letter-spacing:.16em}
+.meta i{flex:1;border-top:1px solid var(--taupe)}
+/* the salon wall */
+.wall{position:relative;height:470px;margin-top:6px}
+.wires{position:absolute;left:0;top:0;width:326px;height:470px;fill:none;stroke:var(--olive);stroke-width:.8;stroke-linecap:round}
+.wires .nail{fill:var(--char);stroke:var(--taupe);stroke-width:.7}
+.fr{position:absolute;background:var(--char);padding:5px;box-sizing:border-box;box-shadow:1px 3px 4px rgba(64,56,34,.45)}
+.fr::before{content:"";position:absolute;inset:2px;border:.7px solid var(--taupe);border-radius:inherit;pointer-events:none}
+.mat{width:100%;height:100%;box-sizing:border-box;background:var(--khaki);padding:7px;border-radius:inherit;box-shadow:inset 0 0 0 1px var(--olive),inset 0 0 0 3px var(--khaki),inset 0 0 0 3.6px var(--taupe)}
+.pic{width:100%;height:100%;background:var(--char);border-radius:inherit;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px var(--olive)}
+.pic svg{width:86%;height:86%;fill:none;stroke:var(--khaki);stroke-width:1.05;stroke-linecap:round;stroke-linejoin:round}
+.oval{border-radius:50%}
+.arch{border-radius:46px 46px 3px 3px}
+.pl{position:absolute;background:var(--khaki);border:1px solid var(--olive);box-shadow:inset 0 0 0 2px var(--khaki),inset 0 0 0 2.6px var(--taupe),0 1px 1.5px rgba(64,56,34,.4);text-align:center;padding:5px 24px 5px 8px;font-size:10.5px;line-height:1.2;box-sizing:border-box;white-space:nowrap}
+.pl b{display:block;font:400 9.5px "Bodoni Moda",serif;font-variation-settings:"opsz" 11;letter-spacing:.16em}
+.pl small{display:block;font-style:italic;font-size:9.5px;opacity:.8}
+.pl.big{font-size:13px;padding:7px 30px 7px 12px}
+.pl.big b{font-size:11px}
+.pl.big small{font-size:10.5px}
+.ro{position:absolute;right:3px;top:-9px;width:20px;height:30px}
+.big .ro{right:6px;top:-10px;width:23px;height:34px}
+.ghost{position:absolute;border:1px dashed var(--taupe);display:flex;align-items:center;justify-content:center;font:italic 10.5px "Old Standard TT",serif;color:var(--olive);opacity:.7}
+.dock{position:absolute;left:0;right:0;bottom:0;height:128px;z-index:4;background:var(--char);border-top:1px solid var(--taupe);color:var(--khaki);padding:12px 22px 0;box-sizing:border-box}
+.dock::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--taupe);opacity:.6}
+.dock .hd{display:flex;justify-content:space-between;font-variant:small-caps;font-size:11px;letter-spacing:.2em;margin:4px 0 9px}
+.dock .row{display:flex;gap:10px;height:44px}
+.dock label{flex:1;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--khaki);padding:0 2px}
+.dock input{border:0;background:none;font:italic 15px "Old Standard TT",serif;color:var(--khaki);width:100%;outline:none}
+.dock input::placeholder{color:var(--khaki);opacity:.65}
+.dock button{font-family:"Bodoni Moda",serif;font-variation-settings:"opsz" 20;font-weight:600;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--olive);background:var(--khaki);border:0;outline:1px solid var(--khaki);outline-offset:3px;padding:0 18px 0 22px;margin:3px 3px 3px 0}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="ros" viewBox="0 0 20 30"><path d="M7 12L3.5 28l3.2-2.4L8.6 29 10 13zM13 12l3.5 16-3.2-2.4-1.9 3.4L10 13z" fill="#8C2020"/><circle cx="10" cy="9.5" r="8" fill="#8C2020"/><circle cx="10" cy="9.5" r="7.2" fill="none" stroke="#BFB493" stroke-width=".7" stroke-dasharray="1.4 1.4"/><circle cx="10" cy="9.5" r="3.4" fill="#BFB493"/><circle cx="10" cy="9.5" r="1.6" fill="#8C2020"/></symbol>
+</defs></svg>
+<div class="floor">
+<div class="in">
+  <div class="orn"><i></i><svg viewBox="0 0 10 10"><path d="M5 .5L9.5 5 5 9.5.5 5z" fill="none" stroke="#403822" stroke-width=".8"/><circle cx="5" cy="5" r="1.2" fill="#403822"/></svg><i></i></div>
+  <h1>CATCH</h1>
+  <div class="sub">Salon of Sessions</div>
+  <div class="tag">Paste it, find it later. Nothing else.</div>
+  <div class="seek">
+    <label><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#403822" stroke-width="1.1"><circle cx="6" cy="6" r="4.6"/><path d="M9.4 9.4l3.6 3.6"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+    <button type="button"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="#403822" stroke-width="1"><path d="M0 1h11M2 4.5h7M4 8h3"/></svg>Filter</button>
+  </div>
+  <div class="meta"><span>East wall · hung newest first</span><i></i><span>4 caught · 4 open</span></div>
+
+  <div class="wall">
+    <svg class="wires" viewBox="0 0 326 470">
+      <path d="M52 7L28 34M52 7L76 34"/><path d="M163 20L127 46M163 20L199 46"/><path d="M274 5L250 30M274 5L298 30"/><path d="M163 186L76 214M163 186L250 214"/>
+      <circle class="nail" cx="52" cy="7" r="2.4"/><circle class="nail" cx="163" cy="20" r="2.4"/><circle class="nail" cx="274" cy="5" r="2.4"/><circle class="nail" cx="163" cy="186" r="2.6"/>
+      <circle class="nail" cx="30" cy="246" r="2.4"/><circle class="nail" cx="296" cy="240" r="2.4"/><circle class="nail" cx="44" cy="420" r="2.4"/><circle class="nail" cx="282" cy="424" r="2.4"/>
+      <path d="M296 240l-18 20M296 240l18 20" stroke-dasharray="2 2" opacity=".55"/>
+    </svg>
+
+    <!-- 003 oval -->
+    <div class="fr oval" style="left:6px;top:28px;width:92px;height:116px"><div class="mat"><div class="pic"><svg viewBox="0 0 62 52"><path d="M4.6 26.4C13 14.2 22 9.8 31.3 10c9.6.1 18.4 5 26.4 16.3-8 11.4-17 15.6-26.6 15.4C21.6 41.6 12.4 37 4.6 26.4z"/><circle cx="31" cy="26" r="9.4"/><circle cx="31.2" cy="25.8" r="3.6" fill="#BFB493"/><path d="M27.4 21.6l1.8 1.4"/><path d="M14.8 15l-2.6-4.4M22.4 11l-1.2-4.6M31 9.6V4.8M39.6 11l1.4-4.6M47.4 15.2l2.8-4.2"/><path d="M20 39.6c-1.2 4.4-.3 7.4 3 8.6"/></svg></div></div></div>
+    <div class="pl" style="left:2px;top:154px;width:100px"><b>Nº 003</b>EyeOfOsiris<small>osirisai.live</small><svg class="ro"><use href="#ros"/></svg></div>
+
+    <!-- 001 small rectangle -->
+    <div class="fr" style="left:122px;top:44px;width:82px;height:66px"><div class="mat" style="padding:5px"><div class="pic"><svg viewBox="0 0 62 52"><path d="M5 30.5l52-.8.3 13.6-52.4.5z"/><path d="M11 30.3v13M17.2 30.4l.1 12.8M23.5 30v13.2M29.6 30.2v13M36 30.1l-.2 13M42.1 30v13.1M48.3 30.2v12.9"/><path d="M6 30.4c.2-6.2.1-9 .4-11.8l50.3-.6.4 11.6"/><circle cx="13" cy="24" r="2.3"/><circle cx="21" cy="24.2" r="2.2"/><path d="M30 22h14.5M30.5 25.8l13.8-.2"/></svg></div></div></div>
+    <div class="pl" style="left:115px;top:120px;width:96px"><b>Nº 001</b>Vir MPC<small>ypc2000.fun</small><svg class="ro"><use href="#ros"/></svg></div>
+
+    <!-- 002 arch -->
+    <div class="fr arch" style="left:228px;top:22px;width:92px;height:122px"><div class="mat"><div class="pic"><svg viewBox="0 0 62 52"><path d="M8 12.5l14.6-4.8 15.8 5.4 15.6-5 .3 31.8-15.4 5.2-16-5.6L8.4 44z"/><path d="M22.6 7.8l.4 31.5M38.4 13.2l.6 31.8"/><path d="M13 19c3 4 6 1 9 4s3 7 6 7 5-5 9-3 2 7 8 6" stroke-dasharray="2 2.4"/><path d="M45.4 30.2l3.5 3.4M48.8 30.1l-3.3 3.6"/><path d="M12 40.5l4-1.3M29 41.6l5 1.6"/></svg></div></div></div>
+    <div class="pl" style="left:224px;top:154px;width:100px"><b>Nº 002</b>Map<small>terraink.app</small><svg class="ro"><use href="#ros"/></svg></div>
+
+    <!-- 004 newest, largest, centre -->
+    <div class="fr" style="left:66px;top:212px;width:194px;height:160px;padding:7px"><div class="mat" style="padding:10px"><div class="pic"><svg viewBox="0 0 62 46" style="width:90%"><path d="M3.8 22.2l53.8-.6.6 12.2L4.2 34.6z"/><path d="M8 22.2l1-6.8 44.2-.4.8 6.6"/><path d="M8.2 27.8l7.6-.1M18.4 27.6h7.8M28.6 27.8h7.6M38.8 27.6l7.6.1M49 27.8h5.6"/><path d="M7.6 31.4h46.8" stroke-dasharray="1.2 2"/><path d="M15 15.4c1.4-4 4-6.6 8-7.6M44.4 15c-.6-3.8-2.6-6.8-6.4-7.4"/><circle cx="31" cy="18.6" r="1.4"/><circle cx="24" cy="18.6" r=".9"/><circle cx="38" cy="18.6" r=".9"/><path d="M12 18.6h6M42 18.6h8"/><path d="M5 38.5h52" stroke-width=".6" opacity=".6"/></svg></div></div></div>
+    <div class="pl big" style="left:88px;top:384px;width:150px"><b>Nº 004 · newest</b>Roland Studio<small>roland50.studio</small><svg class="ro"><use href="#ros"/></svg></div>
+
+    <div class="ghost" style="left:278px;top:260px;width:36px;height:46px">005</div>
+  </div>
+</div>
+</div>
+
+<form class="dock" action="#">
+  <div class="hd"><span>Hang session Nº 005</span><span>one link · nothing else</span></div>
+  <div class="row">
+    <label><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#BFB493" stroke-width="1.1" stroke-linecap="round"><path d="M6 8l2-2M5 5.4L3.6 6.8a2.3 2.3 0 003.3 3.3L8.3 8.7M9 8.6l1.4-1.4A2.3 2.3 0 007.1 3.9L5.7 5.3"/></svg><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+</form>
+<div class="glow"></div>
+<div class="grain"></div>
+</body></html>

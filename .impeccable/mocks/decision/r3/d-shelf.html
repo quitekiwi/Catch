@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — Dispatch Bookshelf</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+:root{--khaki:#BFB493;--taupe:#A69981;--char:#393D3C;--olive:#403822;--red:#8C2020}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{position:relative;color:var(--olive);font-family:"Old Standard TT",serif;background-color:var(--char);
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Cpath d='M7 2.2L11.8 7 7 11.8 2.2 7z' fill='none' stroke='%23A69981' stroke-width='.8' opacity='.55'/%3E%3Ccircle cx='7' cy='7' r='1' fill='%23A69981' opacity='.5'/%3E%3C/svg%3E")}
+.floor{position:absolute;inset:14px 14px 0;background-color:var(--khaki);outline:1px solid var(--taupe);outline-offset:-4px;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46'%3E%3Cg fill='none' stroke='%23A69981' stroke-width='.9' opacity='.42'%3E%3Cpath d='M23 0L46 23 23 46 0 23z'/%3E%3Ccircle cx='23' cy='19' r='4'/%3E%3Ccircle cx='27' cy='23' r='4'/%3E%3Ccircle cx='23' cy='27' r='4'/%3E%3Ccircle cx='19' cy='23' r='4'/%3E%3C/g%3E%3Cg fill='%23393D3C' opacity='.13'%3E%3Cpath d='M0 0h3L0 3zM46 0v3L43 0zM0 46v-3L3 46zM46 46h-3L46 43z'/%3E%3Ccircle cx='23' cy='23' r='1.3'/%3E%3C/g%3E%3C/svg%3E");
+background-position:-2px 6px}
+.glow{position:absolute;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse 120% 80% at 50% 36%,rgba(191,180,147,0) 45%,rgba(64,56,34,.20) 100%)}
+.grain{position:absolute;inset:0;pointer-events:none;z-index:6;opacity:.55;mix-blend-mode:multiply;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .25 0 0 0 0 .22 0 0 0 0 .13 0 0 0 .32 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")}
+.in{position:relative;padding:20px 18px 0}
+.orn{display:flex;align-items:center;justify-content:center;gap:8px;height:10px}
+.orn i{width:56px;border-top:1px solid var(--taupe)}
+.orn svg{width:10px;height:10px}
+h1{margin:6px 0 0;text-align:center;font-family:"Bodoni Moda",serif;font-variation-settings:"opsz" 96;font-weight:500;font-size:50px;line-height:1;letter-spacing:.2em;padding-left:.2em}
+.sub{text-align:center;font-variant:small-caps;font-size:13px;letter-spacing:.24em;margin-top:5px}
+.sub::before,.sub::after{content:"";display:inline-block;width:18px;border-top:1px solid var(--olive);vertical-align:middle;margin:0 9px 2px}
+.tag{text-align:center;font-style:italic;font-size:12.5px;margin:6px 0 13px;opacity:.85}
+.seek{display:flex;gap:8px;height:34px}
+.seek label{flex:1;display:flex;align-items:center;gap:8px;padding:0 10px;border:1px solid var(--olive);box-shadow:inset 0 0 0 3px var(--khaki),inset 0 0 0 3.8px var(--taupe);background:var(--khaki)}
+.seek input{border:0;background:none;font:italic 13px "Old Standard TT",serif;color:var(--olive);width:100%;outline:none;padding:0}
+input::placeholder{color:var(--olive);opacity:.55}
+.seek button{font:400 13px "Old Standard TT",serif;font-variant:small-caps;letter-spacing:.14em;color:var(--olive);background:var(--khaki);border:1px solid var(--olive);padding:0 12px;display:flex;align-items:center;gap:6px}
+.meta{display:flex;align-items:center;gap:8px;margin:13px 0 11px;font-variant:small-caps;font-size:11.5px;letter-spacing:.16em}
+.meta i{flex:1;border-top:1px solid var(--taupe)}
+/* the bookcase */
+.case{position:relative;height:470px}
+.bk{position:absolute;bottom:0;box-sizing:border-box;border:1px solid var(--olive);border-bottom:0;background:var(--char);color:var(--khaki);box-shadow:1px 0 0 rgba(64,56,34,.35)}
+.bk::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.28),rgba(255,255,255,.07) 28%,transparent 62%,rgba(0,0,0,.3))}
+.bk::after{content:"";position:absolute;left:4px;right:4px;bottom:9px;height:4px;border-top:1px solid currentColor;border-bottom:1px solid currentColor;opacity:.6}
+.bk.tp{background:var(--taupe);color:var(--olive)}
+.bk.ol{background:var(--olive)}
+.lab{position:absolute;left:5px;right:5px;top:8px;height:40px;background:var(--khaki);border:1px solid var(--olive);box-shadow:inset 0 0 0 2px var(--khaki),inset 0 0 0 2.6px var(--taupe);color:var(--olive);text-align:center;font:10.5px/1 "Bodoni Moda",serif;font-variation-settings:"opsz" 11;letter-spacing:.06em}
+.lab b{position:absolute;left:0;right:0;bottom:5px;font-weight:600}
+.rib{position:absolute;left:50%;margin-left:-4px;top:-18px;width:8px;height:44px;background:var(--red);clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%);z-index:2}
+.rib::before{content:"";position:absolute;inset:0 3px;background:rgba(0,0,0,.18)}
+.ttl{position:absolute;left:0;right:0;top:56px;bottom:20px;display:flex;justify-content:center;align-items:center;writing-mode:vertical-rl;transform:rotate(180deg);gap:2px;position:absolute}
+.ttl span{font:500 14px/1 "Bodoni Moda",serif;font-variation-settings:"opsz" 24;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+.ttl small{font:italic 10px/1 "Old Standard TT",serif;letter-spacing:.04em;opacity:.85;white-space:nowrap}
+.bk.tp .lab{box-shadow:inset 0 0 0 2px var(--khaki),inset 0 0 0 2.6px var(--olive)}
+/* bookends + ghosts */
+.end{position:absolute;bottom:0;width:18px;height:84px}
+.ghost{position:absolute;bottom:0;box-sizing:border-box;border:1px dashed var(--taupe);border-bottom:0;display:flex;justify-content:center;padding-top:9px;font:11px "Bodoni Moda",serif;letter-spacing:.06em;color:var(--olive);opacity:.7}
+/* shelves */
+.plank{position:absolute;left:-8px;right:-8px;height:13px;background:var(--char);border-top:2px solid var(--taupe);box-shadow:0 1px 0 var(--olive),0 6px 8px -3px rgba(64,56,34,.45)}
+.plank::after{content:"";position:absolute;left:0;right:0;top:3px;border-top:1px solid var(--taupe);opacity:.5}
+.brk{position:absolute;top:13px;width:26px;height:34px}
+.brk.l{left:6px}.brk.r{right:6px;transform:scaleX(-1)}
+.shelf{position:absolute;left:0;right:0}
+.plaque{position:absolute;left:50%;transform:translateX(-50%);top:22px;padding:4px 12px 5px;background:var(--khaki);border:1px solid var(--olive);box-shadow:inset 0 0 0 2px var(--khaki),inset 0 0 0 2.8px var(--taupe),0 1px 1.5px rgba(64,56,34,.4);font-variant:small-caps;font-size:12px;letter-spacing:.2em;white-space:nowrap}
+.plaque::before,.plaque::after{content:"";position:absolute;top:50%;width:3px;height:3px;margin-top:-1.5px;border-radius:50%;background:var(--olive)}
+.plaque::before{left:4px}.plaque::after{right:4px}
+.note{position:absolute;right:2px;font:italic 11px "Old Standard TT",serif;opacity:.8}
+.dock{position:absolute;left:0;right:0;bottom:0;height:128px;z-index:4;background:var(--char);border-top:1px solid var(--taupe);color:var(--khaki);padding:12px 22px 0;box-sizing:border-box;margin:0}
+.dock::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--taupe);opacity:.6}
+.dock .hd{display:flex;justify-content:space-between;font-variant:small-caps;font-size:11px;letter-spacing:.2em;margin:4px 0 9px}
+.dock .row{display:flex;gap:10px;height:44px}
+.dock label{flex:1;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--khaki);padding:0 2px}
+.dock label svg{flex:none}
+.dock input{border:0;background:none;font:italic 15px "Old Standard TT",serif;color:var(--khaki);width:100%;outline:none}
+.dock input::placeholder{color:var(--khaki);opacity:.6}
+.dock button{font-family:"Bodoni Moda",serif;font-variation-settings:"opsz" 20;font-weight:600;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--olive);background:var(--khaki);border:0;outline:1px solid var(--khaki);outline-offset:3px;padding:0 18px 0 22px;margin:3px 3px 3px 0}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="end" viewBox="0 0 18 84"><path d="M0 84V2h6v76h12v6z" fill="#393D3C"/><path d="M1.5 4v77" stroke="#A69981" stroke-width=".6"/><path d="M3 30l2.6 3L3 36 .4 33z" fill="none" stroke="#BFB493" stroke-width=".7"/></symbol>
+<symbol id="brk" viewBox="0 0 26 34"><path d="M0 0h26v3C14 4 5 13 4 34H0z" fill="#393D3C"/><path d="M3 4c0 9 3 13 9 14" fill="none" stroke="#A69981" stroke-width=".8"/><circle cx="13" cy="18" r="2" fill="none" stroke="#A69981" stroke-width=".8"/></symbol>
+</defs></svg>
+<div class="floor">
+<div class="in">
+  <div class="orn"><i></i><svg viewBox="0 0 10 10"><path d="M5 .5L9.5 5 5 9.5.5 5z" fill="none" stroke="#403822" stroke-width=".8"/><circle cx="5" cy="5" r="1.2" fill="#403822"/></svg><i></i></div>
+  <h1>CATCH</h1>
+  <div class="sub">Catalogue of Sessions</div>
+  <div class="tag">Paste it, find it later. Nothing else.</div>
+  <div class="seek">
+    <label><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#403822" stroke-width="1.1"><circle cx="6" cy="6" r="4.6"/><path d="M9.4 9.4l3.6 3.6"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+    <button type="button"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="#403822" stroke-width="1"><path d="M0 1h11M2 4.5h7M4 8h3"/></svg>Filter</button>
+  </div>
+  <div class="meta"><span>Shelf A · in order caught</span><i></i><b style="font-weight:400">4 caught · 4 open</b></div>
+
+  <div class="case">
+    <!-- shelf one: the four sessions -->
+    <div class="shelf" style="top:14px;height:226px">
+      <svg class="end" style="left:4px"><use href="#end"/></svg>
+      <div class="bk" style="left:24px;width:50px;height:196px"><div class="rib"></div><div class="lab"><b>001</b></div><div class="ttl"><span>Vir MPC</span><small>ypc2000.fun</small></div></div>
+      <div class="bk tp" style="left:76px;width:46px;height:174px"><div class="rib"></div><div class="lab"><b>002</b></div><div class="ttl"><span>Map</span><small>terraink.app</small></div></div>
+      <div class="bk ol" style="left:124px;width:56px;height:214px"><div class="rib"></div><div class="lab"><b>003</b></div><div class="ttl"><span>EyeOfOsiris</span><small>osirisai.live</small></div></div>
+      <div class="bk" style="left:182px;width:60px;height:224px"><div class="rib"></div><div class="lab"><b>004</b></div><div class="ttl"><span>Roland Studio</span><small>roland50.studio</small></div></div>
+      <svg class="end" style="left:244px;transform:scaleX(-1)"><use href="#end"/></svg>
+      <div class="ghost" style="left:272px;width:44px;height:176px">005</div>
+      <div class="plank" style="top:226px"><svg class="brk l"><use href="#brk"/></svg><svg class="brk r"><use href="#brk"/></svg><div class="plaque">Sessions 001 – 004</div></div>
+    </div>
+    <!-- shelf two: waiting for more -->
+    <div class="shelf" style="top:296px;height:146px">
+      <div class="ghost" style="left:14px;width:48px;height:132px">006</div>
+      <div class="ghost" style="left:66px;width:42px;height:118px">007</div>
+      <div class="ghost" style="left:112px;width:52px;height:138px">008</div>
+      <div class="note" style="bottom:12px;right:34px">room for more…</div>
+      <svg class="end" style="right:6px;transform:scaleX(-1);height:62px;width:14px"><use href="#end"/></svg>
+      <div class="plank" style="top:146px"><svg class="brk l"><use href="#brk"/></svg><svg class="brk r"><use href="#brk"/></svg></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<form class="dock" action="#">
+  <div class="hd"><span>New session Nº 005</span><span>one link · nothing else</span></div>
+  <div class="row">
+    <label><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#BFB493" stroke-width="1.1" stroke-linecap="round"><path d="M6 8l2-2M5 5.4L3.6 6.8a2.3 2.3 0 003.3 3.3L8.3 8.7M9 8.6l1.4-1.4A2.3 2.3 0 007.1 3.9L5.7 5.3"/></svg><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+</form>
+<div class="glow"></div>
+<div class="grain"></div>
+</body></html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — The Concierge Desk</title>
+<link href="https://fonts.googleapis.com/css2?family=Limelight&family=Bodoni+Moda:ital,wght@0,500;1,400;1,500&family=Josefin+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--crimson:#8E2333;--pink:#E7A6B0;--brass:#C9A25A;--purple:#4B2C5E;--paper:#F4E9DC;--ink:#2a1533}
+*{box-sizing:border-box}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{position:relative;background:repeating-linear-gradient(90deg,#8E2333 0 13px,#842030 13px 26px);font-family:"Josefin Sans",sans-serif;color:var(--ink)}
+.caps{font-family:"Josefin Sans";text-transform:uppercase;letter-spacing:.32em}
+/* marquee */
+.sign{position:absolute;top:18px;left:50%;transform:translateX(-50%);width:292px;height:128px;background:var(--pink);border-radius:146px 146px 6px 6px;text-align:center;box-shadow:0 0 0 3px var(--crimson),0 0 0 5px var(--brass),0 10px 18px rgba(40,6,14,.45)}
+.sign::before{content:"";position:absolute;inset:7px;border-radius:139px 139px 3px 3px;border:1px solid rgba(142,35,51,.45)}
+.sign .over{margin-top:30px;font-size:9px;font-weight:600;color:var(--purple)}
+.sign h1{margin:2px 0 0;font:400 56px/1 "Limelight",serif;letter-spacing:.07em;color:var(--crimson);text-shadow:0 1px 0 #f6d3d8,0 2px 0 rgba(75,44,94,.35)}
+.sign .under{margin-top:6px;font:italic 400 11px "Bodoni Moda",serif;color:var(--purple);letter-spacing:.04em}
+.star{position:absolute;top:66px;fill:var(--brass)}
+/* pigeonhole wall */
+.wall{position:absolute;top:162px;left:50%;transform:translateX(-50%);width:336px;padding:10px;background:linear-gradient(180deg,#5a3670,#4B2C5E 30%,#3d2350);box-shadow:0 0 0 2px var(--brass),0 0 0 5px #3a1f49,0 14px 24px rgba(30,4,12,.55);display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.wall::before{content:"";position:absolute;left:-12px;right:-12px;top:-14px;height:8px;background:linear-gradient(#e3c788,#a8833d);border-radius:2px;box-shadow:0 3px 0 #3a1f49}
+.c{position:relative;height:102px;background:linear-gradient(180deg,#24112e,#3a2049 70%,#452858);box-shadow:inset 0 7px 9px rgba(0,0,0,.55),inset 0 -1px 0 rgba(201,162,90,.35)}
+.c.e{background:linear-gradient(180deg,#160a1c,#211028);box-shadow:inset 0 8px 10px rgba(0,0,0,.7)}
+.p{position:absolute;top:5px;left:50%;transform:translateX(-50%);padding:3px 6px 1px;font:600 8px/1 "Josefin Sans";letter-spacing:.14em;color:#3a2246;background:linear-gradient(#ecd59e,#b18b44);border-radius:1px;box-shadow:0 1px 0 rgba(0,0,0,.4)}
+.c.e .p{opacity:.5}
+.c svg.key{position:absolute;top:14px;left:50%;transform:translateX(-50%)}
+.t{position:absolute;left:5px;right:5px;bottom:5px;padding:3px 2px 2px;background:var(--paper);text-align:center;color:var(--purple);box-shadow:0 1px 2px rgba(0,0,0,.5)}
+.t b{display:block;font:italic 500 9.5px/1.1 "Bodoni Moda",serif;white-space:nowrap}
+.t i{display:block;font:normal 400 7px/1.3 "Josefin Sans";letter-spacing:.02em;color:#7a4a5e}
+/* counter */
+.bell{position:absolute;top:498px;left:50%;transform:translateX(-50%)}
+.counter{position:absolute;top:528px;left:0;right:0;height:26px;background:linear-gradient(#f0d9a2 0,#C9A25A 3px,#6d4084 3px,#4B2C5E 11px,#2c1838 18px,#C9A25A 18px,#8a6a2e 22px,#5a2a3a 22px);box-shadow:0 6px 10px rgba(30,4,12,.5)}
+.desk{position:absolute;top:554px;left:0;right:0;bottom:0;background:var(--pink)}
+.desk::before{content:"";position:absolute;inset:14px 14px 26px;border:1px solid rgba(142,35,51,.5);box-shadow:inset 0 0 0 5px var(--pink),inset 0 0 0 6px rgba(142,35,51,.3)}
+/* register */
+.reg{position:absolute;top:30px;left:30px;right:30px;display:flex;gap:8px}
+.field{position:relative;flex:1}
+.field svg{position:absolute;left:11px;top:11px}
+input{width:100%;height:38px;border:1px solid var(--crimson);border-radius:2px;background:var(--paper) repeating-linear-gradient(transparent 0 11px,rgba(142,35,51,.08) 11px 12px);font:italic 400 15px "Bodoni Moda",serif;color:var(--purple);padding:0 12px 0 32px;outline:none}
+input::placeholder{color:#94657a}
+input:focus{box-shadow:0 0 0 2px var(--brass)}
+button{cursor:pointer;font:600 10px/1 "Josefin Sans";letter-spacing:.24em;text-transform:uppercase}
+.filter{height:38px;padding:3px 13px 0;border:1px solid var(--crimson);border-radius:2px;background:transparent;color:var(--crimson)}
+.plaque{position:absolute;top:92px;left:50%;transform:translateX(-50%);width:250px;padding:9px 10px 8px;text-align:center;background:linear-gradient(#ecd59e,#C9A25A 55%,#a8833d);border-radius:2px;box-shadow:0 0 0 1px #7a5c25,0 2px 4px rgba(60,10,20,.35)}
+.plaque span{display:block;font-size:7px;font-weight:600;color:var(--purple);margin-bottom:3px}
+.plaque em{font:italic 500 13px "Bodoni Moda",serif;color:var(--ink)}
+/* paste dock */
+.dock{position:absolute;left:24px;right:24px;bottom:72px;display:flex;gap:8px;padding:8px;background:var(--purple);border-radius:3px;box-shadow:0 0 0 2px var(--brass),0 8px 14px rgba(60,10,20,.4)}
+.dock input{height:46px;border-color:var(--brass);padding-left:14px;font-size:16px}
+.catch{display:flex;align-items:center;gap:7px;height:46px;padding:3px 16px 0 12px;border:0;border-radius:2px;background:var(--crimson);color:var(--paper);box-shadow:inset 0 0 0 1px var(--brass),inset 0 0 0 3px var(--crimson),inset 0 0 0 4px rgba(201,162,90,.6);font-size:11px}
+.count{position:absolute;bottom:38px;left:0;right:0;text-align:center;font-size:8.5px;font-weight:600;color:var(--crimson);text-shadow:0 1px 0 rgba(255,255,255,.35)}
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="br" x1="0" x2="1"><stop offset="0" stop-color="#f1dca6"/><stop offset=".5" stop-color="#C9A25A"/><stop offset="1" stop-color="#8a6a2e"/></linearGradient>
+<symbol id="key" viewBox="0 0 36 58">
+<rect x="15" y="0" width="6" height="3" rx="1" fill="#8a6a2e"/><path d="M18 3v6" stroke="#8a6a2e" stroke-width="1.4"/>
+<circle cx="18" cy="14" r="5" fill="none" stroke="url(#br)" stroke-width="2.6"/>
+<rect x="16.8" y="19" width="2.4" height="25" fill="url(#br)"/>
+<path d="M19 36h5v2.6h-2.6v2h2.6v3.4h-5z" fill="url(#br)"/>
+<path d="M13.5 16c-4 3-5.5 8-5.5 13" stroke="currentColor" stroke-width="1.1" fill="none"/>
+<circle cx="8" cy="30" r="2.6" fill="currentColor"/><rect x="5.6" y="32" width="4.8" height="2" fill="#C9A25A"/>
+<path d="M6 34h4l2.4 18H3.6z" fill="currentColor"/>
+<path d="M6 36l-1.2 15M8 36v16M10 36l1.2 15" stroke="rgba(0,0,0,.28)" stroke-width=".6"/>
+</symbol></defs></svg>
+
+<header class="sign">
+  <svg class="star" style="left:22px" width="10" height="10" viewBox="0 0 10 10"><path d="M5 0l1.2 3.8H10L7 6.2 8.1 10 5 7.7 1.9 10 3 6.2 0 3.8h3.8z"/></svg>
+  <svg class="star" style="right:22px" width="10" height="10" viewBox="0 0 10 10"><path d="M5 0l1.2 3.8H10L7 6.2 8.1 10 5 7.7 1.9 10 3 6.2 0 3.8h3.8z"/></svg>
+  <div class="over caps">— Session Log —</div>
+  <h1>CATCH</h1>
+  <div class="under">Front desk · keys held for later</div>
+</header>
+
+<main class="wall" aria-label="Sessions">
+  <div class="c"><span class="p">004</span><svg class="key" width="34" height="56" style="color:#E7A6B0"><use href="#key"/></svg><div class="t"><b>Roland Studio</b><i>roland50.studio</i></div></div>
+  <div class="c"><span class="p">003</span><svg class="key" width="34" height="56" style="color:#e0566b"><use href="#key"/></svg><div class="t"><b>EyeOfOsiris</b><i>osirisai.live</i></div></div>
+  <div class="c"><span class="p">002</span><svg class="key" width="34" height="56" style="color:#F4E9DC"><use href="#key"/></svg><div class="t"><b>Map</b><i>terraink.app</i></div></div>
+  <div class="c"><span class="p">001</span><svg class="key" width="34" height="56" style="color:#c3a3dc"><use href="#key"/></svg><div class="t"><b>Vir MPC</b><i>ypc2000.fun</i></div></div>
+  <div class="c e"><span class="p">005</span></div><div class="c e"><span class="p">006</span></div><div class="c e"><span class="p">007</span></div><div class="c e"><span class="p">008</span></div>
+  <div class="c e"><span class="p">009</span></div><div class="c e"><span class="p">010</span></div><div class="c e"><span class="p">011</span></div><div class="c e"><span class="p">012</span></div>
+</main>
+
+<svg class="bell" width="46" height="31" viewBox="0 0 46 31" aria-hidden="true">
+  <rect x="21" y="1" width="4" height="5" rx="1.5" fill="#8a6a2e"/><circle cx="23" cy="2.5" r="2.6" fill="url(#br)"/>
+  <path d="M6 25C6 13 13 6.5 23 6.5S40 13 40 25z" fill="url(#br)"/>
+  <path d="M12 18c2-5 6-8 10-8.5" stroke="#fbeec8" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".8"/>
+  <rect x="2" y="25" width="42" height="5" rx="1.5" fill="#8a6a2e"/><rect x="2" y="25" width="42" height="1.6" fill="#ecd59e"/>
+</svg>
+<div class="counter"></div>
+
+<section class="desk">
+  <form class="reg" role="search">
+    <label class="field"><svg width="13" height="13" viewBox="0 0 13 13" aria-hidden="true"><circle cx="5.5" cy="5.5" r="4.2" fill="none" stroke="#8E2333" stroke-width="1.4"/><path d="M8.6 8.6L12 12" stroke="#8E2333" stroke-width="1.6"/></svg>
+      <input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+    <button type="button" class="filter">Filter</button>
+  </form>
+  <div class="plaque"><span class="caps">Réception</span><em>Paste it, find it later. Nothing else.</em></div>
+  <form class="dock">
+    <input type="url" placeholder="paste a link…" aria-label="Paste a link">
+    <button type="submit" class="catch"><svg width="18" height="13" viewBox="0 0 46 31" aria-hidden="true"><circle cx="23" cy="3" r="3" fill="#C9A25A"/><path d="M6 25C6 13 13 6.5 23 6.5S40 13 40 25z" fill="#C9A25A"/><rect x="2" y="25" width="42" height="5" rx="1.5" fill="#C9A25A"/></svg>Catch</button>
+  </form>
+  <div class="count caps">4 caught · 4 open</div>
+</section>
+</body></html>

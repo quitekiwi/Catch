@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — The Salon</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{--ground:#2A403A;--sage:#748C76;--paper:#B1BFA3;--umber:#59523E;--gilt:#B09C70;--red:#8C2020}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{position:relative;color:var(--paper);font-family:"EB Garamond",serif;background-color:var(--ground);
+background-image:radial-gradient(ellipse 120% 80% at 50% 45%,transparent 55%,rgba(89,82,62,.45)),
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='390' height='844'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='turbulence' baseFrequency='.0045 .011' numOctaves='5' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .455 0 0 0 0 .549 0 0 0 0 .463 -2.4 0 0 0 .62'/%3E%3C/filter%3E%3Crect width='390' height='844' filter='url(%23m)' opacity='.55'/%3E%3C/svg%3E"),
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .455 0 0 0 0 .549 0 0 0 0 .463 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E")}
+.ceil{display:block;width:390px;height:52px}
+.mast{text-align:center;margin-top:6px}
+.mast h1{margin:0;font-family:Cinzel,serif;font-weight:500;font-size:38px;line-height:1;letter-spacing:.34em;padding-left:.34em;color:var(--gilt);text-shadow:0 1px 0 rgba(89,82,62,.9)}
+.mast .sub{font-family:Cinzel,serif;font-size:8px;letter-spacing:.42em;color:var(--gilt);margin-top:4px;opacity:.85}
+.orn{display:block;margin:5px auto 0;width:300px;height:14px}
+.tag{display:flex;justify-content:space-between;align-items:baseline;padding:7px 20px 0}
+.tag i{font-size:13.5px;letter-spacing:.01em}
+.tag b{font-family:Cinzel,serif;font-weight:500;font-size:9px;letter-spacing:.16em;color:var(--gilt)}
+.seek{display:flex;gap:8px;padding:10px 20px 0}
+.seek label{flex:1;display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;border:1px solid var(--gilt);background:rgba(89,82,62,.42);box-shadow:inset 0 0 0 3px rgba(42,64,58,.9),inset 0 0 0 4px rgba(176,156,112,.35)}
+input{border:0;background:none;outline:none;width:100%;font:inherit;font-style:italic;font-size:14.5px;color:var(--paper)}
+input::placeholder{color:var(--paper);opacity:.62}
+button{font-family:Cinzel,serif;font-weight:600;letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.seek button{height:40px;padding:0 13px 0 15px;font-size:10px;color:var(--gilt);background:rgba(89,82,62,.42);border:1px solid var(--gilt)}
+.sec{display:flex;align-items:center;justify-content:center;gap:10px;margin:13px 20px 0;font-family:Cinzel,serif;font-size:8px;letter-spacing:.3em;color:var(--gilt)}
+.sec::before,.sec::after{content:"";flex:1;height:3px;border-top:1px solid var(--gilt);border-bottom:1px solid rgba(176,156,112,.45)}
+.wall{position:absolute;left:0;top:246px;width:390px;height:498px}
+.wall>svg{position:absolute}
+.bg{left:0;top:0;width:390px;height:498px}
+.f{filter:drop-shadow(2px 4px 3px rgba(20,28,24,.75))}
+.il{fill:none;stroke:#59523E;stroke-linecap:round;stroke-linejoin:round}
+.ro{width:24px;height:31px;filter:drop-shadow(1px 2px 1px rgba(20,28,24,.6))}
+.pl{position:absolute;background:var(--paper);color:var(--umber);text-align:center;padding:3px 4px 4px;box-shadow:0 0 0 1px var(--gilt),0 0 0 2.5px var(--umber),0 3px 4px rgba(20,28,24,.6)}
+.pl b{display:block;font-family:Cinzel,serif;font-weight:600;font-size:7.5px;letter-spacing:.2em}
+.pl .t{display:block;font-size:13px;line-height:1.05;font-weight:500}
+.pl .d{display:block;font-size:9px;font-style:italic;letter-spacing:.02em}
+.pl.big .t{font-size:16px}.pl.big b{font-size:8.5px}.pl.big .d{font-size:10px}
+.ghost{position:absolute;font-family:Cinzel,serif;font-size:8.5px;letter-spacing:.2em;color:var(--paper);opacity:.72;text-align:center}
+.dock{position:absolute;left:0;right:0;bottom:0;padding:12px 20px 24px;background:linear-gradient(rgba(42,64,58,.94),var(--ground));border-top:1px solid var(--gilt);box-shadow:0 -1px 0 3px rgba(42,64,58,.9),0 -5px 0 0 rgba(176,156,112,.45),0 -12px 18px rgba(89,82,62,.5)}
+.dock .hd{display:flex;justify-content:space-between;font-family:Cinzel,serif;font-size:7.5px;letter-spacing:.28em;color:var(--gilt);margin-bottom:8px}
+.dock .row{display:flex;gap:8px}
+.dock label{flex:1;display:flex;align-items:center;height:46px;padding:0 14px;border:1px solid var(--gilt);background:rgba(89,82,62,.5);box-shadow:inset 0 0 0 3px rgba(42,64,58,.9),inset 0 0 0 4px rgba(176,156,112,.35)}
+.dock label input{font-size:15.5px}
+.dock button{height:48px;padding:0 18px 0 21px;font-size:13px;color:var(--ground);background:var(--gilt);border:0;box-shadow:inset 0 0 0 3px var(--gilt),inset 0 0 0 4px var(--ground)}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="cu" fill="none" stroke="#B09C70" stroke-width=".8" stroke-linecap="round"><path d="M1.5 15C1.5 7 4.5 2.4 13 1.5"/><path d="M4.5 13.5C4.4 8.2 6.2 4.8 11 4.4c2.6-.2 3.6 2.4 2 3.4-1.1.7-2.3-.2-1.6-1.1"/><circle cx="4.6" cy="4.6" r="1" fill="#B09C70" stroke="none"/></g>
+    <pattern id="cof" width="39" height="31" patternUnits="userSpaceOnUse"><rect width="39" height="31" fill="#2A403A"/><rect x="2.5" y="2.5" width="34" height="26" fill="#59523E" stroke="#B09C70" stroke-width=".6"/><rect x="7.5" y="6.5" width="24" height="18" fill="#2A403A" stroke="#B09C70" stroke-width=".4" opacity=".9"/><path d="M19.5 11.6v7.8M15.6 15.5h7.8" stroke="#B09C70" stroke-width=".5"/><circle cx="19.5" cy="15.5" r="2" fill="#B09C70"/><circle cx="19.5" cy="15.5" r="3.6" fill="none" stroke="#B09C70" stroke-width=".4"/></pattern>
+    <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#59523E" stop-opacity=".75"/><stop offset="1" stop-color="#59523E" stop-opacity="0"/></linearGradient>
+    <radialGradient id="gl" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#C9B88C"/><stop offset=".55" stop-color="#B09C70"/><stop offset="1" stop-color="#59523E"/></radialGradient>
+    <symbol id="ro" viewBox="0 0 26 34">
+      <path d="M8.5 18 5 33l3.6-2.4L11 33.5 12.6 20zM17.5 18 21 33l-3.6-2.4L15 33.5 13.4 20z" fill="#8C2020" stroke="#59523E" stroke-width=".4"/>
+      <circle cx="13" cy="13" r="12.2" fill="#B1BFA3" stroke="#59523E" stroke-width=".7"/>
+      <circle cx="13" cy="13" r="9" fill="#8C2020"/>
+      <circle cx="13" cy="13" r="7.4" fill="none" stroke="#B1BFA3" stroke-width="2.6" stroke-dasharray=".7 1.9" opacity=".55"/>
+      <circle cx="13" cy="13" r="3.8" fill="#B1BFA3"/><circle cx="13" cy="13" r="2.2" fill="#8C2020"/>
+      <circle cx="13" cy="1.6" r="1.1" fill="#59523E"/>
+    </symbol>
+    <symbol id="nail" viewBox="0 0 10 10"><circle cx="5.6" cy="6" r="3.6" fill="#1E2E29" opacity=".7"/><circle cx="5" cy="5" r="3.2" fill="url(#gl)" stroke="#59523E" stroke-width=".5"/></symbol>
+  </defs>
+</svg>
+
+<svg class="ceil" viewBox="0 0 390 52" aria-hidden="true">
+  <rect x="-5" y="0" width="400" height="31" fill="url(#cof)" transform="translate(-4 0)"/>
+  <rect width="390" height="31" fill="url(#shade)"/>
+  <path d="M0 33.5h390" stroke="#B09C70" stroke-width="1"/>
+  <path d="M0 38.5h390" stroke="#B09C70" stroke-width="4" stroke-dasharray="2.4 3.1" opacity=".8"/>
+  <path d="M0 42.5h390" stroke="#B09C70" stroke-width=".6"/>
+  <path d="M0 45.5h390" stroke="#59523E" stroke-width="2.5"/>
+  <path d="M0 48h390" stroke="#B09C70" stroke-width=".4" opacity=".55"/>
+</svg>
+
+<header class="mast">
+  <h1>CATCH</h1>
+  <svg class="orn" viewBox="0 0 300 14" fill="none" stroke="#B09C70" stroke-linecap="round" aria-hidden="true">
+    <path d="M12 7h112M176 7h112" stroke-width=".7"/>
+    <path d="M124 7c6 0 9-5 15-5 4 0 4 4 1.5 4.6M176 7c-6 0-9 5-15 5-4 0-4-4-1.5-4.6" stroke-width=".8"/>
+    <path d="M150 2.2l4.8 4.8-4.8 4.8-4.8-4.8z" fill="#B09C70" stroke="none"/>
+    <path d="M12 7c-4 0-6-3-4-4.4 1.6-1 3 .6 2 1.6M288 7c4 0 6 3 4 4.4-1.6 1-3-.6-2-1.6" stroke-width=".7"/>
+  </svg>
+  <div class="sub">THE SALON OF THE COLLECTION</div>
+</header>
+<div class="tag"><i>Paste it, find it later. Nothing else.</i><b>4 CAUGHT · 4 OPEN</b></div>
+
+<div class="seek">
+  <label><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#B09C70" stroke-width="1.1" stroke-linecap="round"><circle cx="6.3" cy="6.3" r="4.6"/><path d="M9.8 9.8l4 4"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+  <button type="button">Filter</button>
+</div>
+
+<div class="sec">SALON WALL · Nº 001 — 004</div>
+
+<main class="wall">
+  <!-- wall: wires, nails, dado rail, wainscot -->
+  <svg class="bg" viewBox="0 0 390 498" aria-hidden="true">
+    <g stroke="#B09C70" stroke-width=".7" fill="none" opacity=".85">
+      <path d="M195 10 116 34M195 10l79 24"/>
+      <path d="M62 14 30 44M62 14l32 30"/>
+      <path d="M328 8 292 52M328 8l36 44"/>
+      <path d="M66 208 28 226M66 208l38 18"/>
+      <path d="M328 228 296 246M328 228l32 18" stroke-dasharray="2 2.5" opacity=".55"/>
+    </g>
+    <rect x="290.5" y="246.5" width="76" height="62" fill="none" stroke="#B1BFA3" stroke-width=".7" stroke-dasharray="3 3" opacity=".4"/>
+    <use href="#nail" x="190" y="5" width="10" height="10"/><use href="#nail" x="57" y="9" width="10" height="10"/>
+    <use href="#nail" x="323" y="3" width="10" height="10"/><use href="#nail" x="61" y="203" width="10" height="10"/>
+    <use href="#nail" x="323" y="223" width="10" height="10"/>
+    <use href="#nail" x="166" y="318" width="10" height="10"/><use href="#nail" x="224" y="350" width="10" height="10"/>
+    <use href="#nail" x="104" y="372" width="10" height="10"/>
+    <path d="M0 418.5h390" stroke="#B09C70" stroke-width="1"/>
+    <path d="M0 422.5h390" stroke="#59523E" stroke-width="3"/>
+    <path d="M0 426h390" stroke="#B09C70" stroke-width=".5" opacity=".6"/>
+    <g fill="none" stroke="#748C76" stroke-width=".8">
+      <rect x="14.5" y="438.5" width="110" height="70"/><rect x="140.5" y="438.5" width="110" height="70"/><rect x="266.5" y="438.5" width="110" height="70"/>
+      <rect x="20.5" y="444.5" width="98" height="70" opacity=".6"/><rect x="146.5" y="444.5" width="98" height="70" opacity=".6"/><rect x="272.5" y="444.5" width="98" height="70" opacity=".6"/>
+    </g>
+  </svg>
+
+  <!-- 003 oval -->
+  <svg class="f" style="left:16px;top:22px" width="92" height="116" viewBox="0 0 92 116" role="img" aria-label="Session 003 EyeOfOsiris, an eye">
+    <ellipse cx="46" cy="58" rx="45.5" ry="57.5" fill="#B09C70"/><ellipse cx="46" cy="58" rx="41" ry="53" fill="#59523E"/>
+    <ellipse cx="46" cy="58" rx="38.5" ry="50.5" fill="none" stroke="#B09C70" stroke-width="1.6" stroke-dasharray=".1 3.2" stroke-linecap="round"/>
+    <ellipse cx="46" cy="58" rx="35.5" ry="47.5" fill="#B1BFA3" stroke="#B09C70" stroke-width=".8"/>
+    <ellipse cx="46" cy="58" rx="28" ry="38" fill="none" stroke="#59523E" stroke-width=".5" opacity=".6"/>
+    <g class="il" stroke-width="1.3" transform="translate(18 34) scale(.9)"><path d="M4.6 26.4C13 14.2 22 9.8 31.3 10c9.6.1 18.4 5 26.4 16.3-8 11.4-17 15.6-26.6 15.4C21.6 41.6 12.4 37 4.6 26.4z"/><circle cx="31" cy="26" r="9.4"/><circle cx="31.2" cy="25.8" r="3.6" fill="#59523E"/><path d="M27.4 21.6l1.8 1.4"/><path d="M14.8 15l-2.6-4.4M22.4 11l-1.2-4.6M31 9.6V4.8M39.6 11l1.4-4.6M47.4 15.2l2.8-4.2"/><path d="M20 39.6c-1.2 4.4-.3 7.4 3 8.6"/></g>
+  </svg>
+  <svg class="ro" style="left:84px;top:14px" viewBox="0 0 26 34" aria-label="Open, unread"><use href="#ro"/></svg>
+  <div class="pl" style="left:20px;top:146px;width:76px"><b>Nº 003</b><span class="t">EyeOfOsiris</span><span class="d">osirisai.live</span></div>
+
+  <!-- 004 newest, centre -->
+  <svg class="f" style="left:105px;top:30px" width="180" height="160" viewBox="0 0 180 160" role="img" aria-label="Session 004 Roland Studio, a synthesizer">
+    <rect width="180" height="160" fill="#B09C70"/><rect x="6" y="6" width="168" height="148" fill="#59523E"/>
+    <rect x="8" y="8" width="164" height="144" fill="none" stroke="#B09C70" stroke-width="1.8" stroke-dasharray=".1 3.4" stroke-linecap="round"/>
+    <rect x="11.5" y="11.5" width="157" height="137" fill="none" stroke="#B09C70" stroke-width=".8"/>
+    <rect x="13" y="13" width="154" height="134" fill="#B1BFA3"/>
+    <g transform="translate(13 13)"><use href="#cu"/><use href="#cu" transform="matrix(-1 0 0 1 154 0)"/><use href="#cu" transform="matrix(1 0 0 -1 0 134)"/><use href="#cu" transform="matrix(-1 0 0 -1 154 134)"/></g>
+    <rect x="30.5" y="28.5" width="119" height="94" fill="none" stroke="#59523E" stroke-width=".7"/><rect x="33.5" y="31.5" width="113" height="88" fill="none" stroke="#59523E" stroke-width=".4" opacity=".5"/>
+    <g class="il" stroke-width=".75" transform="translate(33 37) scale(1.85)"><path d="M3.8 22.2l53.8-.6.6 12.2L4.2 34.6z"/><path d="M8 22.2l1-6.8 44.2-.4.8 6.6"/><path d="M8.2 27.8l7.6-.1M18.4 27.6h7.8M28.6 27.8h7.6M38.8 27.6l7.6.1M49 27.8h5.6"/><path d="M7.6 31.4h46.8" stroke-dasharray="1.2 2"/><path d="M15 15.4c1.4-4 4-6.6 8-7.6M44.4 15c-.6-3.8-2.6-6.8-6.4-7.4"/><path d="M29 18.6h4"/><circle cx="12" cy="18.6" r="1.1"/><circle cx="16" cy="18.6" r="1.1"/></g>
+    <text x="90" y="139" text-anchor="middle" font-family="Cinzel,serif" font-weight="600" font-size="7" letter-spacing="1.6" fill="#59523E">S·004 · NEWEST</text>
+  </svg>
+  <svg class="ro" style="left:262px;top:20px" viewBox="0 0 26 34" aria-label="Open, unread"><use href="#ro"/></svg>
+  <div class="pl big" style="left:131px;top:200px;width:120px"><b>Nº 004</b><span class="t">Roland Studio</span><span class="d">roland50.studio</span></div>
+
+  <!-- 002 arched -->
+  <svg class="f" style="left:282px;top:14px" width="92" height="120" viewBox="0 0 92 120" role="img" aria-label="Session 002 Map, a folded map">
+    <path d="M0 120V46a46 46 0 0 1 92 0v74z" fill="#B09C70"/><path d="M5 115V46a41 41 0 0 1 82 0v69z" fill="#59523E"/>
+    <path d="M7.5 112.5V46a38.5 38.5 0 0 1 77 0v66.5z" fill="none" stroke="#B09C70" stroke-width="1.6" stroke-dasharray=".1 3.2" stroke-linecap="round"/>
+    <path d="M10 110V46a36 36 0 0 1 72 0v64z" fill="#B1BFA3" stroke="#B09C70" stroke-width=".8"/>
+    <path d="M17.5 102.5V48a28.5 28.5 0 0 1 57 0v54.5z" fill="none" stroke="#59523E" stroke-width=".5" opacity=".6"/>
+    <path d="M40 4.5q6 4 6 6.5 0-2.5 6-6.5" fill="none" stroke="#59523E" stroke-width=".8"/>
+    <g class="il" stroke-width="1.2" transform="translate(15 42)"><path d="M8 12.5l14.6-4.8 15.8 5.4 15.6-5 .3 31.8-15.4 5.2-16-5.6L8.4 44z"/><path d="M22.6 7.8l.4 31.5M38.4 13.2l.6 31.8"/><path d="M13 19c3 4 6 1 9 4s3 7 6 7 5-5 9-3 2 7 8 6" stroke-dasharray="1.6 2.2"/><path d="M45.4 30.2l3.5 3.4M48.8 30.1l-3.3 3.6"/><path d="M14.5 34.6c1-.8 2.4-.6 3 .4"/></g>
+  </svg>
+  <svg class="ro" style="left:356px;top:44px" viewBox="0 0 26 34" aria-label="Open, unread"><use href="#ro"/></svg>
+  <div class="pl" style="left:286px;top:144px;width:76px"><b>Nº 002</b><span class="t">Map</span><span class="d">terraink.app</span></div>
+
+  <!-- 001 small landscape -->
+  <svg class="f" style="left:14px;top:222px" width="104" height="84" viewBox="0 0 104 84" role="img" aria-label="Session 001 Vir MPC, a drum-pad machine">
+    <rect width="104" height="84" fill="#B09C70"/><rect x="5" y="5" width="94" height="74" fill="#59523E"/>
+    <rect x="7" y="7" width="90" height="70" fill="none" stroke="#B09C70" stroke-width="1.6" stroke-dasharray=".1 3.2" stroke-linecap="round"/>
+    <rect x="9.5" y="9.5" width="85" height="65" fill="#B1BFA3" stroke="#B09C70" stroke-width=".8"/>
+    <rect x="16.5" y="15.5" width="71" height="53" fill="none" stroke="#59523E" stroke-width=".5" opacity=".6"/>
+    <g class="il" stroke-width="1" transform="translate(16.3 6.7) scale(1.15)"><path d="M5 30.5l52-.8.3 13.6-52.4.5z"/><path d="M11 30.3v13M17.2 30.4l.1 12.8M23.5 30v13.2M29.6 30.2v13M36 30.1l-.2 13M42.1 30v13.1M48.3 30.2v12.9"/><path d="M14.2 30.5v7.4h3.1v-7.5M26.6 30.3l.2 7.6 3-.1v-7.4M39 30.2v7.6h3M45.4 30.3l-.1 7.4 3 .1"/><path d="M6 30.4c.2-6.2.1-9 .4-11.8l50.3-.6.4 11.6"/><circle cx="13" cy="24" r="2.3"/><circle cx="21" cy="24.2" r="2.2"/><path d="M30 22h14.5M30.5 25.8l13.8-.2M49.5 21.4l3.6 5"/></g>
+  </svg>
+  <svg class="ro" style="left:98px;top:214px" viewBox="0 0 26 34" aria-label="Open, unread"><use href="#ro"/></svg>
+  <div class="pl" style="left:22px;top:316px;width:80px"><b>Nº 001</b><span class="t">Vir MPC</span><span class="d">ypc2000.fun</span></div>
+
+  <!-- empty hooks waiting -->
+  <div class="ghost" style="left:290px;top:270px;width:78px">Nº 005<br><i style="font-family:'EB Garamond',serif;font-size:11px;letter-spacing:0;text-transform:none">next to hang</i></div>
+  <div class="ghost" style="left:150px;top:332px;width:42px">006</div>
+  <div class="ghost" style="left:208px;top:364px;width:42px">007</div>
+  <div class="ghost" style="left:88px;top:386px;width:42px">008</div>
+</main>
+
+<form class="dock" action="#">
+  <div class="hd"><span>NEW ACQUISITION</span><span>TO HANG AS Nº 005</span></div>
+  <div class="row">
+    <label><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+</form>
+</body></html>

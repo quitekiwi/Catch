@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch · Screening Room</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alfa+Slab+One&family=Bebas+Neue&family=Oswald:wght@300;400;600&family=Rubik+Mono+One&display=swap">
+<style>
+:root{--hall:#0E0C10;--paper:#EDE6DA;--red:#C23B2E;--teal:#2F5D62;--dim:#8C8378}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{background:var(--hall);color:var(--paper);font-family:Oswald,sans-serif;position:relative}
+*{box-sizing:border-box}
+.marquee{margin:14px 16px 0;border:1.5px solid var(--red);padding:9px 12px 8px;text-align:center;position:relative;
+ background:repeating-linear-gradient(90deg,var(--paper) 0 3px,transparent 3px 14px) top/100% 3px no-repeat,
+ repeating-linear-gradient(90deg,var(--paper) 0 3px,transparent 3px 14px) bottom/100% 3px no-repeat}
+.marquee small{display:block;font-size:10px;letter-spacing:.42em;color:var(--red);font-weight:600;margin-top:4px}
+.marquee h1{margin:2px 0 0;font:400 34px/1 "Bebas Neue";letter-spacing:.14em}
+.marquee h1 i{font-style:normal;color:var(--red)}
+.marquee p{margin:3px 0 4px;font:300 11px/1.3 Oswald;letter-spacing:.08em;color:#BDB4A6}
+.tools{display:flex;gap:8px;margin:12px 16px 0}
+.tools input{flex:1;height:36px;background:#1A171D;border:1px solid #3A343C;border-radius:2px;color:var(--paper);
+ font:400 13px Oswald;letter-spacing:.06em;padding:0 12px}
+.tools input::placeholder{color:#8C8378}
+.tools button,.dock button{height:36px;border:1px solid var(--paper);background:transparent;color:var(--paper);
+ font:400 15px "Bebas Neue";letter-spacing:.18em;padding:0 14px;border-radius:2px}
+.meta{display:flex;justify-content:space-between;margin:12px 16px 0;font:400 10px Oswald;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.meta b{color:var(--paper);font-weight:600}
+.pool{position:absolute;left:0;right:0;top:178px;height:360px;
+ background:radial-gradient(ellipse 58% 62% at 50% 52%,rgba(237,230,218,.16),rgba(237,230,218,.04) 60%,transparent 75%)}
+.beam{position:absolute;left:50%;top:150px;width:300px;height:110px;transform:translateX(-50%);
+ background:linear-gradient(rgba(237,230,218,.10),transparent);clip-path:polygon(46% 0,54% 0,100% 100%,0 100%)}
+.feature{position:absolute;left:84px;top:188px;width:222px;height:330px;background:var(--paper);color:var(--hall);
+ box-shadow:0 22px 50px rgba(0,0,0,.7),0 0 0 6px #1A171D;overflow:hidden}
+.feature .keys{position:absolute;left:-30px;top:58px;transform:rotate(-14deg)}
+.feature .top{position:absolute;top:12px;left:14px;right:14px;display:flex;justify-content:space-between;
+ font:600 8.5px Oswald;letter-spacing:.3em;color:var(--red)}
+.feature h2{position:absolute;left:14px;right:14px;top:180px;margin:0;font:400 46px/.86 "Abril Fatface";letter-spacing:-.01em}
+.feature h2 em{font-style:normal;color:var(--red)}
+.feature .credit{position:absolute;left:14px;right:14px;bottom:12px;border-top:1px solid var(--hall);padding-top:6px;
+ font:400 7.5px/1.45 Oswald;letter-spacing:.14em;text-transform:uppercase;text-align:center}
+.feature .credit b{font-family:"Bebas Neue";font-weight:400;font-size:11px;letter-spacing:.3em;color:var(--red)}
+.feature .tag{position:absolute;right:12px;top:150px;width:46px;height:46px;border-radius:50%;background:var(--red);color:var(--paper);
+ display:grid;place-items:center;text-align:center;font:400 9px/1 "Bebas Neue";letter-spacing:.12em;transform:rotate(10deg)}
+.feature .tag span{font-size:17px;display:block}
+.label{position:absolute;top:548px;left:16px;right:16px;display:flex;align-items:center;gap:10px;
+ font:600 9px Oswald;letter-spacing:.36em;color:var(--dim)}
+.label:after{content:"";flex:1;height:1px;background:#3A343C}
+.row{position:absolute;top:570px;left:16px;right:16px;display:flex;gap:10px}
+.p{flex:1;height:164px;position:relative;overflow:hidden;filter:brightness(.68) saturate(.85);box-shadow:0 10px 24px rgba(0,0,0,.6)}
+.p .n{position:absolute;top:7px;left:8px;font:600 7px Oswald;letter-spacing:.28em}
+.p .c{position:absolute;bottom:7px;left:8px;right:8px;font:400 6.5px/1.4 Oswald;letter-spacing:.12em;text-transform:uppercase}
+.p svg{position:absolute}
+.osiris{background:var(--teal);color:var(--paper)}
+.osiris h3{position:absolute;left:8px;right:8px;top:96px;margin:0;font:400 12px/1.05 "Rubik Mono One";letter-spacing:.02em}
+.map{background:var(--paper);color:var(--teal)}
+.map h3{position:absolute;left:8px;top:100px;margin:0;font:400 40px/1 "Alfa Slab One";color:var(--hall)}
+.mpc{background:var(--red);color:var(--paper)}
+.mpc h3{position:absolute;left:8px;right:8px;top:98px;margin:0;font:400 30px/.85 "Bebas Neue";letter-spacing:.02em;color:var(--hall)}
+.dock{position:absolute;left:0;right:0;bottom:0;height:88px;padding:14px 16px 0;background:linear-gradient(transparent,var(--hall) 22%);display:flex;gap:8px}
+.dock::before{content:"";position:absolute;left:16px;right:16px;top:8px;height:1px;background:var(--red);opacity:.6}
+.dock input{flex:1;height:46px;background:var(--paper);border:0;border-radius:2px;color:var(--hall);font:400 14px Oswald;letter-spacing:.05em;padding:0 14px}
+.dock input::placeholder{color:#6E665D}
+.dock button{height:46px;background:var(--red);border-color:var(--red);font-size:20px;padding:0 20px}
+</style></head>
+<body>
+<header class="marquee">
+ <small>★ PRIVATE SCREENING ★</small>
+ <h1>NOW SHOWING <i>·</i> CATCH</h1>
+ <p>Paste it, find it later. Nothing else.</p>
+</header>
+<form class="tools" action="#">
+ <input type="search" placeholder="search the archive…" aria-label="Search the archive">
+ <button type="button">FILTER</button>
+</form>
+<div class="meta"><span>Program · <b>All</b></span><span><b>4</b> caught · <b>4</b> open</span></div>
+<div class="beam"></div><div class="pool"></div>
+
+<article class="feature" aria-label="Session 004, Roland Studio">
+ <div class="top"><span>SESSION 004</span><span>NEWEST</span></div>
+ <svg class="keys" width="300" height="120" viewBox="0 0 300 120" aria-hidden="true">
+  <rect x="0" y="0" width="300" height="120" fill="#0E0C10"/>
+  <g fill="#EDE6DA"><rect x="3" y="4" width="26" height="112"/><rect x="32" y="4" width="26" height="112"/><rect x="61" y="4" width="26" height="112"/><rect x="90" y="4" width="26" height="112"/><rect x="119" y="4" width="26" height="112"/><rect x="148" y="4" width="26" height="112"/><rect x="177" y="4" width="26" height="112"/><rect x="206" y="4" width="26" height="112"/><rect x="235" y="4" width="26" height="112"/><rect x="264" y="4" width="26" height="112"/></g>
+  <g fill="#0E0C10"><rect x="21" y="4" width="16" height="66"/><rect x="50" y="4" width="16" height="66"/><rect x="108" y="4" width="16" height="66"/><rect x="137" y="4" width="16" height="66"/><rect x="166" y="4" width="16" height="66"/><rect x="224" y="4" width="16" height="66"/><rect x="253" y="4" width="16" height="66"/></g>
+  <rect x="119" y="4" width="26" height="112" fill="#C23B2E"/><rect x="137" y="4" width="16" height="66" fill="#0E0C10"/>
+ </svg>
+ <div class="tag"><div>NO.<span>004</span>OPEN</div></div>
+ <h2>Roland<br><em>Studio</em></h2>
+ <div class="credit">a link from <b>roland50.studio</b><br>Session 004 · caught &amp; unseen · one night only</div>
+</article>
+
+<div class="label">ALSO IN THE ARCHIVE</div>
+<section class="row">
+ <article class="p osiris" aria-label="Session 003, EyeOfOsiris">
+  <span class="n">003</span>
+  <svg viewBox="0 0 100 60" width="96" height="58" style="left:5px;top:28px" aria-hidden="true">
+   <path d="M6 30 Q50 -4 94 30 Q50 64 6 30Z" fill="none" stroke="#EDE6DA" stroke-width="3"/>
+   <circle cx="50" cy="30" r="13" fill="#C23B2E"/><circle cx="50" cy="30" r="5" fill="#0E0C10"/>
+   <path d="M44 43 L38 58 M50 44 L50 58" stroke="#EDE6DA" stroke-width="2.5"/>
+  </svg>
+  <h3>EYE OF OSIRIS</h3>
+  <div class="c">from osirisai.live</div>
+ </article>
+ <article class="p map" aria-label="Session 002, Map">
+  <span class="n">002</span>
+  <svg viewBox="0 0 110 100" width="110" height="100" style="left:0;top:4px" aria-hidden="true" fill="none" stroke="#2F5D62" stroke-width="1.4">
+   <path d="M55 50 m-8 0 a8 6 0 1 0 16 0 a8 6 0 1 0 -16 0"/><path d="M36 50 C36 34 74 30 76 48 C78 64 40 70 36 50Z"/>
+   <path d="M22 52 C18 24 88 16 90 46 C92 76 28 84 22 52Z"/><path d="M8 54 C2 12 104 2 106 44 C108 92 14 98 8 54Z"/>
+   <circle cx="55" cy="50" r="2.5" fill="#C23B2E" stroke="none"/>
+  </svg>
+  <h3>Map</h3>
+  <div class="c">from terraink.app</div>
+ </article>
+ <article class="p mpc" aria-label="Session 001, Vir MPC">
+  <span class="n">001</span>
+  <svg viewBox="0 0 84 84" width="80" height="80" style="left:13px;top:18px" aria-hidden="true">
+   <g fill="#EDE6DA"><rect x="0" y="0" width="18" height="18"/><rect x="22" y="0" width="18" height="18"/><rect x="44" y="0" width="18" height="18"/><rect x="66" y="0" width="18" height="18"/><rect x="0" y="22" width="18" height="18"/><rect x="44" y="22" width="18" height="18"/><rect x="66" y="22" width="18" height="18"/><rect x="0" y="44" width="18" height="18"/><rect x="22" y="44" width="18" height="18"/><rect x="66" y="44" width="18" height="18"/><rect x="0" y="66" width="18" height="18"/><rect x="22" y="66" width="18" height="18"/><rect x="44" y="66" width="18" height="18"/><rect x="66" y="66" width="18" height="18"/></g>
+   <rect x="22" y="22" width="18" height="18" fill="#0E0C10"/><rect x="44" y="44" width="18" height="18" fill="#0E0C10"/>
+  </svg>
+  <h3>VIR<br>MPC</h3>
+  <div class="c">from ypc2000.fun</div>
+ </article>
+</section>
+
+<form class="dock" action="#">
+ <input type="url" placeholder="paste a link…" aria-label="Paste a link">
+ <button type="submit">CATCH</button>
+</form>
+</body></html>

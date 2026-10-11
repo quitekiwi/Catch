@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — Oxblood Salon</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Cinzel+Decorative:wght@700&family=Marcellus+SC&display=swap">
+<style>
+:root{--ground:#1A1519;--ox:#40101D;--tan:#D9B88F;--taupe:#AC9B86;--wine:#73303C}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{background:var(--ground);color:var(--tan);font-family:Arapey,serif;position:relative;
+background-image:radial-gradient(ellipse 420px 300px at 50% 0,rgba(64,16,29,.55),transparent 70%),radial-gradient(ellipse 380px 260px at 50% 100%,rgba(64,16,29,.4),transparent 70%)}
+.mast{position:relative;height:166px}
+.mast>svg{position:absolute;left:0;top:0}
+.ln{fill:none;stroke:var(--taupe);stroke-linecap:round;stroke-linejoin:round}
+.mast h1{position:absolute;top:44px;left:0;right:0;margin:0;text-align:center;font:700 43px/1 "Cinzel Decorative",serif;letter-spacing:5px;padding-left:5px;color:var(--tan)}
+.sub{position:absolute;top:96px;left:0;right:0;text-align:center;font:10px "Marcellus SC",serif;letter-spacing:3.4px;color:var(--taupe)}
+.tag{position:absolute;top:118px;left:0;right:0;text-align:center;font-style:italic;font-size:14.5px;color:var(--tan)}
+.count{position:absolute;top:149px;left:0;right:0;text-align:center;font:10.5px "Marcellus SC",serif;letter-spacing:2px;color:var(--taupe)}
+.seek{display:flex;gap:8px;margin:10px 16px 0}
+.seek label,.dock label{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--taupe);border-radius:16px 3px 16px 3px;padding:0 12px;height:36px}
+input{border:0;background:none;font:italic 14px Arapey,serif;color:var(--tan);width:100%;outline:none}
+input::placeholder{color:var(--taupe)}
+button{font:12px "Marcellus SC",serif;letter-spacing:2px;color:var(--tan);background:none;border:1px solid var(--taupe);border-radius:3px 16px 3px 16px;padding:0 15px;height:38px;cursor:pointer}
+.wall{position:absolute;left:0;top:218px}
+.fr{fill:#40101D;stroke:#AC9B86;stroke-width:1}
+.mat{fill:#D9B88F}
+.il{fill:none;stroke:#40101D;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.th{fill:none;stroke:#40101D;stroke-width:.5}
+.cord{fill:none;stroke:#AC9B86;stroke-width:.7}
+.pl{fill:#D9B88F;stroke:#AC9B86;stroke-width:.8}
+.n{font:9px "Marcellus SC",serif;letter-spacing:2px;fill:#40101D}
+.ti{font:13.5px Arapey,serif;fill:#40101D}
+.dm{font:italic 10.5px Arapey,serif;fill:#40101D}
+.gh{fill:none;stroke:#AC9B86;stroke-width:.8;stroke-dasharray:2 3;opacity:.55}
+.cap{font:9.5px "Marcellus SC",serif;letter-spacing:2.2px;fill:#AC9B86}
+.dock{position:absolute;left:0;right:0;bottom:0;height:150px;background:var(--ox)}
+.dock>svg{position:absolute;left:0;top:-13px}
+.dock .hd{text-align:center;font:9.5px "Marcellus SC",serif;letter-spacing:2.6px;color:var(--taupe);margin:22px 0 10px}
+.dock .row{display:flex;gap:8px;margin:0 16px}
+.dock label{height:44px;background:rgba(26,21,25,.45)}
+.dock button{height:46px;padding:0 20px;font:700 15px "Cinzel Decorative",serif;letter-spacing:1.5px;background:var(--tan);color:var(--ox);border-color:var(--tan)}
+.fine{text-align:center;font-style:italic;font-size:11px;color:var(--taupe);margin-top:10px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="ros" viewBox="0 0 24 30">
+    <path d="M12 1C19 1 23 5 23 11c0 7-5 11-8 18H9C6 22 1 18 1 11 1 5 5 1 12 1z" fill="#D9B88F" stroke="#40101D" stroke-width=".6"/>
+    <path fill="#73303C" d="M10 14L7 27l2.6-1.8L11 28l1.4-13zM14 14l3 13-2.6-1.8L13 28l-1.4-13z"/>
+    <circle cx="12" cy="11" r="7" fill="none" stroke="#73303C" stroke-width="2.6" stroke-dasharray="1.8 1.3"/>
+    <circle cx="12" cy="11" r="5.2" fill="#73303C"/><circle cx="12" cy="11" r="1.9" fill="#D9B88F"/>
+  </symbol>
+  <g id="nail"><circle r="2.6" fill="#40101D" stroke="#AC9B86" stroke-width=".8"/><circle r=".8" fill="#AC9B86"/></g>
+  <g id="half" class="ln">
+    <path stroke-width="1.4" d="M58 160C56 124 26 110 30 72 34 38 92 20 195 18"/>
+    <path stroke-width=".7" opacity=".7" d="M70 160C69 128 42 112 45 76 48 46 100 30 195 28"/>
+    <path stroke-width="1" d="M58 160C82 140 30 128 52 104 70 86 46 70 66 52"/>
+    <path stroke-width="1" d="M52 104C34 96 22 80 20 52"/>
+    <path stroke-width="1" d="M20 52c-6-6-6-14 0-20 6 6 6 14 0 20zM20 52c-8-2-13-8-13-16 6 2 11 9 13 16zM20 52c8-2 13-8 13-16-6 2-11 9-13 16z"/>
+    <path stroke-width=".8" d="M17 30c-1-4 0-7 3-9M23 30c1-4 0-7-3-9"/>
+    <path stroke-width=".9" d="M36 132c-10-3-15-11-13-20 8 3 13 11 13 20zM36 132c-4-6-8-11-13-20"/>
+    <path stroke-width=".9" d="M66 52c-2-6 2-12 8-12 3 0 4 3 2 5"/>
+    <path stroke-width=".9" d="M124 20c-8-12-26-9-23 1 2 6 10 5 9-1"/>
+    <path stroke-width=".9" d="M183 18c-14 2-26-10-38-6"/>
+  </g>
+  <!-- r5: miniature oil paintings: gradients, brush displacement, canvas grain, varnish vignette -->
+  <filter id="brush" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".14" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+  <filter id="canvas" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.1 .7" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .85 0 0 0 0 .72 0 0 0 0 .56 1.3 0 0 0 -.5"/></filter>
+  <radialGradient id="vig"><stop offset=".6" stop-color="#1A1519" stop-opacity="0"/><stop offset="1" stop-color="#1A1519" stop-opacity=".62"/></radialGradient>
+  <radialGradient id="room" cx=".22" cy=".4" r=".95"><stop offset="0" stop-color="#73303C"/><stop offset=".42" stop-color="#40101D"/><stop offset="1" stop-color="#1A1519"/></radialGradient>
+  <radialGradient id="glow"><stop offset="0" stop-color="#D9B88F" stop-opacity=".85"/><stop offset=".35" stop-color="#D9B88F" stop-opacity=".3"/><stop offset="1" stop-color="#D9B88F" stop-opacity="0"/></radialGradient>
+  <linearGradient id="shade" x2="0" y2="1"><stop offset="0" stop-color="#AC9B86"/><stop offset="1" stop-color="#D9B88F"/></linearGradient>
+  <linearGradient id="cloth" x2="1" y2=".3"><stop offset="0" stop-color="#73303C"/><stop offset=".55" stop-color="#40101D"/><stop offset="1" stop-color="#1A1519"/></linearGradient>
+  <linearGradient id="ctop"><stop offset="0" stop-color="#D9B88F" stop-opacity=".75"/><stop offset=".5" stop-color="#73303C"/><stop offset="1" stop-color="#40101D"/></linearGradient>
+  <linearGradient id="body"><stop offset="0" stop-color="#AC9B86"/><stop offset=".45" stop-color="#40101D"/><stop offset="1" stop-color="#1A1519"/></linearGradient>
+  <linearGradient id="keys"><stop offset="0" stop-color="#D9B88F"/><stop offset="1" stop-color="#AC9B86" stop-opacity=".7"/></linearGradient>
+  <linearGradient id="dusk" x2="0" y2="1"><stop offset="0" stop-color="#1A1519"/><stop offset=".35" stop-color="#40101D"/><stop offset=".62" stop-color="#73303C"/><stop offset=".7" stop-color="#D9B88F"/></linearGradient>
+  <linearGradient id="sea" x2="0" y2="1"><stop offset="0" stop-color="#73303C"/><stop offset=".4" stop-color="#40101D"/><stop offset="1" stop-color="#1A1519"/></linearGradient>
+  <radialGradient id="sclera" cx=".4" cy=".4"><stop offset="0" stop-color="#D9B88F"/><stop offset="1" stop-color="#AC9B86"/></radialGradient>
+  <radialGradient id="iris" cx=".38" cy=".35"><stop offset="0" stop-color="#73303C"/><stop offset="1" stop-color="#40101D"/></radialGradient>
+  <linearGradient id="land" x2="1" y2="1"><stop offset="0" stop-color="#D9B88F"/><stop offset=".6" stop-color="#C6AA8A"/><stop offset="1" stop-color="#AC9B86"/></linearGradient>
+  <radialGradient id="hill" cx=".32" cy=".3" r=".75"><stop offset="0" stop-color="#D9B88F"/><stop offset=".55" stop-color="#AC9B86"/><stop offset="1" stop-color="#73303C"/></radialGradient>
+  <linearGradient id="wax"><stop offset="0" stop-color="#D9B88F"/><stop offset="1" stop-color="#AC9B86"/></linearGradient>
+  <radialGradient id="wine" cx=".3" cy=".3"><stop offset="0" stop-color="#73303C"/><stop offset="1" stop-color="#1A1519"/></radialGradient>
+  <clipPath id="c4"><path d="M158 145V78a37 37 0 0 1 74 0v67z"/></clipPath>
+  <clipPath id="c3"><ellipse cx="70" cy="98" rx="28" ry="38"/></clipPath>
+  <clipPath id="c2"><rect x="294" y="66" width="52" height="64"/></clipPath>
+  <clipPath id="c1"><path d="M48 238h44a4 4 0 0 0 4 4v56H44v-56a4 4 0 0 0 4-4z"/></clipPath>
+  <pattern id="paper" width="46" height="46" patternUnits="userSpaceOnUse"><path class="ln" stroke-width=".6" opacity=".09" d="M23 30c-3-3-3-8 0-11 3 3 3 8 0 11zM23 30c-5 0-8-3-9-7 4 0 7 3 9 7zM23 30c5 0 8-3 9-7-4 0-7 3-9 7zM0 0h0M23 30v10"/></pattern>
+</defs></svg>
+
+<header class="mast">
+  <svg width="390" height="166" viewBox="0 0 390 166" aria-hidden="true">
+    <path fill="#40101D" d="M70 163V160C69 128 42 112 45 76 48 46 100 30 195 28 290 30 342 46 345 76 348 112 321 128 320 160V163Z"/>
+    <path class="ln" stroke-width="1" d="M52 163.5H338M88 166H302"/>
+    <use href="#half"/><use href="#half" transform="translate(390 0) scale(-1 1)"/>
+    <g class="ln" stroke-width="1"><path d="M195 20c-5-5-5-12 0-17 5 5 5 12 0 17zM195 20c-7-1-12-6-13-12 6 1 11 6 13 12zM195 20c7-1 12-6 13-12-6 1-11 6-13 12z"/>
+    <path stroke-width=".8" d="M150 112h34M206 112h34M195 108l4 4-4 4-4-4z"/></g>
+  </svg>
+  <h1>Catch</h1>
+  <div class="sub">The Salon of Sessions</div>
+  <div class="tag">Paste it, find it later. Nothing else.</div>
+  <div class="count">4 caught · 4 open</div>
+</header>
+
+<div class="seek">
+  <label><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#AC9B86" stroke-width="1.2" stroke-linecap="round"><circle cx="6.4" cy="6.4" r="4.9"/><path d="M10 10l4 4"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+  <button type="button">Filter</button>
+</div>
+
+<svg class="wall" width="390" height="460" viewBox="0 0 390 460" role="img" aria-label="Sessions 001 to 004 hung salon-style, all four open, with room for 005 to 010">
+  <rect width="390" height="460" fill="url(#paper)"/>
+  <!-- picture rail -->
+  <path class="ln" stroke-width="1.1" d="M0 12H390"/><path class="ln" stroke-width=".5" opacity=".6" d="M0 16H390"/>
+  <path class="ln" stroke-width=".8" d="M180 12c4-6 11-6 15 0 4-6 11-6 15 0M195 12v-5"/>
+  <!-- cords + nails, row 1 and row 2 -->
+  <path class="cord" d="M70 16L60 52M70 16L80 52M195 16L159 46M195 16L231 46M320 16L300 54M320 16L340 54M70 214L52 226M70 214L88 226"/>
+  <use href="#nail" x="70" y="16"/><use href="#nail" x="195" y="16"/><use href="#nail" x="320" y="16"/><use href="#nail" x="70" y="214"/><use href="#nail" x="195" y="214"/><use href="#nail" x="320" y="214"/>
+
+  <!-- 004 arched, newest, centre (slightly larger) -->
+  <path class="fr" d="M147 156V78a48 48 0 0 1 96 0v78z"/>
+  <path class="ln" stroke-width=".6" d="M150 153V78a45 45 0 0 1 90 0v75z"/>
+  <path class="mat" d="M155 148V78a40 40 0 0 1 80 0v70z"/>
+  <path class="ln" stroke-width=".9" d="M147 156c-6-3-8-11-2-12 4-1 5 4 2 5M243 156c6-3 8-11 2-12-4-1-5 4-2 5"/>
+  <!-- 004 painting: synthesizer still life on a draped table, lamp light from the left -->
+  <g clip-path="url(#c4)"><g filter="url(#brush)">
+    <rect x="156" y="39" width="78" height="108" fill="url(#room)"/>
+    <circle cx="171" cy="80" r="44" fill="url(#glow)"/>
+    <path d="M171 82v29" stroke="#AC9B86" stroke-width="1.6"/><ellipse cx="171" cy="111" rx="6" ry="1.8" fill="#AC9B86"/>
+    <path d="M159 83h24l-5.5-17h-13z" fill="url(#shade)"/><path d="M159 83h24" stroke="#D9B88F" stroke-width="1.2"/>
+    <path d="M156 111l78-4v40h-78z" fill="url(#cloth)"/>
+    <path d="M156 111l78-4v5l-78 4z" fill="url(#ctop)"/>
+    <path fill="none" stroke="#1A1519" stroke-opacity=".5" stroke-width="3" d="M166 117c-2 10 1 19-1 30M186 116c2 11-1 20 1 31M207 115c-2 11 2 21 0 32M226 113c2 11-1 22 1 34"/>
+    <path fill="none" stroke="#D9B88F" stroke-opacity=".28" stroke-width="1.4" d="M162 117c-2 10 1 19-1 30M182 116c2 11-1 20 1 31M203 115c-2 11 2 21 0 32"/>
+    <ellipse cx="216" cy="111" rx="20" ry="3" fill="#1A1519" opacity=".6"/>
+    <path d="M177 108l54-2.5v4.5l-54 3z" fill="#1A1519"/>
+    <path d="M181 97.5l47-2 3 10-54 2.5z" fill="url(#body)"/>
+    <path d="M179 103.6l50.6-2.2 1.4 4.1-54 2.5z" fill="url(#keys)"/>
+    <path stroke="#1A1519" stroke-width="1.1" d="M184 103.5v2M187 103.4v2M193 103.1v2M196 103v2M199 102.9v2M205 102.6v2M208 102.5v2M214 102.2v2M217 102.1v2M220 102v2M226 101.7v2"/>
+    <g fill="#D9B88F"><circle cx="186" cy="99.6" r="1.2"/><circle cx="190.5" cy="99.4" r="1.2" opacity=".85"/><circle cx="195" cy="99.2" r="1.2" opacity=".7"/><circle cx="199.5" cy="99" r="1.2" opacity=".55"/></g>
+    <rect x="205" y="97.6" width="10" height="2.6" fill="#73303C"/><path stroke="#AC9B86" stroke-opacity=".5" stroke-width=".6" d="M219 97.4v2.6M222 97.3v2.6M225 97.2v2.6"/>
+    <path d="M177 108l4-10.5" stroke="#D9B88F" stroke-width=".8"/>
+  </g>
+  <rect x="156" y="39" width="78" height="108" filter="url(#canvas)" opacity=".2"/><rect x="156" y="39" width="78" height="108" fill="url(#vig)"/></g>
+  <path class="th" d="M158 145V78a37 37 0 0 1 74 0v67z"/>
+  <use href="#ros" x="232" y="62" width="22" height="28"/>
+  <path class="pl" d="M151 164h88a6 6 0 0 0 6 6v30a6 6 0 0 0-6 6h-88a6 6 0 0 0-6-6v-30a6 6 0 0 0 6-6z"/>
+  <text x="195" y="177" text-anchor="middle" class="n">Nº 004 · Newest</text>
+  <text x="195" y="191" text-anchor="middle" class="ti">Roland Studio</text>
+  <text x="195" y="201" text-anchor="middle" class="dm">roland50.studio</text>
+
+  <!-- 003 oval, left -->
+  <ellipse class="fr" cx="70" cy="98" rx="38" ry="48"/>
+  <ellipse class="ln" stroke-width=".6" cx="70" cy="98" rx="35" ry="45"/>
+  <ellipse class="mat" cx="70" cy="98" rx="31" ry="41"/>
+  <!-- 003 painting: a great eye in a dusky sky over still water -->
+  <g clip-path="url(#c3)"><g filter="url(#brush)">
+    <rect x="40" y="58" width="60" height="56" fill="url(#dusk)"/>
+    <ellipse cx="54" cy="112" rx="26" ry="9" fill="url(#glow)"/>
+    <path fill="none" stroke="#D9B88F" stroke-opacity=".22" stroke-width=".8" d="M70 84L70 62M70 84L54 66M70 84L86 66M70 84L44 76M70 84L96 76"/>
+    <circle cx="70" cy="84" r="22" fill="url(#glow)" opacity=".55"/>
+    <path d="M51 84q19-15 38 0-19 15-38 0z" fill="url(#sclera)" stroke="#1A1519" stroke-width=".9"/>
+    <path d="M51 84q19-15 38 0-19-8-38 0z" fill="#40101D" opacity=".55"/>
+    <circle cx="70" cy="84.5" r="6.4" fill="url(#iris)"/><circle cx="70" cy="84.5" r="2.8" fill="#1A1519"/><circle cx="68" cy="82.6" r="1.1" fill="#D9B88F"/>
+    <path fill="none" stroke="#D9B88F" stroke-width="1.1" stroke-linecap="round" d="M89 84q4 1 7-2M64 91q0 6-4 9"/>
+    <path d="M40 113c8-5 15-4 22-1 8-5 20-7 38-2v6H40z" fill="#1A1519"/>
+    <rect x="40" y="114" width="60" height="24" fill="url(#sea)"/>
+    <ellipse cx="70" cy="120" rx="9" ry="2.4" fill="#D9B88F" opacity=".35"/>
+    <path stroke="#D9B88F" stroke-linecap="round" fill="none" d="M62 117.5h16M64 123h12M66 128h8M68 132.5h4" stroke-opacity=".45"/>
+    <path stroke="#AC9B86" stroke-linecap="round" fill="none" stroke-opacity=".3" stroke-width=".6" d="M46 121h10M84 120h10M50 127h8M82 126h9"/>
+  </g>
+  <rect x="40" y="58" width="60" height="80" filter="url(#canvas)" opacity=".2"/><rect x="40" y="58" width="60" height="80" fill="url(#vig)"/></g>
+  <ellipse class="th" cx="70" cy="98" rx="28" ry="38"/>
+  <use href="#ros" x="90" y="58" width="22" height="28"/>
+  <rect class="pl" x="26" y="164" width="88" height="42" rx="3"/>
+  <text x="70" y="177" text-anchor="middle" class="n">Nº 003</text>
+  <text x="70" y="191" text-anchor="middle" class="ti" style="font-size:12.5px">EyeOfOsiris</text>
+  <text x="70" y="201" text-anchor="middle" class="dm">osirisai.live</text>
+
+  <!-- 002 rectangle, right -->
+  <rect class="fr" x="282" y="54" width="76" height="88" rx="2"/>
+  <rect class="ln" stroke-width=".6" x="286" y="58" width="68" height="80"/>
+  <rect class="mat" x="290" y="62" width="60" height="72"/>
+  <!-- 002 painting: a landscape from above, rivers and hills like an old map -->
+  <g clip-path="url(#c2)"><g filter="url(#brush)">
+    <rect x="292" y="64" width="56" height="68" fill="url(#land)"/>
+    <path d="M298 96l14-3 3 9-14 3zM326 100l13-2 2 8-13 2z" fill="#73303C" opacity=".22"/>
+    <path stroke="#40101D" stroke-opacity=".25" stroke-width=".6" d="M300 99l13-2.6M301 102l13-2.6M328 102.6l12-2M329 105.6l12-2"/>
+    <g fill="#40101D" opacity=".45"><ellipse cx="308" cy="80" rx="8" ry="5.5"/><ellipse cx="337" cy="76" rx="9.5" ry="6.5"/><ellipse cx="340" cy="117" rx="8.5" ry="5.5"/><ellipse cx="304" cy="121" rx="6.5" ry="4.5"/></g>
+    <g fill="url(#hill)"><ellipse cx="306" cy="78" rx="8" ry="5.5"/><ellipse cx="335" cy="74" rx="9.5" ry="6.5"/><ellipse cx="338" cy="115" rx="8.5" ry="5.5"/><ellipse cx="302" cy="119" rx="6.5" ry="4.5"/></g>
+    <path fill="none" stroke="#40101D" stroke-width="4.2" stroke-linecap="round" d="M292 66c12 12 30 8 27 24s-19 16-5 27 26 9 34 15"/>
+    <path fill="none" stroke="#73303C" stroke-width="2.6" stroke-linecap="round" d="M292 66c12 12 30 8 27 24s-19 16-5 27 26 9 34 15"/>
+    <path fill="none" stroke="#D9B88F" stroke-opacity=".55" stroke-width=".6" d="M292 65c12 12 29 8 26 24s-19 16-5 27 26 9 34 15"/>
+    <path fill="none" stroke="#73303C" stroke-width="1.2" d="M348 90c-8 2-14 0-18 6s-6 8-12 6"/>
+    <g fill="#40101D" opacity=".8"><circle cx="322" cy="104" r="1.8"/><circle cx="325" cy="106" r="1.6"/><circle cx="321" cy="108" r="1.7"/><circle cx="326" cy="110" r="1.5"/><circle cx="299" cy="88" r="1.5"/><circle cx="302" cy="90" r="1.4"/></g>
+    <g fill="#D9B88F" opacity=".7"><circle cx="321.4" cy="103.4" r=".6"/><circle cx="320.4" cy="107.4" r=".6"/><circle cx="298.4" cy="87.4" r=".5"/></g>
+    <path stroke="#40101D" stroke-opacity=".22" stroke-width=".7" d="M311.3 66v64M328.7 66v64M294 98h52"/>
+  </g>
+  <rect x="292" y="64" width="56" height="68" filter="url(#canvas)" opacity=".35"/><rect x="292" y="64" width="56" height="68" fill="url(#vig)" opacity=".8"/></g>
+  <rect class="th" x="294" y="66" width="52" height="64"/>
+  <use href="#ros" x="348" y="44" width="22" height="28"/>
+  <rect class="pl" x="276" y="164" width="88" height="42" rx="3"/>
+  <text x="320" y="177" text-anchor="middle" class="n">Nº 002</text>
+  <text x="320" y="191" text-anchor="middle" class="ti">Map</text>
+  <text x="320" y="201" text-anchor="middle" class="dm">terraink.app</text>
+
+  <!-- 001 cusped rectangle, row 2 left -->
+  <path class="fr" d="M42 226h56a10 10 0 0 0 10 10v74H32v-74a10 10 0 0 0 10-10z"/>
+  <path class="mat" d="M46 234h48a6 6 0 0 0 6 6v62H40v-62a6 6 0 0 0 6-6z"/>
+  <!-- 001 painting: drum machine and a glass of wine by candlelight -->
+  <g clip-path="url(#c1)"><g filter="url(#brush)">
+    <rect x="42" y="236" width="56" height="64" fill="url(#room)"/>
+    <circle cx="52" cy="258" r="30" fill="url(#glow)"/>
+    <path d="M42 281l56-2v21H42z" fill="url(#cloth)"/><path d="M42 281l56-2" stroke="#D9B88F" stroke-opacity=".45" stroke-width=".8"/>
+    <path d="M85 256c0 8 1.4 12 4 12s4-4 4-12z" fill="#D9B88F" opacity=".16" stroke="#D9B88F" stroke-opacity=".6" stroke-width=".5"/>
+    <path d="M85.3 261c.2 4.2 1.4 6.8 3.7 6.8s3.5-2.6 3.7-6.8z" fill="url(#wine)"/>
+    <path d="M89 268v12" stroke="#AC9B86" stroke-width=".8"/><ellipse cx="89" cy="280.3" rx="3.4" ry=".9" fill="#AC9B86"/>
+    <path d="M86 258c-.2 3 .2 6 1.2 8" fill="none" stroke="#D9B88F" stroke-width=".7"/>
+    <path d="M49.5 264h5v18h-5z" fill="url(#wax)"/><path d="M50 264c0 3 1 4 .7 6" stroke="#D9B88F" fill="none" stroke-width=".8"/>
+    <ellipse cx="52" cy="282" rx="5" ry="1.4" fill="#AC9B86"/>
+    <path d="M52 254c2 3 2.6 6 0 8.6-2.6-2.6-2-5.6 0-8.6z" fill="#D9B88F"/><path d="M52 263.4v1" stroke="#1A1519" stroke-width=".6"/>
+    <ellipse cx="78" cy="283.6" rx="12" ry="1.8" fill="#1A1519" opacity=".6"/>
+    <path d="M57 279.5l29-1v4.5l-29 1z" fill="#1A1519"/>
+    <path d="M60 271l25-1 1 8.5-29 1z" fill="url(#body)"/>
+    <g fill="#D9B88F"><rect x="60.4" y="272.4" width="4.4" height="2.4" opacity=".95"/><rect x="66.2" y="272.2" width="4.4" height="2.4" opacity=".75"/><rect x="72" y="272" width="4.4" height="2.4" opacity=".55"/><rect x="77.8" y="271.8" width="4.4" height="2.4" opacity=".4"/><rect x="59.6" y="275.8" width="4.6" height="2.4" opacity=".9"/><rect x="71.6" y="275.4" width="4.6" height="2.4" opacity=".5"/><rect x="77.6" y="275.2" width="4.6" height="2.4" opacity=".35"/></g>
+    <rect x="65.6" y="275.6" width="4.6" height="2.4" fill="#73303C"/>
+    <path d="M57 279.5l3-8.5" stroke="#D9B88F" stroke-width=".7"/>
+  </g>
+  <rect x="42" y="236" width="56" height="64" filter="url(#canvas)" opacity=".2"/><rect x="42" y="236" width="56" height="64" fill="url(#vig)"/></g>
+  <path class="th" d="M48 238h44a4 4 0 0 0 4 4v56H44v-56a4 4 0 0 0 4-4z"/>
+  <use href="#ros" x="98" y="218" width="22" height="28"/>
+  <rect class="pl" x="26" y="318" width="88" height="42" rx="3"/>
+  <text x="70" y="331" text-anchor="middle" class="n">Nº 001</text>
+  <text x="70" y="345" text-anchor="middle" class="ti">Vir MPC</text>
+  <text x="70" y="355" text-anchor="middle" class="dm">ypc2000.fun</text>
+
+  <!-- empty places waiting: 005 and 006 in row 2 -->
+  <rect class="gh" x="159" y="226" width="72" height="84" rx="2"/><rect class="gh" x="151" y="318" width="88" height="42" rx="3" style="opacity:.3"/>
+  <text x="195" y="272" text-anchor="middle" class="cap">005</text>
+  <ellipse class="gh" cx="320" cy="268" rx="34" ry="42"/><rect class="gh" x="276" y="318" width="88" height="42" rx="3" style="opacity:.3"/>
+  <text x="320" y="272" text-anchor="middle" class="cap">006</text>
+  <!-- row 3: 007 to 010 -->
+  <use href="#nail" x="58" y="374"/><use href="#nail" x="153" y="374"/><use href="#nail" x="237" y="374"/><use href="#nail" x="332" y="374"/>
+  <path class="gh" d="M39 430V403a19 19 0 0 1 38 0v27z"/>
+  <rect class="gh" x="134" y="384" width="38" height="46" rx="2"/>
+  <ellipse class="gh" cx="237" cy="407" rx="19" ry="23"/>
+  <path class="gh" d="M319 384h26a6 6 0 0 0 6 6v40h-38v-40a6 6 0 0 0 6-6z"/>
+  <g class="cap" text-anchor="middle" style="font-size:8.5px"><text x="58" y="416">007</text><text x="153" y="410">008</text><text x="237" y="410">009</text><text x="332" y="412">010</text></g>
+  <text x="195" y="452" text-anchor="middle" class="cap">Sessions 001 — 004 · room for more</text>
+</svg>
+
+<form class="dock" action="#">
+  <svg width="390" height="30" viewBox="0 0 390 30" aria-hidden="true">
+    <defs><pattern id="iron" width="40" height="30" patternUnits="userSpaceOnUse"><path class="ln" stroke-width=".8" opacity=".85" d="M0 13C10 3 20 3 20 13S30 23 40 13M20 13c-4 0-5-4-2-5 2 0 3 2 1 3M0 13c4 0 5 4 2 5-2 0-3-2-1-3M40 13c-4 0-5 4-2 5 2 0 3-2 1-3"/></pattern></defs>
+    <path d="M0 13H390" stroke="#40101D" stroke-width="12"/>
+    <rect x="-5" y="0" width="400" height="30" fill="url(#iron)" transform="translate(-5 0)"/>
+    <path class="ln" stroke-width="1" fill="#40101D" d="M195 2c9 0 17 5 20 11-3 6-11 11-20 11s-17-5-20-11c3-6 11-11 20-11z"/>
+    <path class="ln" stroke-width="1" d="M195 19c-3-3-3-8 0-11 3 3 3 8 0 11zM195 19c-5 0-8-3-9-7 4 0 7 3 9 7zM195 19c5 0 8-3 9-7-4 0-7 3-9 7zM165 13h6M219 13h6"/>
+    <path class="ln" stroke-width=".6" opacity=".5" d="M0 26H390"/>
+  </svg>
+  <div class="hd">Hang a New Frame · Nº 005</div>
+  <div class="row">
+    <label><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#AC9B86" stroke-width="1.1" stroke-linecap="round"><path d="M6.5 9.5l3-3M7 4.5l1.6-1.6a2.8 2.8 0 0 1 4 4L11 8.5M9 11.5l-1.6 1.6a2.8 2.8 0 0 1-4-4L5 7.5"/></svg><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+  <div class="fine">One link at a time — kept until you need it.</div>
+</form>
+</body></html>

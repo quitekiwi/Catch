@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>Catch — Departures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=B612+Mono:wght@400;700&family=Martian+Mono:wght@400;600;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--black:#111214;--panel:#18191c;--flapA:#26282c;--flapB:#1d1e22;--white:#F2F0E8;--amber:#F5B700;--red:#E0442E;--dim:#6d6b64}
+*{box-sizing:border-box}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{background:var(--black);color:var(--white);font-family:'Martian Mono',monospace;display:flex;flex-direction:column}
+.status{height:44px;display:flex;justify-content:space-between;align-items:center;padding:0 26px;font:600 13px 'Manrope',sans-serif;flex:none}
+.status b{letter-spacing:.06em;font-size:10px;color:var(--dim);font-family:'Martian Mono'}
+.top{margin:4px 12px 0;padding:12px 14px 11px;background:var(--panel);border:1px solid #000;border-radius:6px;box-shadow:inset 0 1px 0 #2a2b2f;display:flex;justify-content:space-between;align-items:flex-end}
+.top h1{margin:0;font:800 15px/1 'Martian Mono';letter-spacing:.08em;color:var(--amber)}
+.top h1 span{color:var(--white)}
+.top p{margin:6px 0 0;font:400 9px/1.3 'Martian Mono';color:var(--dim);letter-spacing:.02em}
+.clock{font:700 20px/1 'B612 Mono';color:var(--amber);letter-spacing:.04em;text-align:right}
+.clock small{display:block;font:400 8px 'Martian Mono';color:var(--dim);letter-spacing:.12em;margin-top:5px}
+.tools{display:flex;gap:8px;margin:10px 12px 0}
+.tools input{flex:1;height:38px;border-radius:4px;border:1px solid #2c2d31;background:#0b0c0d;color:var(--white);font:400 11px 'Martian Mono';padding:0 12px 0 32px;outline:none;background-image:radial-gradient(circle at 15px 18px,transparent 4px,var(--dim) 4.5px,var(--dim) 5.5px,transparent 6px);}
+.tools input::placeholder{color:var(--dim)}
+.tools button{height:38px;padding:0 14px;border-radius:4px;border:1px solid var(--amber);background:transparent;color:var(--amber);font:600 10px 'Martian Mono';letter-spacing:.14em}
+.board{margin:10px 12px 0;padding:10px 10px 8px;background:#0a0b0c;border:1px solid #000;border-radius:6px;box-shadow:inset 0 0 0 1px #1f2023,0 1px 0 #222}
+.labels,.row{display:grid;grid-template-columns:48px 1fr 64px;column-gap:10px;align-items:start}
+.labels{font:600 8px 'Martian Mono';letter-spacing:.14em;color:var(--amber);padding:0 0 7px;border-bottom:1px solid #1f2023}
+.labels span:last-child{text-align:right}
+.row{padding:8px 0 7px;border-bottom:1px solid #1a1b1e}
+.row:last-of-type{border-bottom:0}
+.f{display:flex;gap:1px;flex-wrap:nowrap}
+.f i{display:block;width:15px;height:23px;background:linear-gradient(var(--flapA) 0 50%,var(--flapB) 50%);color:var(--white);font:700 14px/23px 'B612 Mono';font-style:normal;text-align:center;border-radius:2px;position:relative;box-shadow:0 1px 0 #000}
+.f i::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;margin-top:-.5px;background:#050506;box-shadow:0 1px 0 rgba(255,255,255,.05)}
+.f i::before{content:"";position:absolute;top:50%;width:2px;height:4px;margin-top:-2px;left:-1px;background:#3a3b40;border-radius:1px}
+.f.s i{width:10px;height:14px;font:400 9px/14px 'B612 Mono'}
+.f.s i::before{display:none}
+.from{grid-column:2/4;display:flex;align-items:center;gap:6px;margin-top:5px}
+.from em{font:600 7px 'Martian Mono';font-style:normal;color:var(--dim);letter-spacing:.14em}
+.f.st{justify-content:flex-end}
+.f.st i{color:var(--red)}
+.f.am i{color:var(--amber)}
+.foot{display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid #1f2023;font:400 8px 'Martian Mono';letter-spacing:.12em;color:var(--dim)}
+.foot b{color:var(--white);font-weight:600}
+.foot .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);margin-right:5px;vertical-align:0}
+.spacer{flex:1}
+/* boarding pass */
+.pass{margin:0 12px;height:156px;display:flex;background:var(--white);color:var(--black);border-radius:8px 8px 3px 3px;position:relative;transform:rotate(-1.2deg);transform-origin:left bottom;box-shadow:0 10px 24px rgba(0,0,0,.55);font-family:'Manrope',sans-serif}
+.main{flex:1;padding:12px 14px 10px;display:flex;flex-direction:column;justify-content:space-between;border-top:4px solid var(--amber);border-radius:8px 0 0 3px}
+.kicker{font:700 8px 'Martian Mono';letter-spacing:.16em;color:#7a776e;display:flex;justify-content:space-between}
+.kicker span:last-child{color:var(--red)}
+.dest{font:800 25px/1 'Manrope';letter-spacing:-.02em;margin-top:6px}
+.meta{display:flex;gap:16px;margin-top:2px}
+.meta div{font:500 8px/1.2 'Martian Mono';letter-spacing:.12em;color:#7a776e}
+.meta b{display:block;font:700 12px/1.4 'Manrope';letter-spacing:0;color:var(--black)}
+.line{font:500 8px 'Martian Mono';letter-spacing:.06em;color:#55534c}
+.stub{width:96px;padding:12px 10px 10px 14px;border-left:2px dashed #bdb9ab;position:relative;display:flex;flex-direction:column;justify-content:space-between;border-top:4px solid var(--amber);border-radius:0 8px 3px 0}
+.stub::before,.stub::after{content:"";position:absolute;left:-10px;width:18px;height:18px;border-radius:50%;background:var(--black)}
+.stub::before{top:-13px}.stub::after{bottom:-9px}
+.stub .no{font:800 30px/1 'B612 Mono';letter-spacing:-.02em}
+.stub .no small{display:block;font:600 7px 'Martian Mono';letter-spacing:.16em;color:#7a776e;margin-bottom:3px}
+.bar{height:38px;background:repeating-linear-gradient(90deg,#111214 0 2px,transparent 2px 3px,#111214 3px 4px,transparent 4px 6px,#111214 6px 9px,transparent 9px 10px,#111214 10px 11px,transparent 11px 14px)}
+.bar+span{font:400 6px 'Martian Mono';letter-spacing:.2em;color:#55534c;margin-top:3px;display:block}
+/* dock */
+.dock{flex:none;padding:12px 12px 30px;background:#0a0b0c;border-top:1px solid #222327;position:relative;z-index:1}
+.slot{display:flex;gap:8px;padding:6px;background:#000;border-radius:6px;box-shadow:inset 0 2px 6px rgba(0,0,0,.9),0 0 0 1px #2a2b2f}
+.slot input{flex:1;height:42px;border:0;background:transparent;color:var(--white);font:400 12px 'Martian Mono';padding:0 10px;outline:none}
+.slot input::placeholder{color:var(--dim)}
+.slot button{height:42px;padding:0 20px;border:0;border-radius:4px;background:var(--amber);color:var(--black);font:800 12px 'Martian Mono';letter-spacing:.12em;text-transform:uppercase}
+.home{position:absolute;bottom:9px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--white);opacity:.85}
+</style>
+</head>
+<body>
+<div class="status"><span>9:41</span><b>GATE · CATCH</b><span>●●● 100%</span></div>
+
+<header class="top">
+  <div><h1>CATCH <span>— DEPARTURES</span></h1><p>Paste it, find it later. Nothing else.</p></div>
+  <div class="clock">09:41<small>LOCAL</small></div>
+</header>
+
+<form class="tools" action="#">
+  <input type="search" placeholder="search the archive…" aria-label="Search the archive">
+  <button type="button">FILTER</button>
+</form>
+
+<section class="board" aria-label="Sessions">
+  <div class="labels"><span>SESSION</span><span>DESTINATION / FROM</span><span>STATUS</span></div>
+  <div class="row">
+    <div class="f am"><i>0</i><i>0</i><i>4</i></div>
+    <div class="f"><i>R</i><i>O</i><i>L</i><i>A</i><i>N</i><i>D</i><i></i><i>S</i><i>T</i><i>U</i><i>D</i><i>I</i><i>O</i></div>
+    <div class="f st"><i>O</i><i>P</i><i>E</i><i>N</i></div>
+    <div></div><div class="from"><em>FROM</em><div class="f s"><i>R</i><i>O</i><i>L</i><i>A</i><i>N</i><i>D</i><i>5</i><i>0</i><i>.</i><i>S</i><i>T</i><i>U</i><i>D</i><i>I</i><i>O</i></div></div>
+  </div>
+  <div class="row">
+    <div class="f am"><i>0</i><i>0</i><i>3</i></div>
+    <div class="f"><i>E</i><i>Y</i><i>E</i><i>O</i><i>F</i><i>O</i><i>S</i><i>I</i><i>R</i><i>I</i><i>S</i><i></i><i></i></div>
+    <div class="f st"><i>O</i><i>P</i><i>E</i><i>N</i></div>
+    <div></div><div class="from"><em>FROM</em><div class="f s"><i>O</i><i>S</i><i>I</i><i>R</i><i>I</i><i>S</i><i>A</i><i>I</i><i>.</i><i>L</i><i>I</i><i>V</i><i>E</i></div></div>
+  </div>
+  <div class="row">
+    <div class="f am"><i>0</i><i>0</i><i>2</i></div>
+    <div class="f"><i>M</i><i>A</i><i>P</i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="f st"><i>O</i><i>P</i><i>E</i><i>N</i></div>
+    <div></div><div class="from"><em>FROM</em><div class="f s"><i>T</i><i>E</i><i>R</i><i>R</i><i>A</i><i>I</i><i>N</i><i>K</i><i>.</i><i>A</i><i>P</i><i>P</i></div></div>
+  </div>
+  <div class="row">
+    <div class="f am"><i>0</i><i>0</i><i>1</i></div>
+    <div class="f"><i>V</i><i>I</i><i>R</i><i></i><i>M</i><i>P</i><i>C</i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="f st"><i>O</i><i>P</i><i>E</i><i>N</i></div>
+    <div></div><div class="from"><em>FROM</em><div class="f s"><i>Y</i><i>P</i><i>C</i><i>2</i><i>0</i><i>0</i><i>0</i><i>.</i><i>F</i><i>U</i><i>N</i></div></div>
+  </div>
+  <div class="foot"><span><b>4</b> CAUGHT · <span class="dot"></span><b>4</b> OPEN</span><span>NEWEST FIRST</span></div>
+</section>
+
+<div class="spacer"></div>
+
+<article class="pass" aria-label="Newest catch">
+  <div class="main">
+    <div class="kicker"><span>BOARDING PASS · CATCH</span><span>OPEN</span></div>
+    <div>
+      <div class="dest">ROLAND STUDIO</div>
+      <div class="meta"><div>SESSION<b>004</b></div><div>FROM<b>roland50.studio</b></div><div>SEAT<b>Unread</b></div></div>
+    </div>
+    <div class="line">SESSION 004 · ROLAND STUDIO · FROM roland50.studio</div>
+  </div>
+  <div class="stub">
+    <div class="no"><small>SESSION</small>004</div>
+    <div><div class="bar"></div><span>CATCH0004</span></div>
+  </div>
+</article>
+<div style="height:14px;flex:none"></div>
+
+<form class="dock" action="#">
+  <div class="slot">
+    <input type="url" placeholder="paste a link…" aria-label="Paste a link">
+    <button type="submit">Catch</button>
+  </div>
+  <div class="home"></div>
+</form>
+</body>
+</html>

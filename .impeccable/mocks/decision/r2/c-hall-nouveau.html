@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — The Hall</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{--ground:#2A403A;--sage:#748C76;--paper:#B1BFA3;--umber:#59523E;--gilt:#B09C70;--red:#8C2020}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{position:relative;color:var(--paper);font-family:"EB Garamond",serif;background-color:var(--ground);
+background-image:radial-gradient(ellipse 120% 80% at 50% 45%,transparent 55%,rgba(89,82,62,.45)),
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='390' height='844'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='turbulence' baseFrequency='.0045 .011' numOctaves='5' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .455 0 0 0 0 .549 0 0 0 0 .463 -2.4 0 0 0 .62'/%3E%3C/filter%3E%3Crect width='390' height='844' filter='url(%23m)' opacity='.55'/%3E%3C/svg%3E"),
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .455 0 0 0 0 .549 0 0 0 0 .463 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E")}
+.ceil{display:block;width:390px;height:52px}
+.mast{text-align:center;margin-top:8px}
+.mast h1{margin:0;font-family:Cinzel,serif;font-weight:500;font-size:40px;line-height:1;letter-spacing:.34em;padding-left:.34em;color:var(--gilt);text-shadow:0 1px 0 rgba(89,82,62,.9)}
+.mast .sub{font-family:Cinzel,serif;font-size:8px;letter-spacing:.42em;color:var(--gilt);margin-top:5px;opacity:.85}
+.orn{display:block;margin:6px auto 0;width:300px;height:14px}
+.tag{display:flex;justify-content:space-between;align-items:baseline;padding:8px 20px 0}
+.tag i{font-size:13.5px;letter-spacing:.01em}
+.tag b{font-family:Cinzel,serif;font-weight:500;font-size:9px;letter-spacing:.16em;color:var(--gilt)}
+.seek{display:flex;gap:8px;padding:12px 20px 0}
+.seek label{flex:1;display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;border:1px solid var(--gilt);background:rgba(89,82,62,.42);box-shadow:inset 0 0 0 3px rgba(42,64,58,.9),inset 0 0 0 4px rgba(176,156,112,.35)}
+input{border:0;background:none;outline:none;width:100%;font:inherit;font-style:italic;font-size:14.5px;color:var(--paper)}
+input::placeholder{color:var(--paper);opacity:.62}
+button{font-family:Cinzel,serif;font-weight:600;letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.seek button{height:40px;padding:0 13px 0 15px;font-size:10px;color:var(--gilt);background:rgba(89,82,62,.42);border:1px solid var(--gilt)}
+.sec{display:flex;align-items:center;justify-content:center;gap:10px;margin:15px 20px 9px;font-family:Cinzel,serif;font-size:8px;letter-spacing:.3em;color:var(--gilt)}
+.sec::before,.sec::after{content:"";flex:1;height:3px;border-top:1px solid var(--gilt);border-bottom:1px solid rgba(176,156,112,.45)}
+.grid{display:grid;grid-template-columns:repeat(4,81px);gap:8px 10px;justify-content:center}
+.c{height:110px;text-align:center}
+.fw{position:relative;width:81px;height:84px;filter:drop-shadow(2px 3px 2px rgba(89,82,62,.95))}
+.fw>svg.fr{position:absolute;inset:0;width:81px;height:84px;overflow:visible}
+.st{position:absolute;left:10.5px;top:9.5px;width:60px;height:65px;background:radial-gradient(circle,transparent 1.35px,var(--paper) 1.7px) -2.5px -2.5px/5px 5px}
+.pp{position:absolute;inset:2.5px;background:var(--paper);box-shadow:inset 0 0 0 .6px rgba(89,82,62,.6)}
+.pp svg.il{position:absolute;left:3px;top:5px;width:49px;height:41px;fill:none;stroke:var(--umber);stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round}
+.pp .dn{position:absolute;left:0;right:0;bottom:3px;font-family:Cinzel,serif;font-weight:600;font-size:6.5px;letter-spacing:.14em;color:var(--umber)}
+.pp svg.ring{position:absolute;inset:-1px;width:57px;height:62px;fill:none;stroke:var(--red);stroke-width:1.25;stroke-linecap:round;overflow:visible}
+.t{font-size:11.5px;line-height:1;margin-top:6px;letter-spacing:.01em}
+.d{font-size:8.5px;margin-top:2px;opacity:.68;letter-spacing:.03em}
+.r .fw{filter:none;opacity:.55}
+.r .no{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:Cinzel,serif;font-size:10px;letter-spacing:.18em;color:var(--gilt)}
+.r .t{font-style:italic;font-size:9px;opacity:.42;margin-top:6px}
+.dock{position:absolute;left:0;right:0;bottom:0;padding:12px 20px 24px;background:linear-gradient(rgba(42,64,58,.94),var(--ground));border-top:1px solid var(--gilt);box-shadow:0 -1px 0 3px rgba(42,64,58,.9),0 -5px 0 0 rgba(176,156,112,.45),0 -12px 18px rgba(89,82,62,.5)}
+.dock .hd{display:flex;justify-content:space-between;font-family:Cinzel,serif;font-size:7.5px;letter-spacing:.28em;color:var(--gilt);margin-bottom:8px}
+.dock .row{display:flex;gap:8px}
+.dock label{flex:1;display:flex;align-items:center;height:46px;padding:0 14px;border:1px solid var(--gilt);background:rgba(89,82,62,.5);box-shadow:inset 0 0 0 3px rgba(42,64,58,.9),inset 0 0 0 4px rgba(176,156,112,.35)}
+.dock label input{font-size:15.5px}
+.dock button{height:48px;padding:0 18px 0 21px;font-size:13px;color:var(--ground);background:var(--gilt);border:0;box-shadow:inset 0 0 0 3px var(--gilt),inset 0 0 0 4px var(--ground)}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="cu" fill="none" stroke="#B09C70" stroke-width=".8" stroke-linecap="round"><path d="M1.5 15C1.5 7 4.5 2.4 13 1.5"/><path d="M4.5 13.5C4.4 8.2 6.2 4.8 11 4.4c2.6-.2 3.6 2.4 2 3.4-1.1.7-2.3-.2-1.6-1.1"/><circle cx="4.6" cy="4.6" r="1" fill="#B09C70" stroke="none"/></g>
+    <symbol id="fr" viewBox="0 0 81 84"><rect x=".5" y=".5" width="80" height="83" fill="#2A403A" stroke="#B09C70"/><rect x="4" y="4" width="73" height="76" fill="none" stroke="#B09C70" stroke-width=".5" opacity=".7"/>
+      <use href="#cu"/><use href="#cu" transform="matrix(-1 0 0 1 81 0)"/><use href="#cu" transform="matrix(1 0 0 -1 0 84)"/><use href="#cu" transform="matrix(-1 0 0 -1 81 84)"/>
+      <path d="M36.5 .5q4 3 4 4.6Q40.5 3.5 44.5 .5" fill="none" stroke="#B09C70" stroke-width=".7"/><circle cx="40.5" cy="2.4" r=".9" fill="#B09C70"/></symbol>
+    <pattern id="cof" width="39" height="31" patternUnits="userSpaceOnUse"><rect width="39" height="31" fill="#2A403A"/><rect x="2.5" y="2.5" width="34" height="26" fill="#59523E" stroke="#B09C70" stroke-width=".6"/><rect x="7.5" y="6.5" width="24" height="18" fill="#2A403A" stroke="#B09C70" stroke-width=".4" opacity=".9"/><path d="M19.5 11.6v7.8M15.6 15.5h7.8" stroke="#B09C70" stroke-width=".5"/><circle cx="19.5" cy="15.5" r="2" fill="#B09C70"/><circle cx="19.5" cy="15.5" r="3.6" fill="none" stroke="#B09C70" stroke-width=".4"/></pattern>
+    <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#59523E" stop-opacity=".75"/><stop offset="1" stop-color="#59523E" stop-opacity="0"/></linearGradient>
+  </defs>
+</svg>
+
+<svg class="ceil" viewBox="0 0 390 52" aria-hidden="true">
+  <rect x="-5" y="0" width="400" height="31" fill="url(#cof)" transform="translate(-4 0)"/>
+  <rect width="390" height="31" fill="url(#shade)"/>
+  <path d="M0 33.5h390" stroke="#B09C70" stroke-width="1"/>
+  <path d="M0 38.5h390" stroke="#B09C70" stroke-width="4" stroke-dasharray="2.4 3.1" opacity=".8"/>
+  <path d="M0 42.5h390" stroke="#B09C70" stroke-width=".6"/>
+  <path d="M0 45.5h390" stroke="#59523E" stroke-width="2.5"/>
+  <path d="M0 48h390" stroke="#B09C70" stroke-width=".4" opacity=".55"/>
+</svg>
+
+<header class="mast">
+  <h1>CATCH</h1>
+  <svg class="orn" viewBox="0 0 300 14" fill="none" stroke="#B09C70" stroke-linecap="round" aria-hidden="true">
+    <path d="M12 7h112M176 7h112" stroke-width=".7"/>
+    <path d="M124 7c6 0 9-5 15-5 4 0 4 4 1.5 4.6M176 7c-6 0-9 5-15 5-4 0-4-4-1.5-4.6" stroke-width=".8"/>
+    <path d="M150 2.2l4.8 4.8-4.8 4.8-4.8-4.8z" fill="#B09C70" stroke="none"/>
+    <path d="M12 7c-4 0-6-3-4-4.4 1.6-1 3 .6 2 1.6M288 7c4 0 6 3 4 4.4-1.6 1-3-.6-2-1.6" stroke-width=".7"/>
+  </svg>
+  <div class="sub">CATALOGUE OF THE COLLECTION</div>
+</header>
+<div class="tag"><i>Paste it, find it later. Nothing else.</i><b>4 CAUGHT · 4 OPEN</b></div>
+
+<div class="seek">
+  <label><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#B09C70" stroke-width="1.1" stroke-linecap="round"><circle cx="6.3" cy="6.3" r="4.6"/><path d="M9.8 9.8l4 4"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+  <button type="button">Filter</button>
+</div>
+
+<div class="sec">GALLERY A · Nº 001 — 016</div>
+
+<div class="grid">
+  <div class="c"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="st"><div class="pp">
+    <svg class="il" viewBox="0 0 62 52"><path d="M5 30.5l52-.8.3 13.6-52.4.5z"/><path d="M11 30.3v13M17.2 30.4l.1 12.8M23.5 30v13.2M29.6 30.2v13M36 30.1l-.2 13M42.1 30v13.1M48.3 30.2v12.9"/><path d="M14.2 30.5v7.4h3.1v-7.5M26.6 30.3l.2 7.6 3-.1v-7.4M39 30.2v7.6h3M45.4 30.3l-.1 7.4 3 .1"/><path d="M6 30.4c.2-6.2.1-9 .4-11.8l50.3-.6.4 11.6"/><circle cx="13" cy="24" r="2.3"/><circle cx="21" cy="24.2" r="2.2"/><path d="M30 22h14.5M30.5 25.8l13.8-.2M49.5 21.4l3.6 5"/></svg>
+    <div class="dn">S·001</div>
+    <svg class="ring" viewBox="0 0 57 62"><path d="M33 4C14 2 3 15 3.5 31c.5 17 10 27 26 27 16-.5 24-12 23.5-28C52.5 14 43 4 28 4.5 21 5 16 8 13 11"/></svg>
+  </div></div></div><div class="t">Vir MPC</div><div class="d">ypc2000.fun</div></div>
+
+  <div class="c"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="st"><div class="pp">
+    <svg class="il" viewBox="0 0 62 52"><path d="M8 12.5l14.6-4.8 15.8 5.4 15.6-5 .3 31.8-15.4 5.2-16-5.6L8.4 44z"/><path d="M22.6 7.8l.4 31.5M38.4 13.2l.6 31.8"/><path d="M13 19c3 4 6 1 9 4s3 7 6 7 5-5 9-3 2 7 8 6" stroke-dasharray="1.6 2.2"/><path d="M45.4 30.2l3.5 3.4M48.8 30.1l-3.3 3.6"/><path d="M14.5 34.6c1-.8 2.4-.6 3 .4"/></svg>
+    <div class="dn">S·002</div>
+    <svg class="ring" viewBox="0 0 57 62"><path d="M18 7C6 13 2 27 4 40c3 13 14 19 27 18 14-1 22-13 21-29C51 14 41 4 27 4c-7 .5-12 3-15 7"/></svg>
+  </div></div></div><div class="t">Map</div><div class="d">terraink.app</div></div>
+
+  <div class="c"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="st"><div class="pp">
+    <svg class="il" viewBox="0 0 62 52"><path d="M4.6 26.4C13 14.2 22 9.8 31.3 10c9.6.1 18.4 5 26.4 16.3-8 11.4-17 15.6-26.6 15.4C21.6 41.6 12.4 37 4.6 26.4z"/><circle cx="31" cy="26" r="9.4"/><circle cx="31.2" cy="25.8" r="3.6" fill="#59523E"/><path d="M27.4 21.6l1.8 1.4"/><path d="M14.8 15l-2.6-4.4M22.4 11l-1.2-4.6M31 9.6V4.8M39.6 11l1.4-4.6M47.4 15.2l2.8-4.2"/><path d="M20 39.6c-1.2 4.4-.3 7.4 3 8.6"/></svg>
+    <div class="dn">S·003</div>
+    <svg class="ring" viewBox="0 0 57 62"><path d="M36 5C17 1 3 13 3.5 31 4 49 13 58 29 58c16 0 24-13 23.5-29C52 13 42 4 27 4.5c-6 .3-11 3-14 6"/></svg>
+  </div></div></div><div class="t">EyeOfOsiris</div><div class="d">osirisai.live</div></div>
+
+  <div class="c"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="st"><div class="pp">
+    <svg class="il" viewBox="0 0 62 52"><path d="M3.8 22.2l53.8-.6.6 12.2L4.2 34.6z"/><path d="M8 22.2l1-6.8 44.2-.4.8 6.6"/><path d="M8.2 27.8l7.6-.1M18.4 27.6h7.8M28.6 27.8h7.6M38.8 27.6l7.6.1M49 27.8h5.6"/><path d="M7.6 31.4h46.8" stroke-dasharray="1.2 2"/><path d="M15 15.4c1.4-4 4-6.6 8-7.6M44.4 15c-.6-3.8-2.6-6.8-6.4-7.4"/><path d="M29 18.6h4"/></svg>
+    <div class="dn">S·004</div>
+    <svg class="ring" viewBox="0 0 57 62"><path d="M23 5C8 9 2 22 3.5 36 5 51 16 59 31 57.5c15-1.5 22-14 21-30C51 13 41 4 27 4.5c-6 .5-10 3-13 7"/></svg>
+  </div></div></div><div class="t">Roland Studio</div><div class="d">roland50.studio</div></div>
+
+  <div class="c r"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="no">005</div></div><div class="t">reserved</div></div>
+  <div class="c r"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="no">006</div></div><div class="t">reserved</div></div>
+  <div class="c r"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="no">007</div></div><div class="t">reserved</div></div>
+  <div class="c r"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="no">008</div></div><div class="t">reserved</div></div>
+  <div class="c r"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="no">009</div></div><div class="t">reserved</div></div>
+  <div class="c r"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="no">010</div></div><div class="t">reserved</div></div>
+  <div class="c r"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="no">011</div></div><div class="t">reserved</div></div>
+  <div class="c r"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="no">012</div></div><div class="t">reserved</div></div>
+  <div class="c r"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="no">013</div></div><div class="t">reserved</div></div>
+  <div class="c r"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="no">014</div></div><div class="t">reserved</div></div>
+  <div class="c r"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="no">015</div></div><div class="t">reserved</div></div>
+  <div class="c r"><div class="fw"><svg class="fr"><use href="#fr"/></svg><div class="no">016</div></div><div class="t">reserved</div></div>
+</div>
+
+<form class="dock" action="#">
+  <div class="hd"><span>NEW ACQUISITION</span><span>TO HANG AS Nº 005</span></div>
+  <div class="row">
+    <label><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+</form>
+</body></html>

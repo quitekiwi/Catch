@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — The Scroll Room</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Pinyon+Script&display=swap">
+<style>
+:root{--ground:#2A403A;--sage:#748C76;--paper:#B1BFA3;--umber:#59523E;--gilt:#B09C70;--red:#8C2020;--hole:rgba(14,22,19,.86);
+--grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75 .35' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .32 0 0 0 0 .24 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23p)'/%3E%3C/svg%3E")}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{position:relative;color:var(--paper);font-family:"EB Garamond",serif;background-color:var(--ground);
+background-image:radial-gradient(ellipse 120% 80% at 50% 45%,transparent 55%,rgba(89,82,62,.45)),
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='390' height='844'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='turbulence' baseFrequency='.0045 .011' numOctaves='5' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .455 0 0 0 0 .549 0 0 0 0 .463 -2.4 0 0 0 .62'/%3E%3C/filter%3E%3Crect width='390' height='844' filter='url(%23m)' opacity='.55'/%3E%3C/svg%3E"),
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .455 0 0 0 0 .549 0 0 0 0 .463 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E")}
+.ceil{display:block;width:390px;height:52px}
+.mast{text-align:center;margin-top:6px}
+.mast h1{margin:0;font-family:Cinzel,serif;font-weight:500;font-size:38px;line-height:1;letter-spacing:.34em;padding-left:.34em;color:var(--gilt);text-shadow:0 1px 0 rgba(89,82,62,.9)}
+.mast .sub{font-family:Cinzel,serif;font-size:8px;letter-spacing:.42em;color:var(--gilt);margin-top:4px;opacity:.85}
+.orn{display:block;margin:5px auto 0;width:300px;height:14px}
+.tag{display:flex;justify-content:space-between;align-items:baseline;padding:7px 20px 0}
+.tag i{font-size:13.5px}
+.tag b{font-family:Cinzel,serif;font-weight:500;font-size:9px;letter-spacing:.16em;color:var(--gilt)}
+.seek{display:flex;gap:8px;padding:10px 20px 0}
+.seek label{flex:1;display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;border:1px solid var(--gilt);background:rgba(89,82,62,.42);box-shadow:inset 0 0 0 3px rgba(42,64,58,.9),inset 0 0 0 4px rgba(176,156,112,.35)}
+input{border:0;background:none;outline:none;width:100%;font:inherit;font-style:italic;font-size:14.5px;color:var(--paper)}
+input::placeholder{color:var(--paper);opacity:.62}
+button{font-family:Cinzel,serif;font-weight:600;letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.seek button{height:40px;padding:0 13px 0 15px;font-size:10px;color:var(--gilt);background:rgba(89,82,62,.42);border:1px solid var(--gilt)}
+.sec{display:flex;align-items:center;justify-content:center;gap:10px;margin:13px 20px 8px;font-family:Cinzel,serif;font-size:8px;letter-spacing:.3em;color:var(--gilt)}
+.sec::before,.sec::after{content:"";flex:1;height:3px;border-top:1px solid var(--gilt);border-bottom:1px solid rgba(176,156,112,.45)}
+/* the wall of pigeonholes */
+.wall{position:relative;margin:0 12px;padding:10px 12px 9px;display:grid;grid-template-columns:repeat(4,78px);column-gap:10px;border:1px solid var(--gilt);background:linear-gradient(rgba(89,82,62,.28),rgba(42,64,58,.1));box-shadow:inset 0 0 0 3px rgba(42,64,58,.85),inset 0 0 0 4px rgba(176,156,112,.4),0 6px 14px rgba(14,22,19,.45)}
+.sill{position:absolute;left:4px;right:4px;top:108px;height:8px;background:linear-gradient(var(--sage),var(--ground) 70%);border-top:1px solid var(--gilt);box-shadow:0 3px 5px rgba(14,22,19,.6)}
+.cell{position:relative;height:166px}
+.niche{position:relative;height:98px;border-radius:39px 39px 1px 1px;border:1px solid var(--gilt);background:radial-gradient(ellipse 70% 45% at 50% 0,rgba(177,191,163,.2),transparent 75%),var(--hole);box-shadow:0 0 0 2px rgba(42,64,58,.95),0 0 0 3px rgba(176,156,112,.35),inset 0 10px 14px rgba(14,22,19,.8),inset 0 -6px 10px rgba(89,82,62,.35)}
+.niche svg{position:absolute;left:9px;bottom:3px;width:60px;height:60px;filter:drop-shadow(0 4px 3px rgba(0,0,0,.55))}
+.niche em{position:absolute;left:0;right:0;bottom:30px;text-align:center;font-size:11px;color:var(--paper);opacity:.72}
+.cord{position:absolute;left:38px;top:86px;width:1.4px;height:32px;background:var(--gilt);z-index:2}
+.cord::after{content:"";position:absolute;left:-2.2px;top:-2px;width:6px;height:4px;border-radius:50%;background:var(--umber);border:1px solid var(--gilt)}
+.tg{position:absolute;z-index:2;left:3px;right:3px;top:116px;height:46px;padding:7px 4px 0;box-sizing:border-box;text-align:center;color:var(--ground);background:var(--grain),linear-gradient(#bcc8ae,var(--paper) 60%,#a3b195);clip-path:polygon(10% 0,90% 0,100% 16%,100% 100%,0 100%,0 16%);box-shadow:0 3px 4px rgba(0,0,0,.4);transform:rotate(var(--r,-2deg));transform-origin:50% 0}
+.tg::before{content:"";position:absolute;left:35px;top:3px;width:4px;height:4px;border-radius:50%;background:var(--ground);opacity:.55}
+.tg .n{display:block;font-family:Cinzel,serif;font-weight:600;font-size:7.5px;letter-spacing:.16em}
+.tg .ti{display:block;font-size:12.5px;line-height:1.05;margin-top:2px;font-weight:500}
+.tg .dm{display:block;font-size:8.5px;font-style:italic;margin-top:1px}
+.seal{position:absolute;right:3px;top:5px;width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 38% 34%,#b04040,var(--red) 55%,#5e1414);box-shadow:0 0 0 1.5px rgba(140,32,32,.55),0 1px 1px rgba(0,0,0,.35)}
+.seal::after{content:"";position:absolute;inset:2.5px;border-radius:50%;border:.8px solid rgba(60,10,10,.55)}
+.e{height:76px;margin-top:2px}
+.e .niche{height:70px;opacity:.85}
+.e .niche b{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);padding:2px 5px;font-family:Cinzel,serif;font-weight:500;font-size:8.5px;letter-spacing:.16em;color:var(--gilt);border:1px solid rgba(176,156,112,.5);white-space:nowrap}
+.e.nx .niche{opacity:1;background:radial-gradient(ellipse 70% 60% at 50% 0,rgba(176,156,112,.22),transparent 80%),var(--hole)}
+/* the reading ledge */
+.ledge{position:relative;margin:14px auto 0;width:350px;height:178px}
+.glow{position:absolute;left:-20px;right:-20px;top:-16px;height:190px;background:radial-gradient(ellipse 60% 70% at 50% 30%,rgba(177,191,163,.17),transparent 75%)}
+.cap{position:relative;text-align:center;font-family:Cinzel,serif;font-size:8px;letter-spacing:.3em;color:var(--gilt)}
+.sheet{position:absolute;left:30px;right:44px;top:24px;height:126px;background:linear-gradient(90deg,rgba(89,82,62,.4),transparent 7%,transparent 90%,rgba(89,82,62,.45)),var(--grain),linear-gradient(#bfcab2,var(--paper) 50%,#a7b499);box-shadow:0 5px 8px rgba(0,0,0,.45);color:var(--ground);padding:12px 22px 0;box-sizing:border-box}
+.sheet .n{font-family:Cinzel,serif;font-weight:600;font-size:8.5px;letter-spacing:.24em}
+.sheet h2{margin:2px 0 0;font-family:"Pinyon Script",cursive;font-weight:400;font-size:40px;line-height:1.1;color:var(--ground)}
+.sheet .dm{font-style:italic;font-size:14px;margin-top:1px}
+.sheet .rule{width:120px;height:1px;background:var(--umber);opacity:.5;margin:7px 0 5px}
+.sheet .nt{font-size:10.5px;letter-spacing:.02em;color:var(--umber)}
+.sheet .seal{right:16px;top:auto;bottom:16px;width:30px;height:30px;box-shadow:0 0 0 3px rgba(140,32,32,.45),0 2px 3px rgba(0,0,0,.4)}
+.sheet .seal::after{inset:6px;border-width:1.2px}
+.roll{position:absolute;top:16px;height:142px;border-radius:3px;background:linear-gradient(90deg,#6f6a52,#c3cdb6 40%,var(--paper) 55%,#7d7f66);box-shadow:0 5px 8px rgba(0,0,0,.45)}
+.roll::before,.roll::after{content:"";position:absolute;left:50%;width:16px;height:9px;transform:translateX(-50%);border-radius:3px;background:linear-gradient(90deg,#3d3829,var(--umber) 30%,var(--gilt) 50%,var(--umber) 75%,#3d3829);border:1px solid rgba(176,156,112,.7)}
+.roll::before{top:-9px}.roll::after{bottom:-9px}
+.rl{left:16px;width:20px}.rr{right:22px;width:30px}
+.tie{position:absolute;right:30px;top:120px;width:14px;height:44px;border-left:1.4px solid var(--gilt);border-right:1.4px solid var(--gilt);border-radius:0 0 7px 7px;transform:skewX(-8deg)}
+.shelf{position:absolute;left:0;right:0;top:166px;height:12px;background:linear-gradient(var(--sage),var(--ground) 60%,#1c2b27);border-top:1px solid var(--gilt);box-shadow:0 1px 0 0 rgba(176,156,112,.35),0 6px 10px rgba(14,22,19,.6)}
+.dock{position:absolute;left:0;right:0;bottom:0;padding:12px 20px 24px;background:linear-gradient(rgba(42,64,58,.94),var(--ground));border-top:1px solid var(--gilt);box-shadow:0 -1px 0 3px rgba(42,64,58,.9),0 -5px 0 0 rgba(176,156,112,.45),0 -12px 18px rgba(89,82,62,.5)}
+.dock .hd{display:flex;justify-content:space-between;font-family:Cinzel,serif;font-size:7.5px;letter-spacing:.28em;color:var(--gilt);margin-bottom:8px}
+.dock .row{display:flex;gap:8px}
+.dock label{flex:1;display:flex;align-items:center;height:46px;padding:0 14px;border:1px solid var(--gilt);background:rgba(89,82,62,.5);box-shadow:inset 0 0 0 3px rgba(42,64,58,.9),inset 0 0 0 4px rgba(176,156,112,.35)}
+.dock label input{font-size:15.5px}
+.dock button{height:48px;padding:0 18px 0 21px;font-size:13px;color:var(--ground);background:var(--gilt);border:0;box-shadow:inset 0 0 0 3px var(--gilt),inset 0 0 0 4px var(--ground)}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="cof" width="39" height="31" patternUnits="userSpaceOnUse"><rect width="39" height="31" fill="#2A403A"/><rect x="2.5" y="2.5" width="34" height="26" fill="#59523E" stroke="#B09C70" stroke-width=".6"/><rect x="7.5" y="6.5" width="24" height="18" fill="#2A403A" stroke="#B09C70" stroke-width=".4" opacity=".9"/><path d="M19.5 11.6v7.8M15.6 15.5h7.8" stroke="#B09C70" stroke-width=".5"/><circle cx="19.5" cy="15.5" r="2" fill="#B09C70"/><circle cx="19.5" cy="15.5" r="3.6" fill="none" stroke="#B09C70" stroke-width=".4"/></pattern>
+    <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#59523E" stop-opacity=".75"/><stop offset="1" stop-color="#59523E" stop-opacity="0"/></linearGradient>
+    <radialGradient id="pe" cx=".42" cy=".38" r=".62"><stop offset="0" stop-color="#C6D0BA"/><stop offset=".6" stop-color="#B1BFA3"/><stop offset="1" stop-color="#7E8466"/></radialGradient>
+    <radialGradient id="kn" cx=".38" cy=".34" r=".7"><stop offset="0" stop-color="#B09C70"/><stop offset=".45" stop-color="#59523E"/><stop offset="1" stop-color="#2f2b20"/></radialGradient>
+    <symbol id="scr" viewBox="0 0 60 60">
+      <ellipse cx="30" cy="56" rx="22" ry="3" fill="#000" opacity=".35"/>
+      <circle cx="30" cy="31" r="22" fill="url(#pe)" stroke="#59523E" stroke-width=".6"/>
+      <path d="M30 31a2 2 0 0 1 4 0a4 4 0 0 1-8 0a6 6 0 0 1 12 0a8 8 0 0 1-16 0a10 10 0 0 1 20 0a12 12 0 0 1-24 0a14 14 0 0 1 28 0a16 16 0 0 1-32 0a18 18 0 0 1 36 0a20 20 0 0 1-40 0" fill="none" stroke="#59523E" stroke-width=".55" opacity=".55"/>
+      <circle cx="30" cy="31" r="8.2" fill="none" stroke="#B09C70" stroke-width="1"/>
+      <circle cx="30" cy="31" r="6.6" fill="url(#kn)"/>
+      <circle cx="28" cy="29" r="1.6" fill="#B1BFA3" opacity=".35"/>
+      <path d="M30 53.2v4" stroke="#B09C70" stroke-width="1.4"/>
+    </symbol>
+  </defs>
+</svg>
+
+<svg class="ceil" viewBox="0 0 390 52" aria-hidden="true">
+  <rect x="-5" y="0" width="400" height="31" fill="url(#cof)" transform="translate(-4 0)"/>
+  <rect width="390" height="31" fill="url(#shade)"/>
+  <path d="M0 33.5h390" stroke="#B09C70" stroke-width="1"/>
+  <path d="M0 38.5h390" stroke="#B09C70" stroke-width="4" stroke-dasharray="2.4 3.1" opacity=".8"/>
+  <path d="M0 42.5h390" stroke="#B09C70" stroke-width=".6"/>
+  <path d="M0 45.5h390" stroke="#59523E" stroke-width="2.5"/>
+  <path d="M0 48h390" stroke="#B09C70" stroke-width=".4" opacity=".55"/>
+</svg>
+
+<header class="mast">
+  <h1>CATCH</h1>
+  <svg class="orn" viewBox="0 0 300 14" fill="none" stroke="#B09C70" stroke-linecap="round" aria-hidden="true">
+    <path d="M12 7h112M176 7h112" stroke-width=".7"/>
+    <path d="M124 7c6 0 9-5 15-5 4 0 4 4 1.5 4.6M176 7c-6 0-9 5-15 5-4 0-4-4-1.5-4.6" stroke-width=".8"/>
+    <path d="M150 2.2l4.8 4.8-4.8 4.8-4.8-4.8z" fill="#B09C70" stroke="none"/>
+    <path d="M12 7c-4 0-6-3-4-4.4 1.6-1 3 .6 2 1.6M288 7c4 0 6 3 4 4.4-1.6 1-3-.6-2-1.6" stroke-width=".7"/>
+  </svg>
+  <div class="sub">THE SCROLL ROOM</div>
+</header>
+<div class="tag"><i>Paste it, find it later. Nothing else.</i><b>4 CAUGHT · 4 OPEN</b></div>
+
+<div class="seek">
+  <label><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#B09C70" stroke-width="1.1" stroke-linecap="round"><circle cx="6.3" cy="6.3" r="4.6"/><path d="M9.8 9.8l4 4"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+  <button type="button">Filter</button>
+</div>
+
+<div class="sec">PIGEONHOLES · Nº 001 — 008</div>
+
+<div class="wall">
+  <div class="sill"></div>
+  <div class="cell"><div class="niche"><svg><use href="#scr"/></svg></div><i class="cord"></i>
+    <div class="tg" style="--r:-3deg"><b class="seal"></b><span class="n">Nº 001</span><span class="ti">Vir MPC</span><span class="dm">ypc2000.fun</span></div></div>
+  <div class="cell"><div class="niche"><svg><use href="#scr"/></svg></div><i class="cord"></i>
+    <div class="tg" style="--r:2deg"><b class="seal"></b><span class="n">Nº 002</span><span class="ti">Map</span><span class="dm">terraink.app</span></div></div>
+  <div class="cell"><div class="niche"><svg><use href="#scr"/></svg></div><i class="cord"></i>
+    <div class="tg" style="--r:-1.5deg"><b class="seal"></b><span class="n">Nº 003</span><span class="ti">EyeOfOsiris</span><span class="dm">osirisai.live</span></div></div>
+  <div class="cell"><div class="niche"><em>on the ledge</em></div><i class="cord" style="top:104px;height:14px"></i>
+    <div class="tg" style="--r:2.5deg"><b class="seal"></b><span class="n">Nº 004</span><span class="ti">Roland Studio</span><span class="dm">roland50.studio</span></div></div>
+  <div class="cell e nx"><div class="niche"><b>Nº 005</b></div></div>
+  <div class="cell e"><div class="niche"><b>Nº 006</b></div></div>
+  <div class="cell e"><div class="niche"><b>Nº 007</b></div></div>
+  <div class="cell e"><div class="niche"><b>Nº 008</b></div></div>
+</div>
+
+<div class="ledge">
+  <div class="glow"></div>
+  <div class="cap">THE READING LEDGE · NEWEST</div>
+  <div class="roll rl"></div>
+  <div class="sheet">
+    <div class="n">Nº 004 · UNREAD</div>
+    <h2>Roland Studio</h2>
+    <div class="dm">roland50.studio</div>
+    <div class="rule"></div>
+    <div class="nt">Caught today · waiting to be read</div>
+    <b class="seal"></b>
+  </div>
+  <div class="roll rr"></div>
+  <i class="tie"></i>
+  <div class="shelf"></div>
+</div>
+
+<form class="dock" action="#">
+  <div class="hd"><span>NEW SCROLL</span><span>TO FILE AS Nº 005</span></div>
+  <div class="row">
+    <label><input type="url" placeholder="paste a link…" aria-label="Paste a link"></label>
+    <button type="submit">Catch</button>
+  </div>
+</form>
+</body></html>

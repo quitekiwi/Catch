@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Catch — The Collection Plates</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#E8E4D8;--ink:#16181A;--green:#1F3B2F;--ox:#6B1E1E;--gold:#C79A3B;--hair:rgba(22,24,26,.28);--mono:"JetBrains Mono",monospace;--sans:"Bricolage Grotesque",sans-serif}
+html,body{margin:0;width:390px;height:844px;overflow:hidden}
+body{position:relative;color:var(--ink);font-family:var(--sans);background:
+radial-gradient(120% 60% at 0 0,rgba(199,154,59,.10),transparent 55%),
+radial-gradient(120% 60% at 100% 100%,rgba(31,59,47,.09),transparent 55%),
+radial-gradient(90% 50% at 100% 0,rgba(31,59,47,.06),transparent 60%),
+radial-gradient(90% 50% at 0 100%,rgba(199,154,59,.08),transparent 60%),var(--paper)}
+.m{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase}
+.bar{position:sticky;top:0;height:28px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid var(--ink);background:var(--paper)}
+.bar b{font-weight:500}
+.mast{padding:14px 16px 0;display:flex;align-items:baseline;justify-content:space-between}
+.mast h1{margin:0;font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.mast p{margin:0;font-size:12px;max-width:170px;text-align:right;line-height:1.25;color:#3a3c3c}
+.find{display:flex;gap:8px;margin:12px 16px 0}
+.find label{flex:1;display:flex;align-items:center;gap:8px;height:36px;padding:0 10px;border:1px solid var(--ink);background:rgba(255,255,255,.25)}
+.find input{all:unset;flex:1;font-family:var(--sans);font-size:14px}
+.find input::placeholder{color:#6a6b68}
+.btn{all:unset;box-sizing:border-box;height:36px;padding:0 12px;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--ink);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+.sec{margin:18px 16px 8px;display:flex;justify-content:space-between;border-top:1px solid var(--ink);padding-top:5px}
+.plate{position:relative;margin:0 16px}
+.frame{position:relative;padding:10px;border:1px solid var(--hair);background:#efece2;box-shadow:0 1px 0 rgba(22,24,26,.06)}
+.frame svg.art{display:block;width:100%;height:auto}
+.reg{position:absolute;width:14px;height:14px;color:var(--ink)}
+.tl{left:-7px;top:-7px}.tr{right:-7px;top:-7px}.bl{left:-7px;bottom:-7px}.br{right:-7px;bottom:-7px}
+.stamp{position:absolute;right:-30px;top:-34px;width:96px;height:96px;transform:rotate(-12deg);mix-blend-mode:multiply}
+.cred{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:baseline;margin:8px 16px 0;padding:6px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.cred .t{font-size:15px;font-weight:500;letter-spacing:-.01em}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 16px}
+.row .frame{padding:6px}
+.row .reg{width:10px;height:10px}.row .tl{left:-5px;top:-5px}.row .tr{right:-5px;top:-5px}.row .bl{left:-5px;bottom:-5px}.row .br{right:-5px;bottom:-5px}
+.cap{margin-top:7px;line-height:1.3}
+.cap .t{font-size:13px;font-weight:500;display:block}
+.cap .m{font-size:8px;color:#4b4d4c}
+.dock{position:absolute;left:0;right:0;bottom:0;padding:10px 16px 26px;border-top:1px solid var(--ink);background:var(--paper)}
+.dock .m{display:block;margin-bottom:6px;color:#4b4d4c}
+.dock form{display:flex}
+.dock input{all:unset;flex:1;height:44px;padding:0 12px;border:1px solid var(--ink);border-right:0;font-family:var(--sans);font-size:15px;background:rgba(255,255,255,.35)}
+.dock input::placeholder{color:#6a6b68}
+.catch{height:44px;padding:0 18px;background:var(--ink);color:var(--paper);border-radius:0;font-weight:500}
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="x" viewBox="0 0 20 20"><circle cx="10" cy="10" r="5" fill="none" stroke="currentColor" stroke-width="1"/><path d="M10 0V20M0 10H20" stroke="currentColor" stroke-width="1"/></symbol>
+<path id="ring" d="M48 48m-34 0a34 34 0 1 1 68 0a34 34 0 1 1-68 0"/>
+</defs></svg>
+
+<div class="bar m"><b>Catch</b><span>Plates 001–004</span><span>4 open</span></div>
+
+<header class="mast"><h1>Catch</h1><p>Paste it, find it later. Nothing else.</p></header>
+
+<form class="find" role="search">
+<label><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#16181A" stroke-width="1.3"><circle cx="6" cy="6" r="4.5"/><path d="M9.5 9.5L13 13"/></svg><input type="search" placeholder="search the archive…" aria-label="Search the archive"></label>
+<button class="btn" type="button"><svg width="11" height="9" viewBox="0 0 11 9" stroke="#16181A" stroke-width="1.2"><path d="M0 1.5H11M2 4.5H9M4 7.5H7"/></svg>Filter</button>
+</form>
+
+<div class="sec m"><span>Plate 004 · Newest acquisition</span><span>4 caught · 4 open</span></div>
+
+<figure class="plate" style="margin-top:0;margin-bottom:0">
+<div class="frame">
+<svg class="art" viewBox="0 0 336 230" role="img" aria-label="Plate 004, Roland Studio: abstract still life of a synthesizer">
+<rect width="336" height="230" fill="#1F3B2F"/>
+<rect x="0" y="0" width="120" height="230" fill="#24453a"/>
+<circle cx="250" cy="62" r="40" fill="#C79A3B"/>
+<path d="M0 150L336 128V230H0Z" fill="#C79A3B"/>
+<path d="M0 150L336 128V138L0 162Z" fill="#a37c2c"/>
+<g transform="rotate(-4 168 150)">
+<rect x="40" y="96" width="236" height="64" fill="#16181A"/>
+<rect x="52" y="104" width="62" height="20" fill="#6B1E1E"/>
+<circle cx="132" cy="114" r="7" fill="#E8E4D8"/><circle cx="154" cy="114" r="7" fill="none" stroke="#E8E4D8" stroke-width="2"/><circle cx="176" cy="114" r="7" fill="#C79A3B"/>
+<rect x="196" y="106" width="3" height="16" fill="#E8E4D8"/><rect x="208" y="110" width="3" height="12" fill="#E8E4D8"/><rect x="220" y="104" width="3" height="18" fill="#E8E4D8"/><rect x="232" y="112" width="3" height="10" fill="#E8E4D8"/>
+<rect x="252" y="104" width="16" height="18" fill="#E8E4D8"/>
+<rect x="48" y="132" width="220" height="22" fill="#E8E4D8"/>
+<path d="M58 132v13M71 132v13M92 132v13M105 132v13M118 132v13M139 132v13M152 132v13M173 132v13M186 132v13M199 132v13M220 132v13M233 132v13M254 132v13" stroke="#16181A" stroke-width="6"/>
+</g>
+<path d="M300 230V180q-14-30 10-52" fill="none" stroke="#6B1E1E" stroke-width="3"/>
+<circle cx="310" cy="126" r="6" fill="#6B1E1E"/>
+<rect x="18" y="186" width="54" height="30" fill="#6B1E1E"/><rect x="26" y="176" width="38" height="10" fill="#16181A"/>
+</svg>
+<svg class="reg tl"><use href="#x"/></svg><svg class="reg tr"><use href="#x"/></svg><svg class="reg bl"><use href="#x"/></svg><svg class="reg br"><use href="#x"/></svg>
+</div>
+<svg class="stamp" viewBox="0 0 96 96" aria-label="Stamp: Session 004, open, roland50.studio">
+<circle cx="48" cy="48" r="46" fill="none" stroke="#6B1E1E" stroke-width="2"/>
+<circle cx="48" cy="48" r="26" fill="none" stroke="#6B1E1E" stroke-width="1"/>
+<text font-family="JetBrains Mono,monospace" font-size="8.4" letter-spacing="1.1" fill="#6B1E1E"><textPath href="#ring">SESSION 004 · OPEN · ROLAND50.STUDIO ·</textPath></text>
+<text x="48" y="53" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-weight="700" font-size="15" fill="#6B1E1E">004</text>
+</svg>
+</figure>
+<div class="cred"><span class="m">Pl. 004</span><span class="t">Roland Studio</span><span class="m">roland50.studio</span><span class="m">10.10.26</span></div>
+
+<div class="sec m" style="margin-top:16px"><span>Plates 003–001</span><span>Earlier sessions</span></div>
+<div class="row">
+<figure style="margin:0"><div class="frame">
+<svg class="art" viewBox="0 0 100 100" role="img" aria-label="Plate 003, EyeOfOsiris"><rect width="100" height="100" fill="#C79A3B"/><path d="M8 50Q50 14 92 50Q50 86 8 50Z" fill="#E8E4D8"/><circle cx="50" cy="50" r="17" fill="#1F3B2F"/><circle cx="50" cy="50" r="7" fill="#16181A"/><path d="M42 67L36 92M58 67q2 18 18 22" stroke="#6B1E1E" stroke-width="3" fill="none"/></svg>
+<svg class="reg tl"><use href="#x"/></svg><svg class="reg tr"><use href="#x"/></svg><svg class="reg bl"><use href="#x"/></svg><svg class="reg br"><use href="#x"/></svg></div>
+<figcaption class="cap"><span class="m">Pl. 003 · Open</span><span class="t">EyeOfOsiris</span><span class="m">osirisai.live</span></figcaption></figure>
+<figure style="margin:0"><div class="frame">
+<svg class="art" viewBox="0 0 100 100" role="img" aria-label="Plate 002, Map"><rect width="100" height="100" fill="#E8E4D8"/><path d="M0 62Q30 40 52 58T100 44V100H0Z" fill="#1F3B2F"/><path d="M0 80Q36 62 60 78T100 70V100H0Z" fill="#16181A"/><rect x="14" y="14" width="30" height="30" fill="#6B1E1E"/><path d="M60 10V48M52 30H100" stroke="#16181A" stroke-width="1"/><circle cx="74" cy="30" r="5" fill="#C79A3B"/></svg>
+<svg class="reg tl"><use href="#x"/></svg><svg class="reg tr"><use href="#x"/></svg><svg class="reg bl"><use href="#x"/></svg><svg class="reg br"><use href="#x"/></svg></div>
+<figcaption class="cap"><span class="m">Pl. 002 · Open</span><span class="t">Map</span><span class="m">terraink.app</span></figcaption></figure>
+<figure style="margin:0"><div class="frame">
+<svg class="art" viewBox="0 0 100 100" role="img" aria-label="Plate 001, Vir MPC"><rect width="100" height="100" fill="#6B1E1E"/><rect x="16" y="16" width="68" height="68" fill="#16181A"/><g fill="#E8E4D8"><rect x="24" y="44" width="14" height="14"/><rect x="43" y="44" width="14" height="14"/><rect x="24" y="63" width="14" height="14"/><rect x="62" y="63" width="14" height="14"/></g><rect x="62" y="44" width="14" height="14" fill="#C79A3B"/><rect x="43" y="63" width="14" height="14" fill="#1F3B2F"/><rect x="24" y="24" width="52" height="12" fill="#1F3B2F"/></svg>
+<svg class="reg tl"><use href="#x"/></svg><svg class="reg tr"><use href="#x"/></svg><svg class="reg bl"><use href="#x"/></svg><svg class="reg br"><use href="#x"/></svg></div>
+<figcaption class="cap"><span class="m">Pl. 001 · Open</span><span class="t">Vir MPC</span><span class="m">ypc2000.fun</span></figcaption></figure>
+</div>
+
+<footer class="dock">
+<span class="m">New acquisition → Plate 005</span>
+<form><input type="url" placeholder="paste a link…" aria-label="Paste a link"><button class="btn catch" type="submit">Catch</button></form>
+</footer>
+</body></html>
