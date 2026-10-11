@@ -1,309 +1,302 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="oxblood" data-mode="night">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Catch</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,650;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=Cinzel:wght@400;600&family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Marcellus+SC&family=Old+Standard+TT:ital@0;1&display=swap" rel="stylesheet">
 <style>
+  /* ---------- theme tokens: three rooms, each lit for day and night ---------- */
   :root{
-    --outline: #14100a;
-    --bg: #1C1A17; --ink: #A69981; --accent: #8C2020; --title-color: #C1272D;
-    --spine-a: #BFB493; --spine-b: #393D3C;
-    --paper: #EFE6D3; --paper-ink: #2a2015;
-    /* readable-on-dark variants: accent as text, text on an accent fill, session no. on paper */
-    --accent-text: #E07A72; --on-accent: var(--paper); --label-num: var(--accent);
-    --danger: #e88a82;
+    --font-display:'Cinzel Decorative',serif; --font-label:'Marcellus SC',serif; --font-body:'EB Garamond',serif;
+    --spot:#73303C; --spot-halo:transparent;
   }
-  :root[data-theme="sage"]{
-    --bg: #16231F; --ink: #90A892; --accent: #B09C70; --title-color: #B09C70;
-    --spine-a: #B1BFA3; --spine-b: #59523E;
-    --paper: #E9EFE2; --paper-ink: #23291f;
-    --accent-text: #B09C70; --on-accent: var(--paper-ink); --label-num: #6E5E38;
+  /* Oxblood Art Nouveau */
+  [data-theme="oxblood"][data-mode="night"]{
+    --bg:#1A1519; --chrome:#40101D; --chrome-ink:#D9B88F; --ink:#D9B88F; --ink2:#AC9B86; --line:rgba(172,155,134,.35);
+    --paper:#D9B88F; --paper-ink:#40101D; --btn:#D9B88F; --btn-ink:#40101D; --field:#241C20; --field-ink:#D9B88F;
+    --frame:#40101D; --frame-line:#AC9B86; --plaque-outline:#73303C; --pattern-ink:%23AC9B86; --pattern-op:.10;
   }
-  /* derived tokens live on every themed root so they resolve against that theme's --bg/--ink */
-  :root, :root[data-theme="sage"]{
-    --bg-raised: color-mix(in srgb, var(--bg) 94%, white 6%);
-    --ink-dim: color-mix(in srgb, var(--ink) 95%, var(--bg) 5%);
-    --ink-faint: color-mix(in srgb, var(--ink) 90%, var(--bg) 10%);
-    --line: color-mix(in srgb, var(--ink) 28%, var(--bg) 72%);
-    --shelf-wood: color-mix(in srgb, var(--bg) 55%, black 45%);
+  [data-theme="oxblood"][data-mode="day"]{
+    --bg:#E6CFAF; --chrome:#40101D; --chrome-ink:#D9B88F; --ink:#40101D; --ink2:#73303C; --line:rgba(64,16,29,.25);
+    --paper:#D9B88F; --paper-ink:#40101D; --btn:#40101D; --btn-ink:#D9B88F; --field:#EFDDC3; --field-ink:#40101D;
+    --frame:#40101D; --frame-line:#73303C; --plaque-outline:transparent; --pattern-ink:%2373303C; --pattern-op:.10;
+  }
+  /* Green Hall */
+  [data-theme="hall"]{ --font-display:'Cinzel',serif; --font-label:'Cinzel',serif; --font-body:'EB Garamond',serif; --spot:#8C2020; }
+  [data-theme="hall"][data-mode="night"]{
+    --bg:#2A403A; --chrome:#1F302B; --chrome-ink:#B1BFA3; --ink:#B1BFA3; --ink2:#B1BFA3; --line:rgba(176,156,112,.45);
+    --paper:#B1BFA3; --paper-ink:#2A403A; --btn:#B1BFA3; --btn-ink:#2A403A; --field:rgba(0,0,0,.2); --field-ink:#B1BFA3;
+    --shelf:#B09C70; --bookend:#B1BFA3; --bookend-line:#59523E; --vein:0.69 0.75 0.64;
+  }
+  [data-theme="hall"][data-mode="day"]{
+    --bg:#748C76; --chrome:#2A403A; --chrome-ink:#B1BFA3; --ink:#101A17; --ink2:#101A17; --line:rgba(42,64,58,.5);
+    --paper:#B1BFA3; --paper-ink:#2A403A; --btn:#2A403A; --btn-ink:#B1BFA3; --field:rgba(177,191,163,.55); --field-ink:#101A17;
+    --shelf:#2A403A; --bookend:#2A403A; --bookend-line:#B09C70; --vein:0.69 0.75 0.64;
+  }
+  /* Dispatch: same five colours, re-allocated 60-30-10 between day and night */
+  [data-theme="dispatch"]{ --font-display:'Bodoni Moda',serif; --font-label:'Old Standard TT',serif; --font-body:'Old Standard TT',serif; --spot:#8C2020; }
+  [data-theme="dispatch"][data-mode="day"]{
+    --bg:#BFB493; --chrome:#393D3C; --chrome-ink:#BFB493; --ink:#403822; --ink2:#403822; --line:rgba(64,56,34,.35);
+    --paper:#BFB493; --paper-ink:#403822; --btn:#393D3C; --btn-ink:#BFB493; --field:rgba(255,255,255,.18); --field-ink:#403822;
+    --stamp-edge:#403822; --stamp-face:#393D3C; --stamp-ink:#BFB493; --pattern-ink:%23A69981; --pattern-op:.55;
+  }
+  [data-theme="dispatch"][data-mode="night"]{
+    --bg:#403822; --chrome:#393D3C; --chrome-ink:#BFB493; --ink:#BFB493; --ink2:#BFB493; --line:rgba(191,180,147,.35);
+    --paper:#BFB493; --paper-ink:#403822; --btn:#BFB493; --btn-ink:#403822; --field:#393D3C; --field-ink:#BFB493;
+    --stamp-edge:#BFB493; --stamp-face:#393D3C; --stamp-ink:#BFB493; --spot-halo:#BFB493; --pattern-ink:%23A69981; --pattern-op:.30;
   }
 
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html,body{ margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:'Fraunces',serif;
-    height:100%; overscroll-behavior-y:none; position:relative; transition:background 0.2s,color 0.2s; }
-  body::before{
-    content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:0.045;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    mix-blend-mode:overlay;
-  }
-  body::after{
-    content:''; position:fixed; inset:0; pointer-events:none; z-index:9998;
-    background:radial-gradient(ellipse at 50% 0%, transparent 40%, rgba(0,0,0,0.35) 130%);
-  }
+  html,body{ margin:0; padding:0; min-height:100%; background:var(--bg); color:var(--ink); font-family:var(--font-body);
+    overscroll-behavior-y:none; transition:background-color .3s,color .3s; }
+  body{ position:relative; }
+  /* the room's wall: wallpaper, marble or floor tiles */
+  .wall{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+  [data-theme="oxblood"] .wall{ opacity:var(--pattern-op);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='80'%3E%3Cg fill='none' stroke='%23AC9B86' stroke-width='1'%3E%3Cpath d='M32 70C32 50 30 36 32 22M32 46c-8-6-9-16-5-22M32 38c8-6 9-16 5-22M27 22c1 5 9 5 10 0M32 22c-2-4-1-8 0-10 1 2 2 6 0 10z'/%3E%3C/g%3E%3C/svg%3E"); }
+  [data-theme="oxblood"][data-mode="day"] .wall{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='80'%3E%3Cg fill='none' stroke='%2373303C' stroke-width='1'%3E%3Cpath d='M32 70C32 50 30 36 32 22M32 46c-8-6-9-16-5-22M32 38c8-6 9-16 5-22M27 22c1 5 9 5 10 0M32 22c-2-4-1-8 0-10 1 2 2 6 0 10z'/%3E%3C/g%3E%3C/svg%3E"); }
+  [data-theme="hall"] .wall{ opacity:.55; background-size:700px 700px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='700'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='turbulence' baseFrequency='.004 .012' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .69 0 0 0 0 .75 0 0 0 0 .64 1.1 0 0 0 -.18'/%3E%3C/filter%3E%3Crect width='700' height='700' filter='url(%23m)'/%3E%3C/svg%3E"); }
+  [data-theme="hall"][data-mode="day"] .wall{ opacity:.6; }
+  [data-theme="dispatch"] .wall{ opacity:var(--pattern-op); background-size:46px 46px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46'%3E%3Cg fill='none' stroke='%23A69981' stroke-width='.9'%3E%3Cpath d='M23 0L46 23 23 46 0 23z'/%3E%3Ccircle cx='23' cy='19' r='4'/%3E%3Ccircle cx='27' cy='23' r='4'/%3E%3Ccircle cx='23' cy='27' r='4'/%3E%3Ccircle cx='19' cy='23' r='4'/%3E%3C/g%3E%3C/svg%3E"); }
+  [data-theme="dispatch"] body::after, [data-theme="dispatch"] .frame-band{ }
+  .grain{ position:fixed; inset:0; z-index:9998; pointer-events:none; opacity:.07; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  /* Dispatch: charcoal band of floor tiles around the screen edge */
+  [data-theme="dispatch"] .edge-band{ position:fixed; inset:0; z-index:1; pointer-events:none; border:10px solid var(--chrome); }
+  [data-theme="dispatch"][data-mode="night"] .edge-band{ border-color:#393D3C; }
 
-  #root{ min-height:100vh; display:flex; flex-direction:column; max-width:720px; margin:0 auto;
-    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0; position:relative; }
+  #root{ position:relative; z-index:2; }
+  .app{ min-height:100vh; display:flex; flex-direction:column; max-width:760px; margin:0 auto;
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0; }
+  .app > *{ min-width:0; }
 
-  header{ padding:32px 20px 14px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
-  .wordmark{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
-  .wordmark svg{ width:18px; height:18px; flex-shrink:0; }
-  .wordmark span{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.24em;
-    text-transform:uppercase; color:var(--ink-faint); }
-  h1{ font-family:'Anton',sans-serif; font-weight:400; font-size:38px; letter-spacing:0.01em;
-    margin:0; line-height:0.95; text-transform:uppercase; color:var(--title-color); }
-  .sub{ color:var(--ink-dim); font-size:15px; margin-top:8px; font-style:italic; font-weight:400; font-family:'Fraunces',serif; }
-  .header-actions{ display:flex; flex-direction:column; gap:6px; align-items:flex-end; flex-shrink:0; padding-top:2px; }
-  .theme-switch{ display:flex; border:1px solid var(--line); border-radius:2px; overflow:hidden; }
-  .theme-switch button{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
-    padding:6px 10px; border:none; background:transparent; color:var(--ink-faint); cursor:pointer; }
-  .theme-switch button.active{ background:var(--accent); color:var(--on-accent); }
-  .privacy-link{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
-    color:var(--ink-faint); background:none; border:none; cursor:pointer; padding:0; text-decoration:underline; text-underline-offset:2px; }
+  /* ---------- masthead ---------- */
+  header.mast{ position:relative; text-align:center; padding:22px 20px 16px; }
+  [data-theme="oxblood"] header.mast{ background:var(--chrome); color:var(--chrome-ink); border-radius:0 0 50% 50% / 0 0 18px 18px; margin:0 10px; }
+  [data-theme="hall"] header.mast{ padding-top:34px; }
+  [data-theme="hall"] header.mast::before{ content:""; position:absolute; left:-10px; right:-10px; top:0; height:16px; background:var(--chrome);
+    border-bottom:2px solid #B09C70; box-shadow:inset 0 -5px 0 -3px #B09C70; }
+  .mast .tools{ display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; }
+  .seg{ display:flex; border:1px solid currentColor; border-radius:2px; overflow:hidden; opacity:.95; }
+  .seg button{ font:12px var(--font-label); letter-spacing:.06em; padding:6px 9px; border:none; background:transparent; color:inherit; cursor:pointer; }
+  .seg button[aria-pressed="true"]{ background:currentColor; }
+  .seg button[aria-pressed="true"] span{ color:var(--bg); }
+  [data-theme="oxblood"] .seg button[aria-pressed="true"] span{ color:var(--chrome); }
+  .mode-btn, .privacy-link{ font:12px var(--font-label); letter-spacing:.06em; background:none; border:1px solid currentColor; color:inherit;
+    padding:6px 9px; border-radius:2px; cursor:pointer; }
+  .privacy-link{ border:none; text-decoration:underline; text-underline-offset:3px; padding:6px 2px; }
+  .orn{ display:flex; align-items:center; justify-content:center; gap:10px; opacity:.85; }
+  .orn i{ width:60px; height:1px; background:currentColor; }
+  .orn b{ width:7px; height:7px; transform:rotate(45deg); border:1px solid currentColor; }
+  h1{ font-family:var(--font-display); font-weight:700; font-size:46px; letter-spacing:.12em; margin:8px 0 2px; line-height:1; }
+  [data-theme="hall"] h1{ font-weight:400; letter-spacing:.24em; color:#B09C70; }
+  [data-theme="hall"][data-mode="day"] h1{ color:#101A17; }
+  [data-theme="dispatch"] h1{ font-weight:400; letter-spacing:.2em; }
+  .subtitle{ font:13px var(--font-label); letter-spacing:.2em; text-transform:uppercase; margin-top:6px; }
+  .tagline{ font-style:italic; font-size:16px; margin-top:6px; }
+  .count{ font:12px var(--font-label); letter-spacing:.16em; text-transform:uppercase; margin-top:4px; opacity:.95; }
 
-  .save-block{ padding:20px 20px 8px; display:flex; flex-direction:column; gap:8px; }
-  .save-row{ display:flex; gap:8px; }
-  .save-row input[type=text]{
-    flex:1; background:var(--bg-raised); border:1px solid var(--line); border-radius:3px;
-    padding:14px 14px; color:var(--ink); font-family:'JetBrains Mono',monospace; font-size:13.5px; outline:none;
-  }
-  .save-row input[type=text]:focus{ border-color:var(--accent); }
-  .save-row input[type=text]::placeholder{ color:var(--ink-dim); }
-  .save-btn{
-    background:var(--accent); color:var(--on-accent); border:none; border-radius:3px; padding:0 22px;
-    font-family:'Anton',sans-serif; font-size:13px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; white-space:nowrap;
-  }
-  .save-btn:active{ transform:scale(0.97); }
-  .save-btn:disabled{ opacity:0.35; }
+  /* ---------- banners ---------- */
+  .banner{ margin:14px 20px 0; padding:11px 14px; background:var(--paper); color:var(--paper-ink); font-size:15px; line-height:1.5;
+    display:flex; gap:10px; align-items:center; justify-content:space-between; border-radius:2px; }
+  .banner button{ font:12px var(--font-label); letter-spacing:.08em; background:transparent; color:inherit; border:1px solid currentColor;
+    padding:6px 10px; cursor:pointer; flex-shrink:0; }
+  .banner .x{ border:none; padding:4px; min-width:32px; }
+  .banner .x svg{ width:12px; height:12px; display:block; margin:auto; }
 
-  .detail-row{ display:flex; gap:8px; }
-  .detail-row input[type=text]{
-    flex:1.3; background:transparent; border:1px solid var(--line); border-radius:3px;
-    padding:9px 10px; color:var(--ink-dim); font-family:'Fraunces',serif; font-style:italic; font-size:13.5px; outline:none;
-  }
-  .detail-row input[type=text]:focus{ border-color:var(--accent); }
-  .detail-row input[type=text]::placeholder{ color:var(--ink-faint); }
-  .detail-row select{
-    flex:1; background:transparent; border:1px solid var(--line); border-radius:3px;
-    padding:9px 8px; color:var(--ink-dim); font-family:'JetBrains Mono',monospace; font-size:11.5px; outline:none;
-  }
+  /* ---------- save block (docked at the bottom on phones) ---------- */
+  .save-block{ padding:16px 20px 6px; display:flex; flex-direction:column; gap:8px; }
+  .dock-label{ display:none; font:12px var(--font-label); letter-spacing:.14em; text-transform:uppercase; }
+  .save-row, .detail-row{ display:flex; gap:8px; }
+  .save-row input, .detail-row input, .detail-row select, .search-row input, .sheet input, .sheet select{ min-width:0; width:0; }
+  .save-row input{ flex:1; background:var(--field); color:var(--field-ink); border:1px solid var(--line); border-radius:2px;
+    padding:13px 14px; font:italic 16px var(--font-body); outline:none; }
+  .save-row input::placeholder, .search-row input::placeholder, .detail-row input::placeholder{ color:var(--field-ink); opacity:.8; }
+  .save-btn{ background:var(--btn); color:var(--btn-ink); border:none; border-radius:2px; padding:0 22px; font:600 15px var(--font-label);
+    letter-spacing:.14em; text-transform:uppercase; cursor:pointer; min-height:46px; }
+  .save-btn:disabled{ opacity:.55; }
+  .detail-row input, .detail-row select{ flex:1; background:transparent; color:var(--ink); border:1px solid var(--line); border-radius:2px;
+    padding:10px; font:italic 15px var(--font-body); outline:none; }
+  .detail-row select option{ color:#000; }
+  .save-error{ font-style:italic; font-size:14px; color:var(--ink); }
+  [data-mode="night"] .save-error{ color:var(--ink); }
 
-  .search-row{ padding:14px 20px 6px; display:flex; align-items:center; gap:8px; }
-  .search-row .lbl{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.18em; color:var(--ink-faint); text-transform:uppercase; }
-  .search-row input{
-    flex:1; background:transparent; border:none; border-bottom:1px solid var(--line);
-    padding:8px 2px; color:var(--ink-dim); font-family:'JetBrains Mono',monospace; font-size:12.5px; outline:none;
-  }
-  .search-row input:focus{ border-color:var(--accent); color:var(--ink); }
-  .search-row input::placeholder{ color:var(--ink-faint); }
+  /* ---------- search + filters ---------- */
+  .search-row{ padding:12px 20px 4px; display:flex; align-items:center; gap:10px; }
+  .search-row input{ flex:1; background:var(--field); color:var(--field-ink); border:1px solid var(--line); border-radius:2px;
+    padding:10px 12px; font:italic 16px var(--font-body); outline:none; }
+  .filter-toggle{ font:13px var(--font-label); letter-spacing:.12em; text-transform:uppercase; background:transparent; color:var(--ink);
+    border:1px solid var(--line); border-radius:2px; padding:0 12px; min-height:42px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+  .filter-toggle .pip{ width:6px; height:6px; border-radius:50%; background:currentColor; }
+  .filter-summary{ font-style:italic; font-size:14px; padding:2px 20px 0; }
+  .row-label{ font:12px var(--font-label); letter-spacing:.16em; text-transform:uppercase; margin:14px 20px 8px; }
+  .chips{ padding:0 20px; display:flex; gap:6px; flex-wrap:wrap; }
+  .chip{ font:13px var(--font-label); letter-spacing:.06em; padding:8px 12px; border-radius:2px; border:1px solid var(--line);
+    background:transparent; color:var(--ink); cursor:pointer; }
+  .chip[aria-pressed="true"]{ background:var(--paper); color:var(--paper-ink); border-color:var(--paper); }
 
-  .row-label{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.18em; color:var(--ink-faint);
-    text-transform:uppercase; margin:14px 20px 8px; }
-  .chips{ padding:0 20px; display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
-  .filter-chip{
-    font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em;
-    padding:7px 12px; border-radius:2px; border:1px solid var(--line); color:var(--ink-faint);
-    background:transparent; cursor:pointer;
-  }
-  .filter-chip.active{ border-color:var(--accent-text); color:var(--accent-text); background:color-mix(in srgb, var(--accent) 16%, transparent); }
-  .filter-chip.ghost{ border-style:dashed; }
+  /* folder cards */
+  .catalog{ display:flex; gap:10px; overflow-x:auto; padding:6px 20px 10px; }
+  .card{ flex:0 0 auto; min-width:86px; background:var(--paper); color:var(--paper-ink); border:2px solid transparent; border-radius:2px;
+    padding:10px 10px 8px; text-align:left; cursor:pointer; font:inherit; }
+  .card[aria-pressed="true"]{ border-color:var(--spot); box-shadow:0 0 0 1px var(--spot-halo); }
+  .card .fname{ font:13px var(--font-label); letter-spacing:.06em; text-transform:uppercase; }
+  .card .fcount{ font-size:13px; margin-top:2px; }
 
-  /* folder catalog cards */
-  .catalog{ display:flex; gap:14px; overflow-x:auto; padding:10px 20px 18px; }
-  .catalog-card{ flex:0 0 auto; width:90px; background:var(--paper); padding:15px 9px 9px; position:relative; cursor:pointer;
-    border:2px solid transparent;
-    clip-path: polygon(3% 1%, 78% 0, 88% 13%, 100% 15%, 99% 97%, 2% 100%, 0 5%); }
-  .catalog-card.active{ border-color:var(--accent); }
-  button.catalog-card{ font:inherit; text-align:left; appearance:none; -webkit-appearance:none; }
-  .catalog-card:focus-visible{ outline:2px solid var(--accent-text); outline-offset:3px; }
-  .catalog-card .tab{ position:absolute; top:-9px; left:9px; width:28px; height:10px; }
-  .catalog-card .fname{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.03em; color:var(--paper-ink); text-transform:uppercase; }
-  .catalog-card .fcount{ font-family:'JetBrains Mono',monospace; font-size:11px; color:color-mix(in srgb, var(--paper-ink) 72%, var(--paper)); margin-top:3px; }
+  /* ---------- the collection ---------- */
+  .room{ flex:1; padding:12px 16px 40px; }
+  .room-label{ display:flex; align-items:center; gap:10px; font:12px var(--font-label); letter-spacing:.18em; text-transform:uppercase; margin:6px 4px 16px; }
+  .room-label::before, .room-label::after{ content:""; flex:1; height:1px; background:var(--line); }
+  .empty{ text-align:center; padding:40px 20px; font-style:italic; font-size:16px; line-height:1.6; }
+  .empty .clear-btn{ margin-top:12px; }
+  .clear-btn{ font:13px var(--font-label); letter-spacing:.1em; text-transform:uppercase; background:transparent; color:var(--ink);
+    border:1px solid currentColor; border-radius:2px; padding:9px 14px; cursor:pointer; }
+  .motif{ fill:none; stroke:currentColor; stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round; display:block; }
+  .item{ font:inherit; color:inherit; background:none; border:none; padding:0; cursor:pointer; text-align:center; }
+  .item:focus-visible{ outline:2px solid var(--ink); outline-offset:4px; }
 
-  .shelves{ flex:1; padding:4px 20px 130px; }
+  /* Oxblood: the salon wall */
+  .salon{ display:grid; grid-template-columns:repeat(auto-fill,minmax(104px,1fr)); gap:26px 14px; padding-top:8px; }
+  .hang{ position:relative; display:flex; flex-direction:column; align-items:center; }
+  .hang::before{ content:""; width:4px; height:4px; border-radius:50%; background:var(--frame-line); margin-bottom:2px; }
+  .wire{ width:46px; height:12px; border-top:1px solid var(--frame-line); border-radius:50% 50% 0 0; margin-bottom:-4px; opacity:.8; }
+  .frame{ position:relative; width:94px; height:108px; padding:6px; background:var(--frame); border:1px solid var(--frame-line);
+    box-shadow:0 6px 12px rgba(0,0,0,.35), inset 0 0 0 3px var(--frame), inset 0 0 0 4px var(--frame-line); }
+  .frame.oval{ border-radius:50%; } .frame.arch{ border-radius:47px 47px 4px 4px; } .frame.rect{ border-radius:3px; }
+  .frame.newest{ width:104px; height:120px; }
+  .painting{ position:absolute; inset:8px; overflow:hidden; display:flex; align-items:center; justify-content:center; color:#D9B88F; }
+  .frame.oval .painting{ border-radius:50%; } .frame.arch .painting{ border-radius:40px 40px 2px 2px; }
+  .painting .motif{ width:64%; filter:drop-shadow(1px 2px 1px rgba(26,21,25,.6)); }
+  .painting::after{ content:""; position:absolute; inset:0; opacity:.25; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23c)'/%3E%3C/svg%3E"); }
+  .closed .painting{ filter:saturate(.3) brightness(.7); }
+  .rosette{ position:absolute; top:-6px; right:-8px; width:24px; height:30px; }
+  .plaque{ position:relative; margin-top:8px; background:#D9B88F; color:#40101D; border:1px solid #AC9B86; border-radius:3px; padding:5px 8px 6px; min-width:96px; max-width:118px; }
+  .plaque::after{ content:""; position:absolute; inset:3px; border:1px solid var(--plaque-outline); border-radius:2px; pointer-events:none; }
+  .plaque .no{ font:10px 'Marcellus SC',serif; letter-spacing:.1em; }
+  .plaque .t{ font-size:15px; line-height:1.15; margin-top:1px; overflow-wrap:anywhere; }
+  .plaque .d{ font-style:italic; font-size:12px; overflow-wrap:anywhere; }
+  .slot{ display:flex; flex-direction:column; align-items:center; opacity:.6; }
+  .slot .frame-empty{ width:84px; height:96px; border:1px dashed var(--frame-line); border-radius:3px; display:flex; align-items:center; justify-content:center;
+    font:13px 'Marcellus SC',serif; letter-spacing:.1em; margin-top:16px; }
 
-  .empty-archive{ margin-top:60px; text-align:center; color:var(--ink-faint); padding:0 30px; }
-  .empty-archive .stamp{ font-family:'Anton',sans-serif; font-size:15px; letter-spacing:0.1em; color:var(--ink-dim);
-    text-transform:uppercase; margin-bottom:10px; }
-  .empty-archive p{ font-size:14.5px; line-height:1.6; margin:4px 0; font-style:italic; }
+  /* Green Hall: the bookshelf */
+  .shelf{ position:relative; display:flex; align-items:flex-end; gap:5px; padding:0 4px; margin-bottom:34px; min-height:200px; }
+  .shelf::after{ content:""; position:absolute; left:-6px; right:-6px; bottom:-10px; height:10px; background:var(--shelf);
+    box-shadow:0 1px 0 rgba(0,0,0,.25), 0 6px 10px rgba(0,0,0,.25); }
+  .bookend{ width:30px; height:150px; flex-shrink:0; }
+  .bookend.right{ transform:scaleX(-1); margin-left:auto; }
+  .book{ position:relative; display:flex; flex-direction:column; align-items:center; border-radius:2px 2px 0 0; color:#B1BFA3;
+    box-shadow:inset 0 0 0 1px rgba(176,156,112,.7), 2px 0 3px rgba(0,0,0,.25); padding:8px 0 10px; }
+  .book .bands{ position:absolute; left:2px; right:2px; height:6px; border-top:1px solid #B09C70; border-bottom:1px solid #B09C70; opacity:.8; }
+  .book .cart{ background:#B1BFA3; color:#2A403A; border:1px solid #59523E; border-radius:6px; padding:2px 3px; font:9px 'Cinzel',serif; letter-spacing:.04em; line-height:1.1; min-width:28px; }
+  .book .cart b{ display:block; font-size:11px; font-weight:600; }
+  .book .spine-title{ flex:1; writing-mode:vertical-rl; transform:rotate(180deg); font:15px 'EB Garamond',serif; margin:8px 0; overflow:hidden;
+    white-space:nowrap; text-overflow:ellipsis; max-height:100%; }
+  .book.light .spine-title{ color:#1C2B26; }
+  .book .seal{ width:30px; height:26px; border-radius:50%; background:#B1BFA3; color:#59523E; border:1px solid #B09C70; display:flex; align-items:center; justify-content:center; }
+  .book .seal .motif{ width:24px; stroke-width:1.6; }
+  .book .ribbon{ position:absolute; top:-4px; right:7px; width:5px; height:58px; background:#8C2020; }
+  .book .ribbon::after{ content:""; position:absolute; left:-4px; bottom:-14px; width:13px; height:14px; background:#B1BFA3; border:1px solid #59523E;
+    clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%); }
+  .book.closed{ filter:brightness(.7) saturate(.6); }
+  .ghost-book{ width:40px; border:1px dashed var(--line); border-radius:2px 2px 0 0; opacity:.8; display:flex; align-items:flex-start; justify-content:center;
+    font:10px 'Cinzel',serif; padding-top:8px; }
 
-  .shelf-block{ margin-top:32px; }
-  .shelf-plaque{ display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); padding:5px 12px;
-    margin-bottom:14px; background:var(--bg-raised); }
-  .shelf-plaque .dot{ width:5px; height:5px; background:var(--accent); flex-shrink:0; border-radius:50%; }
-  .shelf-plaque span{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:var(--ink-dim); text-transform:uppercase; }
+  /* Dispatch: stamps on the tiled floor */
+  .stamps{ display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:24px 14px; }
+  .stamp-wrap{ position:relative; width:94px; height:110px; margin:0 auto; }
+  .stamp{ position:absolute; inset:7px; background:var(--stamp-edge);
+    -webkit-mask:radial-gradient(circle at 4px 4px,transparent 2.6px,#000 3px) -4px -4px/8px 8px, linear-gradient(#000,#000) 4px 4px/calc(100% - 8px) calc(100% - 8px) no-repeat;
+            mask:radial-gradient(circle at 4px 4px,transparent 2.6px,#000 3px) -4px -4px/8px 8px, linear-gradient(#000,#000) 4px 4px/calc(100% - 8px) calc(100% - 8px) no-repeat; }
+  .stamp-face{ position:absolute; inset:14px; background:var(--stamp-face); color:var(--stamp-ink); display:flex; align-items:center; justify-content:center;
+    box-shadow:inset 0 0 0 2px var(--stamp-face), inset 0 0 0 3px rgba(191,180,147,.55); }
+  .stamp-face .motif{ width:70%; }
+  .stamp-face .val{ position:absolute; right:4px; bottom:2px; font:italic 10px 'Old Standard TT',serif; }
+  .ring{ position:absolute; inset:-4px -6px; width:calc(100% + 12px); height:calc(100% + 8px); fill:none; stroke-linecap:round; overflow:visible; }
+  .ring .halo{ stroke:var(--spot-halo); stroke-width:3.4; }
+  .ring .ink{ stroke:var(--spot); stroke-width:1.7; }
+  .postmark{ position:absolute; inset:0; width:100%; height:100%; color:var(--stamp-ink); opacity:.9; }
+  .caption{ margin-top:6px; line-height:1.2; }
+  .caption .code{ font-size:13px; letter-spacing:.12em; }
+  .caption .t{ font-size:15px; overflow-wrap:anywhere; }
+  .caption .d{ font-style:italic; font-size:12px; overflow-wrap:anywhere; }
+  .caption .newest{ font-style:italic; font-size:12px; }
+  .reserved{ width:76px; height:90px; margin:10px auto 0; border:1px dashed var(--line); display:flex; align-items:center; justify-content:center; font-size:14px; opacity:.85; }
 
-  .shelf{ display:flex; align-items:flex-end; gap:5px; padding:20px 4px 14px; position:relative; flex-wrap:wrap; row-gap:22px; }
-  .plank{ position:absolute; left:0; right:0; bottom:0; height:14px; background:var(--shelf-wood);
-    background-image:repeating-linear-gradient(90deg, transparent, transparent 7px, color-mix(in srgb, var(--shelf-wood) 70%, black 30%) 8px);
-    clip-path: polygon(0% 15%, 2% 0%, 98% 8%, 100% 20%, 100% 100%, 0% 100%);
-    box-shadow:0 0 0 1px var(--outline); }
+  .count-footer{ text-align:center; padding:10px 0 20px; font:12px var(--font-label); letter-spacing:.14em; text-transform:uppercase; }
 
-  .book{ position:relative; border:1px solid var(--outline); transform-origin:bottom center; isolation:isolate; cursor:pointer;
-    clip-path: polygon(0% 1%, 8% 0%, 22% 0.5%, 40% 0%, 58% 0.5%, 76% 0%, 92% 0.5%, 100% 1%,
-      100% 20%, 99.5% 40%, 100% 60%, 99.5% 80%, 100% 99%,
-      92% 100%, 76% 99.5%, 58% 100%, 40% 99.5%, 22% 100%, 8% 99.5%, 0% 99%,
-      0.5% 80%, 0% 60%, 0.5% 40%, 0% 20%); }
-  .book::before{ content:''; position:absolute; inset:0; background:var(--title-color); opacity:0.5;
-    mix-blend-mode:multiply; transform:translate(2.5px,-2px); z-index:0; }
-  .book:nth-child(4n+1){ transform:rotate(-1.1deg); }
-  .book:nth-child(4n+2){ transform:rotate(0.6deg); }
-  .book:nth-child(4n+3){ transform:rotate(-0.4deg); }
-  .book:nth-child(4n+4){ transform:rotate(1deg); }
-  /* outline would be clipped by the spine's clip-path, so selection pulls the book off the shelf instead */
-  .book{ padding:0; font:inherit; appearance:none; -webkit-appearance:none; transition:transform 0.18s ease-out, filter 0.18s; }
-  .book.selected, .book:focus-visible{ transform:translateY(-12px) rotate(0deg); outline:none; }
-  .book:focus-visible:not(.selected){ transform:translateY(-6px); }
+  /* ---------- link sheet ---------- */
+  .overlay{ position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:20000; display:flex; align-items:flex-end; justify-content:center; }
+  @media (min-width:640px){ .overlay{ align-items:center; } }
+  .sheet{ background:var(--paper); color:var(--paper-ink); width:100%; max-width:560px; max-height:86vh; overflow-y:auto; padding:20px 20px 22px;
+    border-radius:6px 6px 0 0; box-shadow:0 -8px 30px rgba(0,0,0,.4); }
+  @media (min-width:640px){ .sheet{ border-radius:6px; } }
+  .sheet .num{ font:13px var(--font-label); letter-spacing:.14em; text-transform:uppercase; }
+  .sheet h2{ font-family:var(--font-body); font-weight:600; font-size:22px; margin:6px 0 2px; }
+  .sheet h2 a{ color:inherit; }
+  .sheet .url{ font-size:14px; font-style:italic; word-break:break-all; margin-bottom:12px; }
+  .sheet .pic-row{ display:flex; align-items:center; gap:12px; margin:8px 0 14px; }
+  .sheet .pic{ width:56px; height:46px; border:1px solid currentColor; border-radius:3px; display:flex; align-items:center; justify-content:center; }
+  .sheet .pic .motif{ width:42px; }
+  .picker{ display:grid; grid-template-columns:repeat(auto-fill,minmax(74px,1fr)); gap:8px; margin:0 0 14px; }
+  .picker button{ font:12px var(--font-body); color:inherit; background:transparent; border:1px solid rgba(0,0,0,.25); border-radius:3px; padding:6px 4px;
+    cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px; min-height:64px; }
+  .picker button[aria-pressed="true"]{ border:2px solid currentColor; }
+  .picker .motif{ width:36px; }
+  .edit-row{ display:flex; gap:8px; margin-bottom:12px; }
+  .edit-row input, .edit-row select{ flex:1; background:transparent; color:inherit; border:1px solid currentColor; border-radius:2px; padding:10px;
+    font:italic 16px var(--font-body); outline:none; }
+  .edit-row select option{ color:#000; }
+  .actions{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .actions button, .sheet .ghost{ font:13px var(--font-label); letter-spacing:.08em; text-transform:uppercase; padding:10px 13px; border-radius:2px;
+    cursor:pointer; min-height:44px; background:transparent; color:inherit; border:1px solid currentColor; }
+  .actions .primary{ background:var(--paper-ink); color:var(--paper); border-color:var(--paper-ink); }
+  .actions .danger{ margin-left:auto; }
+  .confirm{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-left:auto; font-style:italic; }
+  .saved{ font-style:italic; }
 
-  .book .label{ position:absolute; top:36%; left:-6px; right:-6px; background:var(--paper); padding:5px 6px; text-align:center; z-index:2;
-    clip-path: polygon(0% 1.5%, 25% 0%, 75% 0.5%, 100% 1.5%, 99.3% 50%, 100% 98.5%, 70% 100%, 30% 99.5%, 0% 100%, 0.7% 50%); }
-  .book .label::before{ content:''; position:absolute; inset:0; background:var(--spine-b); opacity:0.4; mix-blend-mode:multiply; transform:translate(1.5px,-1.5px); }
-  .book .label .num{ font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; color:var(--label-num); letter-spacing:0.08em; display:block; position:relative; z-index:1; }
-  .book .label .title{ font-family:'Fraunces',serif; font-weight:650; font-size:10px; color:var(--paper-ink); line-height:1.15; display:block; margin-top:2px; position:relative; z-index:1; }
-  .book.closed{ filter:brightness(0.55) saturate(0.45); }
-  .book .ribbon{ position:absolute; top:-15px; left:50%; width:9px; height:21px; margin-left:-4.5px; z-index:3;
-    clip-path: polygon(0% 0%, 38% 0%, 50% 13%, 62% 0%, 100% 0%, 100% 100%, 0% 100%); }
+  /* privacy */
+  .modal h2{ font-family:var(--font-display); font-size:20px; margin:0 0 12px; }
+  .modal p{ font-size:16px; line-height:1.6; margin:0 0 12px; }
+  .modal h3{ font:13px var(--font-label); letter-spacing:.12em; text-transform:uppercase; margin:16px 0 6px; }
 
-  .empty-shelf{ position:relative; padding:30px 4px 18px; }
-  .cobweb{ position:absolute; bottom:10px; opacity:0.4; z-index:1; }
-  .cobweb-left{ left:0px; transform:rotate(-4deg); }
-  .cobweb-right{ right:0px; transform:scaleX(-1) rotate(-6deg); }
-  .dust{ position:absolute; inset:0; opacity:0.55; pointer-events:none;
-    background-image:
-      radial-gradient(circle at 18% 40%, var(--ink-faint) 1.5px, transparent 1.6px),
-      radial-gradient(circle at 34% 65%, var(--ink-faint) 1px, transparent 1.1px),
-      radial-gradient(circle at 52% 30%, var(--ink-faint) 1.8px, transparent 1.9px),
-      radial-gradient(circle at 68% 55%, var(--ink-faint) 1px, transparent 1.1px),
-      radial-gradient(circle at 81% 42%, var(--ink-faint) 1.4px, transparent 1.5px),
-      radial-gradient(circle at 25% 20%, var(--ink-faint) 1px, transparent 1.1px),
-      radial-gradient(circle at 91% 25%, var(--ink-faint) 1.3px, transparent 1.4px);
-  }
-  .empty-shelf .msg{ font-family:'Fraunces',serif; font-style:italic; font-size:13px; color:var(--ink-faint);
-    text-align:center; padding-bottom:22px; position:relative; z-index:1; }
+  :focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
+  ::selection{ background:var(--spot); color:#fff; }
 
-  /* detail panel for a selected book */
-  .detail-panel{ background:var(--bg-raised); border:1px solid var(--line); border-left:2px solid var(--accent);
-    padding:16px 16px 14px; margin:10px 0 26px; }
-  .detail-panel .dp-num{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent-text); letter-spacing:0.1em; margin-bottom:6px; }
-  .detail-panel .dp-title{ font-family:'Fraunces',serif; font-weight:650; font-size:16px; margin-bottom:4px; }
-  .detail-panel .dp-title a{ color:var(--ink); text-decoration:none; }
-  .detail-panel .dp-title a:hover{ color:var(--accent-text); }
-  .detail-panel .dp-url{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-faint); margin-bottom:10px; word-break:break-all; }
-  .dp-edit-row{ display:flex; gap:6px; margin-bottom:8px; }
-  .dp-edit-row input[type=text]{
-    flex:1.3; background:var(--bg); border:1px solid var(--accent); border-radius:3px;
-    padding:8px 9px; color:var(--ink); font-family:'Fraunces',serif; font-style:italic; font-size:13.5px; outline:none;
-  }
-  .dp-edit-row select{
-    flex:1; background:var(--bg); border:1px solid var(--accent); border-radius:3px;
-    padding:8px 6px; color:var(--ink); font-family:'JetBrains Mono',monospace; font-size:11.5px; outline:none;
-  }
-  .dp-actions{ display:flex; gap:8px; flex-wrap:wrap; }
-  .dp-actions button{
-    font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em;
-    padding:7px 13px; border-radius:2px; cursor:pointer;
-  }
-  .dp-save{ background:var(--accent); color:var(--on-accent); border:none; }
-  .dp-ghost{ background:transparent; color:var(--ink-dim); border:1px solid var(--line); }
-  .dp-ghost:hover{ color:var(--ink); border-color:var(--ink-dim); }
-  .dp-danger{ background:transparent; color:var(--danger); border:1px solid var(--danger); }
-
-  .install-hint{
-    margin:16px 20px 0; padding:13px 14px; background:var(--bg-raised); border:1px solid var(--line);
-    border-left:2px solid var(--accent); font-size:12px; color:var(--ink-dim); line-height:1.65;
-    display:flex; gap:10px; align-items:flex-start; font-family:'JetBrains Mono',monospace;
-  }
-  .install-hint .x{ margin-left:auto; background:none; border:none; color:var(--ink-faint); cursor:pointer; font-size:13px; flex-shrink:0; }
-
-  .sync-banner{
-    margin:16px 20px 0; padding:10px 14px; background:var(--bg-raised); border:1px solid var(--line);
-    border-left:2px solid var(--danger); font-size:11.5px; color:var(--ink-dim); line-height:1.6;
-    font-family:'JetBrains Mono',monospace;
-  }
-
-  .count-footer{ position:fixed; bottom:0; left:0; right:0; text-align:center; padding:12px 0 calc(12px + env(safe-area-inset-bottom));
-    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint);
-    background:linear-gradient(to top, var(--bg) 55%, transparent); pointer-events:none; z-index:10; }
-
-  /* privacy modal */
-  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:20000; display:flex; align-items:flex-end;
-    justify-content:center; }
-  @media (min-width:640px){ .modal-overlay{ align-items:center; } }
-  .modal{ background:var(--bg); border:1px solid var(--line); border-top:2px solid var(--accent); max-width:560px; width:100%;
-    max-height:82vh; overflow-y:auto; padding:22px 22px 20px; border-radius:4px 4px 0 0; }
-  @media (min-width:640px){ .modal{ border-radius:4px; border-top:1px solid var(--line); border-left:2px solid var(--accent); } }
-  .modal h2{ font-family:'Anton',sans-serif; font-size:20px; text-transform:uppercase; color:var(--title-color); margin:0 0 14px; letter-spacing:0.02em; }
-  .modal p{ font-size:14px; line-height:1.7; color:var(--ink-dim); margin:0 0 12px; font-family:'Fraunces',serif; }
-  .modal h3{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); margin:18px 0 8px; }
-  .modal-close{ margin-top:16px; background:var(--accent); color:var(--on-accent); border:none; border-radius:3px; padding:9px 18px;
-    font-family:'Anton',sans-serif; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; }
-
-  /* browser surfaces carry the palette too */
-  :focus-visible{ outline:2px solid var(--accent-text); outline-offset:2px; }
-  ::selection{ background:color-mix(in srgb, var(--accent) 55%, transparent); color:var(--ink); }
-  input, select{ caret-color:var(--accent-text); }
-
-  .save-error{ font-family:'Fraunces',serif; font-style:italic; font-size:13px; color:var(--danger); }
-  .dp-saved{ font-family:'Fraunces',serif; font-style:italic; font-size:13px; color:var(--ink-dim); align-self:center; }
-  .sync-banner{ display:flex; gap:12px; align-items:center; justify-content:space-between; }
-  .sync-banner button{ font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em;
-    background:transparent; color:var(--ink); border:1px solid var(--line); border-radius:2px; padding:6px 10px; cursor:pointer; flex-shrink:0; }
-  .empty-shelf .clear-btn{ display:block; margin:0 auto 18px; position:relative; z-index:1; font-family:'JetBrains Mono',monospace; font-size:11px;
-    text-transform:uppercase; letter-spacing:0.06em; background:transparent; color:var(--accent-text); border:1px solid var(--accent-text);
-    border-radius:2px; padding:8px 14px; cursor:pointer; }
-  .install-hint .x svg{ width:12px; height:12px; display:block; }
-
-  /* filter & sort live behind one toggle so the shelves come up sooner */
-  .filter-toggle{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
-    background:transparent; border:1px solid var(--line); border-radius:2px; color:var(--ink-dim); padding:7px 10px;
-    cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; }
-  .filter-toggle[aria-expanded="true"], .filter-toggle.on{ border-color:var(--accent-text); color:var(--accent-text); }
-  .filter-toggle .pip{ width:5px; height:5px; border-radius:50%; background:var(--accent-text); }
-  .filter-summary{ font-family:'Fraunces',serif; font-style:italic; font-size:13px; color:var(--ink-faint); padding:2px 20px 0; }
-
-  /* delete asks once, inline */
-  .dp-actions .dp-danger{ margin-left:auto; }
-  .dp-confirm{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-left:auto; }
-  .dp-confirm span{ font-family:'Fraunces',serif; font-style:italic; font-size:13px; color:var(--danger); }
-  .dp-danger-solid{ background:var(--danger); color:var(--bg); border:none; }
-
-  /* the app renders its own #root inside the mount #root; pin it to the column width */
-  #root #root{ width:100%; }
-  /* let fields shrink inside their flex rows instead of pushing the page wider */
-  #root > *{ min-width:0; }
-  .save-row input, .detail-row input, .detail-row select, .search-row input, .dp-edit-row input, .dp-edit-row select{ min-width:0; width:0; }
-
-  /* phones: 16px inputs stop iOS zoom-on-focus; touch targets reach 44px */
+  /* phones: the shelf comes first; the paste slot docks at the bottom in thumb reach */
   @media (max-width:640px){
-    .save-row input[type=text], .detail-row input[type=text], .detail-row select,
-    .search-row input, .dp-edit-row input[type=text], .dp-edit-row select{ font-size:16px; }
-  }
-  @media (pointer:coarse){
-    .theme-switch button, .filter-chip, .filter-toggle, .dp-actions button, .save-btn{ min-height:44px; }
-    .privacy-link{ min-height:44px; padding:0 4px; }
-    .install-hint .x{ min-width:44px; min-height:44px; margin:-12px -12px -12px auto; }
-    .detail-row input[type=text], .detail-row select, .dp-edit-row input[type=text], .dp-edit-row select{ min-height:44px; }
-    .search-row input{ min-height:44px; }
-  }
-  /* phones: the shelf comes first and the paste slot docks at the bottom, in thumb reach.
-     Name + folder only unfold once there's a link to name. */
-  @media (max-width:640px){
-    header{ padding-top:20px; }
-    .save-block{ position:fixed; left:0; right:0; bottom:0; z-index:15; order:99;
-      padding:10px 16px calc(10px + env(safe-area-inset-bottom));
-      background:var(--bg); border-top:1px solid var(--line);
-      box-shadow:0 -10px 24px -8px rgba(0,0,0,0.5); }
+    h1{ font-size:40px; }
+    .mast .tools{ flex-wrap:wrap; justify-content:center; }
+    .save-block{ position:fixed; left:0; right:0; bottom:0; z-index:15; padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+      background:var(--chrome); color:var(--chrome-ink); box-shadow:0 -10px 24px -8px rgba(0,0,0,.45); order:99; }
+    .save-block .dock-label{ display:block; }
     .save-block .detail-row{ display:none; }
     .save-block.has-text .detail-row{ display:flex; }
-    .shelves{ padding-bottom:40px; }
-    .count-footer{ position:static; background:none; padding:0 0 calc(110px + env(safe-area-inset-bottom)); }
+    .save-block .detail-row input, .save-block .detail-row select{ color:var(--chrome-ink); border-color:rgba(255,255,255,.3); }
+    .save-block .save-row input{ background:rgba(0,0,0,.18); color:var(--chrome-ink); border-color:rgba(255,255,255,.3); }
+    .save-block .save-row input::placeholder{ color:var(--chrome-ink); }
+    .save-block .save-error{ color:var(--chrome-ink); }
+    .save-block .save-btn{ background:var(--chrome-ink); color:var(--chrome); }
+    .count-footer{ padding-bottom:calc(120px + env(safe-area-inset-bottom)); }
+  }
+  @media (pointer:coarse){ .seg button, .mode-btn, .chip, .filter-toggle{ min-height:44px; } .privacy-link{ min-height:44px; } }
+  @media (prefers-reduced-motion:no-preference){
+    .frame.just, .book.just, .stamp-wrap.just{ animation:arrive .6s cubic-bezier(.2,.8,.2,1); }
+    @keyframes arrive{ from{ transform:translateY(-14px) rotate(-3deg); opacity:0; } to{ transform:none; opacity:1; } }
   }
 </style>
 </head>
 <body>
+<div class="wall" aria-hidden="true"></div>
+<div class="edge-band" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
 <div id="root"></div>
+<script src="motifs.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
@@ -312,9 +305,12 @@ const { useState, useEffect, useRef, useMemo } = React;
 
 const SUPABASE_URL = 'https://xgeqkpitsoziywgzautn.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_xMKJ_dj27JkM6XGFJH_8bA_7hM4vyJj';
-const SHELF_SIZE = 9;
-const RIBBON_SLOTS = ['--accent', '--spine-a', '--spine-b', '--title-color'];
-const PRIVACY_TEXT_VERSION = '1';
+const THEMES = [['oxblood','Oxblood'],['hall','Hall'],['dispatch','Dispatch']];
+const ROOM = {
+  oxblood:  { subtitle:'The Salon of Sessions',          label:'The wall', dock:'Hang a new frame', verb:'hang' },
+  hall:     { subtitle:'The Library of the Collection', label:'The library', dock:'To shelve as',   verb:'shelve' },
+  dispatch: { subtitle:'Catalogue of Sessions',          label:'Section A',  dock:'New session',    verb:'file' },
+};
 
 async function sb(path, options = {}) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
@@ -351,48 +347,51 @@ function normalizeUrl(raw){
 }
 function pad(n){ return String(n).padStart(3,'0'); }
 function displayTitle(l){ return l.name ? l.name : l.url.replace(/^https?:\/\//,''); }
-
-// deterministic pseudo-random book size from the link id, so spines don't
-// reshuffle their width/height on every re-render
 function hashStr(s){ let h=0; for(let i=0;i<s.length;i++){ h = (h*31 + s.charCodeAt(i)) >>> 0; } return h; }
-function bookDims(id){
-  const h = hashStr(id);
-  const width = 34 + (h % 21);              // 34–54
-  const height = 130 + ((h >> 5) % 61);      // 130–190
-  return { width, height };
+function chunk(arr, size){ const out=[]; for(let i=0;i<arr.length;i+=size) out.push(arr.slice(i,i+size)); return out; }
+function readJSON(key, fallback){ try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }catch(e){ return fallback; } }
+function writeJSON(key, v){ try{ localStorage.setItem(key, JSON.stringify(v)); }catch(e){} }
+
+const ART = window.CatchArt || null;
+function autoArt(l){ try{ return ART ? ART.pick(l.url, l.name) : 'key'; }catch(e){ return 'key'; } }
+function Motif({ k }){
+  const s = ART && (ART.subjects[k] || ART.subjects.key);
+  if(!s) return null;
+  return <svg className="motif" viewBox="0 0 64 52" aria-hidden="true" dangerouslySetInnerHTML={{__html: s.svg}} />;
 }
 
-function chunk(arr, size){
-  const out = [];
-  for(let i=0;i<arr.length;i+=size) out.push(arr.slice(i, i+size));
-  return out;
-}
+/* painted grounds for the salon miniatures: a lamp-lit vignette in the oxblood palette */
+const GROUNDS = [
+  'radial-gradient(circle at 30% 28%, #8a4a4f 0%, #73303C 34%, #40101D 78%, #1A1519 100%)',
+  'radial-gradient(circle at 70% 30%, #b98d63 0%, #73303C 40%, #40101D 80%)',
+  'radial-gradient(ellipse at 50% 85%, #73303C 0%, #40101D 55%, #1A1519 100%)',
+  'linear-gradient(170deg, #5b2a35 0%, #40101D 55%, #1A1519 100%)',
+];
+const SHAPES = ['arch','oval','rect'];
+const CLOTHS = [ ['#22352F',false], ['#59523E',false], ['#748C76',true], ['#B09C70',true] ];
 
-const Mark = () => (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M4 4 L12 12 L4 20" stroke="var(--accent)" strokeWidth="2"/>
-    <path d="M20 4 L12 12 L20 20" stroke="var(--spine-a)" strokeWidth="2"/>
+const Rosette = () => (
+  <svg className="rosette" viewBox="0 0 24 30" aria-hidden="true">
+    <path d="M8 16l-3 13 5-3 2 4 1-14zM16 16l3 13-5-3-2 4-1-14z" fill="#73303C"/>
+    <circle cx="12" cy="11" r="9" fill="#D9B88F"/>
+    <g fill="#73303C">{[0,45,90,135,180,225,270,315].map(a => <ellipse key={a} cx="12" cy="5.4" rx="2.2" ry="3.4" transform={`rotate(${a} 12 11)`}/>)}</g>
+    <circle cx="12" cy="11" r="3" fill="#D9B88F" stroke="#73303C"/>
   </svg>
 );
-
-const Cobwebs = () => (
-  <React.Fragment>
-    <svg className="cobweb cobweb-left" viewBox="0 0 40 40" width="34" height="34">
-      <g fill="none" stroke="var(--ink-faint)" strokeWidth="0.9">
-        <line x1="0" y1="40" x2="0" y2="0"/><line x1="0" y1="40" x2="14" y2="4"/>
-        <line x1="0" y1="40" x2="26" y2="12"/><line x1="0" y1="40" x2="34" y2="24"/>
-        <line x1="0" y1="40" x2="40" y2="40"/>
-        <path d="M0,28 A12,12 0 0 1 12,40"/><path d="M0,15 A25,25 0 0 1 25,40"/>
-      </g>
-    </svg>
-    <svg className="cobweb cobweb-right" viewBox="0 0 40 40" width="20" height="20">
-      <g fill="none" stroke="var(--ink-faint)" strokeWidth="0.9">
-        <line x1="0" y1="40" x2="0" y2="0"/><line x1="0" y1="40" x2="16" y2="7"/>
-        <line x1="0" y1="40" x2="30" y2="20"/><line x1="0" y1="40" x2="40" y2="40"/>
-        <path d="M0,20 A20,20 0 0 1 20,40"/>
-      </g>
-    </svg>
-  </React.Fragment>
+const Lily = ({ right }) => (
+  <svg className={"bookend" + (right ? " right" : "")} viewBox="0 0 30 150" aria-hidden="true">
+    <path d="M2 150V22A13 13 0 0 1 28 22V150Z" fill="var(--bookend)" stroke="var(--bookend-line)"/>
+    <g fill="none" stroke="var(--bookend-line)" strokeWidth="1.1" strokeLinecap="round">
+      <path d="M15 142C15 110 13 80 15 50M15 120c-7-6-8-16-4-24M15 100c7-6 8-16 4-24M10 50c1 6 9 6 10 0M15 50c-2-5-1-9 0-12 1 3 2 7 0 12z"/>
+    </g>
+  </svg>
+);
+const Postmark = () => (
+  <svg className="postmark" viewBox="0 0 94 110" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.3">
+    <circle cx="38" cy="50" r="17"/><circle cx="38" cy="50" r="13" strokeWidth=".7"/>
+    <text x="38" y="53" textAnchor="middle" fontSize="8" fill="currentColor" stroke="none" fontFamily="Old Standard TT">READ</text>
+    <path d="M58 40c5-4 9 4 14 0s9 4 14 0M58 50c5-4 9 4 14 0s9 4 14 0M58 60c5-4 9 4 14 0s9 4 14 0"/>
+  </svg>
 );
 
 function PrivacyModal({ onClose }){
@@ -405,8 +404,8 @@ function PrivacyModal({ onClose }){
     return () => { document.removeEventListener('keydown', onKey); prev && prev.focus && prev.focus(); };
   }, []);
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" role="dialog" aria-modal="true" aria-labelledby="privacy-title" onClick={e=>e.stopPropagation()}>
+    <div className="overlay" onClick={onClose}>
+      <div className="sheet modal" role="dialog" aria-modal="true" aria-labelledby="privacy-title" onClick={e=>e.stopPropagation()}>
         <h2 id="privacy-title">About your data</h2>
         <p>Catch stores everything you save — links, names, folders — in a shared cloud database (Supabase). This is what lets the same list show up whether you're in Safari, Brave, or the home-screen icon.</p>
         <h3>Who can access it</h3>
@@ -415,7 +414,7 @@ function PrivacyModal({ onClose }){
         <p>Nothing is encrypted per-user, nothing is sold, and there are no ads or analytics tracking you across other sites. This app talks only to its own database.</p>
         <h3>If that changes</h3>
         <p>If this app is ever shared with other people or shipped more broadly, that would require real per-user accounts and access control first — not just this notice.</p>
-        <button ref={closeRef} className="modal-close" onClick={onClose}>Close</button>
+        <div className="actions"><button ref={closeRef} className="primary" onClick={onClose}>Close</button></div>
       </div>
     </div>
   );
@@ -435,7 +434,12 @@ function App(){
   const [showHint, setShowHint] = useState(true);
   const [saving, setSaving] = useState(false);
   const [syncError, setSyncError] = useState(false);
-  const [theme, setTheme] = useState('leather');
+  const [theme, setTheme] = useState(() => {
+    const t = readJSON('catch:room', null);
+    return THEMES.some(([k]) => k === t) ? t : 'oxblood';
+  });
+  const [modePref, setModePref] = useState(() => readJSON('catch:mode', 'auto'));
+  const [systemDark, setSystemDark] = useState(() => !window.matchMedia || window.matchMedia('(prefers-color-scheme: dark)').matches);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [editName, setEditName] = useState('');
@@ -444,13 +448,15 @@ function App(){
   const [showFilters, setShowFilters] = useState(false);
   const [saveError, setSaveError] = useState('');
   const [savedFlash, setSavedFlash] = useState(false);
+  const [artOverrides, setArtOverrides] = useState(() => readJSON('catch:art', {}));
+  const [showPicker, setShowPicker] = useState(false);
+  const [justCaught, setJustCaught] = useState(null);
+  const [wide, setWide] = useState(() => window.innerWidth >= 640);
   const inputRef = useRef(null);
 
+  const mode = modePref === 'auto' ? (systemDark ? 'night' : 'day') : modePref;
+
   useEffect(() => {
-    try{
-      const t = localStorage.getItem('catch:theme');
-      if(t === 'leather' || t === 'sage') setTheme(t);
-    }catch(e){}
     (async () => {
       try{ const rows = await sb('links?select=*&order=session_no.desc'); setLinks((rows || []).map(rowToLink)); }
       catch(e){ console.error(e); setLinks([]); setSyncError(true); }
@@ -460,10 +466,16 @@ function App(){
       catch(e){ console.error(e); setCounter(0); }
       // the add-to-home-screen tip only makes sense on iOS Safari, outside the installed app
       const ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      const installed = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+      const installed = window.navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
       if(!ios || installed) setShowHint(false);
       try{ if(localStorage.getItem('catch:hint-dismissed') === 'true') setShowHint(false); }catch(e){}
     })();
+    const mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+    const onScheme = e => setSystemDark(e.matches);
+    mq && mq.addEventListener && mq.addEventListener('change', onScheme);
+    const onResize = () => setWide(window.innerWidth >= 640);
+    window.addEventListener('resize', onResize);
+    return () => { mq && mq.removeEventListener && mq.removeEventListener('change', onScheme); window.removeEventListener('resize', onResize); };
   }, []);
 
   useEffect(() => {
@@ -476,14 +488,18 @@ function App(){
     // eslint-disable-next-line
   }, [links === null]);
 
-  useEffect(() => { document.documentElement.setAttribute('data-theme', theme); }, [theme]);
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-mode', mode);
+  }, [theme, mode]);
 
-  function setThemeAndPersist(t){ setTheme(t); try{ localStorage.setItem('catch:theme', t); }catch(e){} }
+  function chooseTheme(t){ setTheme(t); writeJSON('catch:room', t); }
+  function cycleMode(){ const next = modePref === 'auto' ? 'day' : modePref === 'day' ? 'night' : 'auto'; setModePref(next); writeJSON('catch:mode', next); }
 
   async function createFolder(){
     const name = window.prompt('Name this folder (e.g. AI, Recipes, Gifts):');
     if(!name || !name.trim()) return null;
-    const colorIdx = folders.length % RIBBON_SLOTS.length;
+    const colorIdx = folders.length % 4;
     const folder = { id:'f_'+Date.now()+'_'+Math.random().toString(36).slice(2,5), name:name.trim(), colorIdx };
     try{
       await sb('folders', { method:'POST', body: JSON.stringify({ id:folder.id, name:folder.name, color_idx:colorIdx }) });
@@ -492,7 +508,6 @@ function App(){
       return folder.id;
     }catch(e){ console.error(e); setSyncError(true); return null; }
   }
-
   async function handleFolderSelectChange(e, setter){
     if(e.target.value === '__new__'){ const id = await createFolder(); setter(id || ''); }
     else{ setter(e.target.value); }
@@ -510,6 +525,7 @@ function App(){
       await sb('meta?key=eq.counter', { method:'PATCH', body: JSON.stringify({ value: String(nextCounter) }), prefer:'return=minimal' });
       setCounter(nextCounter);
       setLinks(prev => [entry, ...(prev || [])]);
+      setJustCaught(entry.id); setTimeout(() => setJustCaught(null), 900);
       setSyncError(false);
       return true;
     }catch(e){ console.error(e); setSyncError(true); return false; }
@@ -533,7 +549,6 @@ function App(){
     try{ await sb(`links?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ read: nextRead }), prefer:'return=minimal' }); setSyncError(false); }
     catch(e){ console.error(e); setSyncError(true); }
   }
-
   async function removeLink(id){
     const prev = links;
     setLinks(links.filter(l => l.id!==id));
@@ -541,14 +556,10 @@ function App(){
     try{ await sb(`links?id=eq.${id}`, { method:'DELETE', prefer:'return=minimal' }); setSyncError(false); }
     catch(e){ console.error(e); setSyncError(true); setLinks(prev); }
   }
-
   async function dismissHint(){ setShowHint(false); try{ localStorage.setItem('catch:hint-dismissed','true'); }catch(e){} }
 
-  function selectBook(l){
-    setConfirmDelete(false);
-    if(selectedId === l.id){ setSelectedId(null); return; }
-    setSelectedId(l.id); setEditName(l.name || ''); setEditFolder(l.folderId || ''); setConfirmDelete(false);
-  }
+  function openLink(l){ setConfirmDelete(false); setShowPicker(false); setSelectedId(l.id); setEditName(l.name || ''); setEditFolder(l.folderId || ''); }
+  function closeSheet(){ setSelectedId(null); setConfirmDelete(false); setShowPicker(false); }
   async function saveEdit(id){
     const newFolderId = editFolder || null;
     const newName = editName.trim();
@@ -559,9 +570,22 @@ function App(){
     }
     catch(e){ console.error(e); setSyncError(true); }
   }
+  // picture choices live on this device for now; a database column can carry them across devices later
+  function setArt(id, key){
+    const next = { ...artOverrides };
+    if(key) next[id] = key; else delete next[id];
+    setArtOverrides(next); writeJSON('catch:art', next);
+  }
+  const artOf = l => artOverrides[l.id] || autoArt(l);
+
+  useEffect(() => {
+    if(!selectedId) return;
+    const onKey = e => { if(e.key === 'Escape') closeSheet(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [selectedId]);
 
   const folderById = useMemo(() => { const m = {}; folders.forEach(f => m[f.id]=f); return m; }, [folders]);
-
   const visible = useMemo(() => {
     if(!links) return [];
     let list = links;
@@ -582,59 +606,145 @@ function App(){
     return list;
   }, [links, statusFilter, folderFilter, query, folderById, sortMode]);
 
-  const shelves = useMemo(() => chunk(visible, SHELF_SIZE), [visible]);
   const unreadCount = links ? links.filter(l=>!l.read).length : 0;
   const filtersActive = statusFilter !== 'all' || sortMode !== 'newest';
-  const selectedLink = selectedId ? links.find(l=>l.id===selectedId) : null;
+  const selectedLink = selectedId && links ? links.find(l=>l.id===selectedId) : null;
+  const nextNo = Math.max(counter, ...((links || []).map(l => l.sessionNo || 0))) + 1;
+  const newestId = links && links.length ? [...links].sort((a,b)=>b.addedAt-a.addedAt)[0].id : null;
+  const room = ROOM[theme];
 
-  function shelfLabel(shelfLinks, idx){
-    if(sortMode==='alphabetical'){
-      const a = displayTitle(shelfLinks[0])[0]?.toUpperCase() || '?';
-      const b = displayTitle(shelfLinks[shelfLinks.length-1])[0]?.toUpperCase() || '?';
-      return a===b ? a : `${a} – ${b}`;
-    }
-    const nums = shelfLinks.map(l=>l.sessionNo);
-    return `Sessions ${pad(Math.min(...nums))} – ${pad(Math.max(...nums))}`;
+  function itemLabel(l){ return `Session ${pad(l.sessionNo)}, ${displayTitle(l)}, ${l.domain}, ${l.read ? 'read' : 'unread'}`; }
+
+  /* ---------- the three rooms ---------- */
+  function Salon(){
+    return (
+      <div className="salon">
+        {visible.map(l => {
+          const h = hashStr(l.id);
+          const newest = l.id === newestId;
+          return (
+            <div className="hang" key={l.id}>
+              <div className="wire"></div>
+              <button className={"item frame " + SHAPES[h % 3] + (newest ? " newest" : "") + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "")}
+                aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
+                <div className="painting" style={{ background: GROUNDS[(h >> 3) % GROUNDS.length] }}><Motif k={artOf(l)} /></div>
+                {!l.read && <Rosette />}
+              </button>
+              <div className="plaque" aria-hidden="true">
+                <div className="no">Nº {pad(l.sessionNo)}{newest ? ' · Newest' : ''}</div>
+                <div className="t">{displayTitle(l).slice(0,32)}</div>
+                <div className="d">{l.domain}</div>
+              </div>
+            </div>
+          );
+        })}
+        {!query && folderFilter==='all' && statusFilter==='all' && [0,1].map(i => (
+          <div className="slot" key={'s'+i} aria-hidden="true"><div className="frame-empty">{pad(nextNo + i)}</div></div>
+        ))}
+      </div>
+    );
+  }
+  function Shelves(){
+    const perRow = wide ? 9 : 5;
+    const rows = chunk(visible, perRow);
+    if(rows.length === 0 || rows[rows.length-1].length >= perRow) rows.push([]);
+    return rows.map((row, ri) => (
+      <div className="shelf" key={ri}>
+        <Lily />
+        {row.map(l => {
+          const h = hashStr(l.id);
+          const [cloth, light] = CLOTHS[h % CLOTHS.length];
+          const height = 150 + ((h >> 4) % 40);
+          const width = 42 + ((h >> 9) % 14);
+          return (
+            <button key={l.id} className={"item book" + (light ? " light" : "") + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "")}
+              style={{ background:cloth, height, width }} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
+              <span className="bands" style={{ top:4 }}></span>
+              <span className="cart"><span>Nº</span><b>{pad(l.sessionNo)}</b></span>
+              <span className="spine-title">{displayTitle(l)}</span>
+              <span className="seal"><Motif k={artOf(l)} /></span>
+              <span className="bands" style={{ bottom:3 }}></span>
+              {!l.read && <span className="ribbon"></span>}
+            </button>
+          );
+        })}
+        {ri === rows.length-1 && !query && [0,1].map(i => (
+          <div className="ghost-book" key={'g'+i} style={{ height:140 + i*12 }} aria-hidden="true">{pad(nextNo + i)}</div>
+        ))}
+        <Lily right />
+      </div>
+    ));
+  }
+  function Stamps(){
+    return (
+      <div className="stamps">
+        {visible.map(l => (
+          <div key={l.id} className="cell">
+            <button className={"item stamp-wrap" + (justCaught===l.id ? " just" : "")} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
+              <span className="stamp"></span>
+              <span className="stamp-face"><Motif k={artOf(l)} /><span className="val">{l.sessionNo}</span></span>
+              {l.read ? <Postmark /> : (
+                <svg className="ring" viewBox="0 0 106 118" preserveAspectRatio="none" aria-hidden="true">
+                  <path className="halo" d="M60 4C28 0 5 22 5 57c0 33 20 56 50 55 31-1 47-25 46-56C100 24 80 6 52 6 40 6 30 10 24 16"/>
+                  <path className="ink" d="M60 4C28 0 5 22 5 57c0 33 20 56 50 55 31-1 47-25 46-56C100 24 80 6 52 6 40 6 30 10 24 16"/>
+                </svg>
+              )}
+            </button>
+            <div className="caption" aria-hidden="true">
+              <div className="code">S-{pad(l.sessionNo)}</div>
+              <div className="t">{displayTitle(l).slice(0,32)}</div>
+              <div className="d">{l.domain}</div>
+              {l.id === newestId && <div className="newest">— newest —</div>}
+            </div>
+          </div>
+        ))}
+        {!query && folderFilter==='all' && statusFilter==='all' && [0,1].map(i => (
+          <div key={'r'+i} aria-hidden="true"><div className="reserved">{pad(nextNo + i)}</div></div>
+        ))}
+      </div>
+    );
   }
 
   return (
-    <div id="root">
-      <header>
-        <div>
-          <div className="wordmark"><Mark /><span>Session Log</span></div>
-          <h1>Catch</h1>
-          <div className="sub">Paste it, find it later. Nothing else.</div>
-        </div>
-        <div className="header-actions">
-          <div className="theme-switch">
-            <button className={theme==='leather' ? 'active' : ''} onClick={()=>setThemeAndPersist('leather')}>Leather</button>
-            <button className={theme==='sage' ? 'active' : ''} onClick={()=>setThemeAndPersist('sage')}>Sage</button>
+    <div className="app">
+      <header className="mast">
+        <div className="tools">
+          <div className="seg" role="group" aria-label="Room">
+            {THEMES.map(([k,label]) => (
+              <button key={k} aria-pressed={theme===k} onClick={()=>chooseTheme(k)}><span>{label}</span></button>
+            ))}
           </div>
+          <button className="mode-btn" onClick={cycleMode} aria-label={`Lighting: ${modePref}. Tap to change.`}>
+            {modePref === 'auto' ? 'Auto' : modePref === 'day' ? 'Day' : 'Night'}
+          </button>
           <button className="privacy-link" onClick={()=>setShowPrivacy(true)}>Privacy</button>
         </div>
+        <div className="orn" aria-hidden="true"><i></i><b></b><i></i></div>
+        <h1>Catch</h1>
+        <div className="subtitle">{room.subtitle}</div>
+        <div className="tagline">Paste it, find it later. Nothing else.</div>
+        {links && links.length > 0 && <div className="count">{links.length} caught · {unreadCount} open</div>}
       </header>
 
       {syncError && (
-        <div className="sync-banner" role="status">
+        <div className="banner" role="status">
           <span>Having trouble syncing right now — check your connection. Anything you save may not appear on your other devices until this clears up.</span>
           <button onClick={()=>window.location.reload()}>Try again</button>
         </div>
       )}
       {showHint && (
-        <div className="install-hint">
-          <span>NOTE —</span>
+        <div className="banner">
           <span>On iPhone: Share → Add to Home Screen, so this opens full-screen like an app.</span>
           <button className="x" aria-label="Dismiss tip" onClick={dismissHint}><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 2l8 8M10 2l-8 8"/></svg></button>
         </div>
       )}
 
       <div className={"save-block" + (inputVal.trim() || nameVal ? " has-text" : "")}>
+        <div className="dock-label">{room.dock} · Nº {pad(nextNo)}</div>
         <div className="save-row">
           <input ref={inputRef} type="text" inputMode="url" aria-label="Link to save" placeholder="paste a link…" value={inputVal}
             onChange={e=>{ setInputVal(e.target.value); setSaveError(''); }} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
-          <button className="save-btn" onClick={handleSaveClick} disabled={!inputVal.trim() || saving}>
-            {saving ? '···' : 'Catch'}
-          </button>
+          <button className="save-btn" onClick={handleSaveClick} disabled={!inputVal.trim() || saving}>{saving ? '···' : 'Catch'}</button>
         </div>
         {saveError && <div className="save-error" role="alert">{saveError}</div>}
         <div className="detail-row">
@@ -649,135 +759,116 @@ function App(){
       </div>
 
       <div className="search-row">
-        <span className="lbl">Find</span>
         <input type="text" aria-label="Search the archive" placeholder="search the archive…" value={query} onChange={e=>setQuery(e.target.value)} />
-        <button className={"filter-toggle" + (filtersActive ? " on" : "")} aria-expanded={showFilters} onClick={()=>setShowFilters(v=>!v)}>
+        <button className="filter-toggle" aria-expanded={showFilters} onClick={()=>setShowFilters(v=>!v)}>
           {filtersActive && <span className="pip"></span>}Filter
         </button>
       </div>
       {!showFilters && filtersActive && (
-        <div className="filter-summary">Showing {statusFilter === 'all' ? 'all' : statusFilter === 'unread' ? 'open' : 'closed'}, {sortMode === 'alphabetical' ? 'A–Z' : sortMode + ' first'}</div>
+        <div className="filter-summary">Showing {statusFilter === 'all' ? 'all' : statusFilter === 'unread' ? 'unread' : 'read'}, {sortMode === 'alphabetical' ? 'A–Z' : sortMode + ' first'}</div>
       )}
-
       {showFilters && <React.Fragment>
-      <div className="row-label">Status</div>
-      <div className="chips">
-        {[['all','all'],['unread','open'],['read','closed']].map(([f,label]) => (
-          <button key={f} className={"filter-chip" + (statusFilter===f ? " active" : "")} aria-pressed={statusFilter===f} onClick={()=>setStatusFilter(f)}>
-            {label}{f==='unread' && unreadCount>0 ? ` · ${unreadCount}` : ''}
-          </button>
-        ))}
-      </div>
-
-      <div className="row-label">Sort</div>
-      <div className="chips">
-        {[['newest','newest'],['oldest','oldest'],['alphabetical','alphabetical']].map(([v,label]) => (
-          <button key={v} className={"filter-chip" + (sortMode===v ? " active" : "")} aria-pressed={sortMode===v} onClick={()=>setSortMode(v)}>{label}</button>
-        ))}
-      </div>
+        <div className="row-label">Status</div>
+        <div className="chips">
+          {[['all','all'],['unread','unread'],['read','read']].map(([f,label]) => (
+            <button key={f} className="chip" aria-pressed={statusFilter===f} onClick={()=>setStatusFilter(f)}>
+              {label}{f==='unread' && unreadCount>0 ? ` · ${unreadCount}` : ''}
+            </button>
+          ))}
+        </div>
+        <div className="row-label">Sort</div>
+        <div className="chips">
+          {[['newest','newest'],['oldest','oldest'],['alphabetical','A–Z']].map(([v,label]) => (
+            <button key={v} className="chip" aria-pressed={sortMode===v} onClick={()=>setSortMode(v)}>{label}</button>
+          ))}
+        </div>
       </React.Fragment>}
 
       <div className="row-label">Folders</div>
       <div className="catalog">
-        <button className={"catalog-card" + (folderFilter==='all' ? " active" : "")} aria-pressed={folderFilter==='all'} onClick={()=>setFolderFilter('all')}>
-          <div className="tab" style={{background:'var(--ink-faint)'}}></div>
-          <div className="fname">All</div>
-          <div className="fcount">{links ? links.length : 0}</div>
+        <button className="card" aria-pressed={folderFilter==='all'} onClick={()=>setFolderFilter('all')}>
+          <div className="fname">All</div><div className="fcount">{links ? links.length : 0}</div>
         </button>
         {folders.map(f => (
-          <button key={f.id} className={"catalog-card" + (folderFilter===f.id ? " active" : "")} aria-pressed={folderFilter===f.id} onClick={()=>setFolderFilter(f.id)}>
-            <div className="tab" style={{background:`var(${RIBBON_SLOTS[f.colorIdx % RIBBON_SLOTS.length]})`}}></div>
-            <div className="fname">{f.name}</div>
-            <div className="fcount">{links ? links.filter(l=>l.folderId===f.id).length : 0}</div>
+          <button key={f.id} className="card" aria-pressed={folderFilter===f.id} onClick={()=>setFolderFilter(f.id)}>
+            <div className="fname">{f.name}</div><div className="fcount">{links ? links.filter(l=>l.folderId===f.id).length : 0}</div>
           </button>
         ))}
-        <button className="catalog-card" aria-label="New folder" onClick={createFolder} style={{display:'flex', alignItems:'center', justifyContent:'center', minHeight:44}}>
-          <div className="fname" style={{opacity:0.75}}>+ new</div>
-        </button>
+        <button className="card" aria-label="New folder" onClick={createFolder}><div className="fname">+ new</div></button>
       </div>
 
-      <div className="shelves">
-        {links === null && <div className="empty-archive"><p>loading the archive…</p></div>}
-        {links !== null && visible.length === 0 && links.length === 0 && (
-          <div className="empty-archive">
-            <div className="stamp">— archive empty —</div>
-            <p>Nothing caught yet. Paste a link above and it becomes Session 001.</p>
+      <main className="room">
+        {links === null && <div className="empty">opening the archive…</div>}
+        {links !== null && links.length === 0 && (
+          <div className="empty">Nothing caught yet. Paste a link and it becomes Session 001.</div>
+        )}
+        {links !== null && links.length > 0 && visible.length === 0 && (
+          <div className="empty">Nothing in the collection matches that.<br/>
+            <button className="clear-btn" onClick={()=>{ setQuery(''); setStatusFilter('all'); setFolderFilter('all'); }}>Clear search &amp; filters</button>
           </div>
         )}
-        {links !== null && visible.length === 0 && links.length > 0 && (
-          <div className="shelf-block">
-            <div className="shelf-plaque"><span className="dot"></span><span>No matches</span></div>
-            <div className="empty-shelf">
-              <Cobwebs />
-              <div className="dust"></div>
-              <div className="msg">Nothing on the shelves matches that.</div>
-              <button className="clear-btn" onClick={()=>{ setQuery(''); setStatusFilter('all'); setFolderFilter('all'); }}>Clear search &amp; filters</button>
-              <div className="plank"></div>
-            </div>
-          </div>
-        )}
-
-        {shelves.map((shelfLinks, idx) => (
-          <div className="shelf-block" key={idx}>
-            <div className="shelf-plaque"><span className="dot"></span><span>{shelfLabel(shelfLinks, idx)}</span></div>
-            <div className="shelf">
-              <div className="plank"></div>
-              {shelfLinks.map(l => {
-                const { width, height } = bookDims(l.id);
-                const folder = l.folderId ? folderById[l.folderId] : null;
-                return (
-                  <button key={l.id}
-                    className={"book" + (l.read ? " closed" : "") + (selectedId===l.id ? " selected" : "")}
-                    style={{ width, height, background:`var(${RIBBON_SLOTS[hashStr(l.id) % 2 === 0 ? 0 : 1]})` }}
-                    aria-label={`Session ${pad(l.sessionNo)}, ${displayTitle(l)}, ${l.domain}, ${l.read ? 'closed' : 'open'}`}
-                    aria-expanded={selectedId===l.id}
-                    onClick={()=>selectBook(l)}>
-                    {folder && <div className="ribbon" style={{background:`var(${RIBBON_SLOTS[folder.colorIdx % RIBBON_SLOTS.length]})`}}></div>}
-                    <div className="label">
-                      <span className="num">{pad(l.sessionNo)}</span>
-                      <span className="title">{displayTitle(l).slice(0,26)}</span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {shelfLinks.some(l => l.id === selectedId) && selectedLink && (
-              <div className="detail-panel">
-                <div className="dp-num">SESSION {pad(selectedLink.sessionNo)} · {selectedLink.read ? 'CLOSED' : 'OPEN'}</div>
-                <div className="dp-title"><a href={selectedLink.url} target="_blank" rel="noopener noreferrer">{displayTitle(selectedLink)}</a></div>
-                <div className="dp-url">{selectedLink.url.replace(/^https?:\/\//,'')} · {selectedLink.domain}</div>
-                <div className="dp-edit-row">
-                  <input type="text" aria-label="Name" placeholder="name it…" value={editName} onChange={e=>setEditName(e.target.value)} />
-                  <select aria-label="Folder" value={editFolder} onChange={e=>handleFolderSelectChange(e, setEditFolder)}>
-                    <option value="">No folder</option>
-                    {folders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
-                    <option value="__new__">+ New folder…</option>
-                  </select>
-                </div>
-                <div className="dp-actions">
-                  <button className="dp-save" onClick={()=>saveEdit(selectedLink.id)}>Save changes</button>
-                  {savedFlash && <span className="dp-saved" role="status">Saved.</span>}
-                  <button className="dp-ghost" onClick={()=>toggleRead(selectedLink.id)}>{selectedLink.read ? 'Reopen' : 'Mark closed'}</button>
-                  <button className="dp-ghost" onClick={()=>setSelectedId(null)}>Close panel</button>
-                  {confirmDelete ? (
-                    <div className="dp-confirm">
-                      <span>Delete for good?</span>
-                      <button className="dp-danger-solid" onClick={()=>{ setConfirmDelete(false); removeLink(selectedLink.id); }}>Yes, delete</button>
-                      <button className="dp-ghost" onClick={()=>setConfirmDelete(false)}>Keep</button>
-                    </div>
-                  ) : (
-                    <button className="dp-danger" onClick={()=>setConfirmDelete(true)}>Delete</button>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+        {links !== null && visible.length > 0 && <React.Fragment>
+          <div className="room-label">{room.label}</div>
+          {theme === 'oxblood' && <Salon />}
+          {theme === 'hall' && <Shelves />}
+          {theme === 'dispatch' && <Stamps />}
+        </React.Fragment>}
+      </main>
 
       {links !== null && links.length > 0 && (
         <div className="count-footer">{links.length} caught · {unreadCount} open</div>
+      )}
+
+      {selectedLink && (
+        <div className="overlay" onClick={closeSheet}>
+          <div className="sheet" role="dialog" aria-modal="true" aria-label={displayTitle(selectedLink)} onClick={e=>e.stopPropagation()}>
+            <div className="num">Session {pad(selectedLink.sessionNo)} · {selectedLink.read ? 'Read' : 'Unread'}</div>
+            <h2><a href={selectedLink.url} target="_blank" rel="noopener noreferrer">{displayTitle(selectedLink)}</a></h2>
+            <div className="url">{selectedLink.url.replace(/^https?:\/\//,'')}</div>
+            <div className="pic-row">
+              <div className="pic"><Motif k={artOf(selectedLink)} /></div>
+              <div>
+                <div>{ART && (ART.subjects[artOf(selectedLink)] || ART.subjects.key).label}{artOverrides[selectedLink.id] ? '' : ' (automatic)'}</div>
+                <button className="ghost" onClick={()=>setShowPicker(v=>!v)} aria-expanded={showPicker}>{showPicker ? 'Done' : 'Change picture'}</button>
+              </div>
+            </div>
+            {showPicker && ART && (
+              <div className="picker">
+                <button aria-pressed={!artOverrides[selectedLink.id]} onClick={()=>setArt(selectedLink.id, null)}>
+                  <Motif k={autoArt(selectedLink)} />Automatic
+                </button>
+                {ART.order.map(k => (
+                  <button key={k} aria-pressed={artOverrides[selectedLink.id]===k} onClick={()=>setArt(selectedLink.id, k)}>
+                    <Motif k={k} />{ART.subjects[k].label}
+                  </button>
+                ))}
+              </div>
+            )}
+            <div className="edit-row">
+              <input type="text" aria-label="Name" placeholder="name it…" value={editName} onChange={e=>setEditName(e.target.value)} />
+              <select aria-label="Folder" value={editFolder} onChange={e=>handleFolderSelectChange(e, setEditFolder)}>
+                <option value="">No folder</option>
+                {folders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+                <option value="__new__">+ New folder…</option>
+              </select>
+            </div>
+            <div className="actions">
+              <button className="primary" onClick={()=>saveEdit(selectedLink.id)}>Save changes</button>
+              {savedFlash && <span className="saved" role="status">Saved.</span>}
+              <button onClick={()=>toggleRead(selectedLink.id)}>{selectedLink.read ? 'Mark unread' : 'Mark read'}</button>
+              <button onClick={closeSheet}>Close</button>
+              {confirmDelete ? (
+                <div className="confirm">
+                  <span>Delete for good?</span>
+                  <button className="primary" onClick={()=>{ setConfirmDelete(false); removeLink(selectedLink.id); }}>Yes, delete</button>
+                  <button onClick={()=>setConfirmDelete(false)}>Keep</button>
+                </div>
+              ) : (
+                <button className="danger" onClick={()=>setConfirmDelete(true)}>Delete</button>
+              )}
+            </div>
+          </div>
+        </div>
       )}
 
       {showPrivacy && <PrivacyModal onClose={()=>setShowPrivacy(false)} />}

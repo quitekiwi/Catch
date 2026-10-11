@@ -16,7 +16,7 @@ The theme switch replaces Leather / Sage. Day/night: follow the phone's light/da
 | Theme | Idea | Night (reference sketch) | Day (reference sketch) | Unread mark |
 |---|---|---|---|---|
 | Oxblood Art Nouveau | Salon wall of framed, whimsical painted miniatures, newest slightly larger, empty nails for future frames | `r7/b-salon-v5.html` (dark wall; plaques have thin oxblood inner outline) | `r6/b-salon-v4.html` (light tan wall, ~60% tan / 40% oxblood; no plaque outline needed) | wine rosette on the frame |
-| Green Hall | Two-row Art Nouveau bookshelf, flat graphic books in sage / olive-brown / gold / deep green, pale lily bookends that pop | `r7/c-shelf-v2.html` (deep green marble) | `r9/c-day-gold.html` (dark antique-gold travertine marble, wall #7A6A45) | red ribbon bookmark on a pale tag |
+| Green Hall | Two-row Art Nouveau bookshelf, flat graphic books in sage / olive-brown / gold / deep green, pale lily bookends that pop | `r7/c-shelf-v2.html` (deep green marble) | `r9/c-day-sage.html` (sage marble; gold rejected) | red ribbon bookmark on a pale tag |
 | Dispatch | Stamps on the French Dispatch tiled floor, 3 columns, one row of empty slots, "newest" note, read links get a wavy postmark | `r9/d-night.html` (olive floor 60, charcoal stamps/border/dock 30, khaki edges/drawings/text 10) | `r9/d-day.html` (khaki floor 60, charcoal stamps/border/dock 30, olive stamp edges/text 10) | red hand-drawn circle (khaki halo at night) |
 
 Palettes:
