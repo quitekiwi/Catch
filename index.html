@@ -385,12 +385,12 @@
   [data-theme="hall"][data-mode="night"] body{ background-color:#2A403A;
     background-image:radial-gradient(ellipse 120% 80% at 50% 45%,transparent 55%,rgba(89,82,62,.45)),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='390' height='844'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='turbulence' baseFrequency='.0045 .011' numOctaves='5' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .455 0 0 0 0 .549 0 0 0 0 .463 -2.4 0 0 0 .62'/%3E%3C/filter%3E%3Crect width='390' height='844' filter='url(%23m)' opacity='.55'/%3E%3C/svg%3E");
-    background-size:auto, 390px 844px; }
+    background-size:auto, cover; background-attachment:fixed; }
   [data-theme="hall"][data-mode="day"] body{ background-color:#748C76;
     background-image:radial-gradient(ellipse 95% 55% at 8% 4%,rgba(177,191,163,.22),rgba(177,191,163,0) 72%),radial-gradient(ellipse 120% 80% at 50% 45%,transparent 58%,rgba(42,64,58,.3)),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='390' height='844'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='turbulence' baseFrequency='.0045 .011' numOctaves='5' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .694 0 0 0 0 .749 0 0 0 0 .639 -2.4 0 0 0 .62'/%3E%3C/filter%3E%3Crect width='390' height='844' filter='url(%23m)' opacity='.55'/%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='390' height='844'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='turbulence' baseFrequency='.005 .012' numOctaves='5' seed='23'/%3E%3CfeColorMatrix values='0 0 0 0 .165 0 0 0 0 .251 0 0 0 0 .227 -2.6 0 0 0 .6'/%3E%3C/filter%3E%3Crect width='390' height='844' filter='url(%23m)' opacity='.32'/%3E%3C/svg%3E");
-    background-size:auto, auto, 390px 844px, 390px 844px; }
+    background-size:auto, auto, cover, cover; background-attachment:fixed; }
   .gh-ceil{ display:block; width:100%; height:52px; }
   .gh-mast{ text-align:center; margin-top:8px; }
   .gh-mast h1{ margin:0; font-family:Cinzel,serif; font-weight:500; font-size:40px; line-height:1; letter-spacing:.34em; padding-left:.34em; color:#B09C70; text-shadow:0 1px 0 rgba(89,82,62,.9); }
@@ -514,6 +514,13 @@
 <div class="grain" aria-hidden="true"></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
+    <filter id="gh-age" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="5" result="fine"/>
+      <feColorMatrix in="fine" values="0 0 0 0 .08 0 0 0 0 .1 0 0 0 0 .08 0 0 0 1.6 -.82" result="speck"/>
+      <feTurbulence type="fractalNoise" baseFrequency=".045 .02" numOctaves="3" seed="11" result="blot"/>
+      <feColorMatrix in="blot" values="0 0 0 0 .8 0 0 0 0 .78 0 0 0 0 .66 0 0 0 .9 -.42" result="wear"/>
+      <feMerge><feMergeNode in="wear"/><feMergeNode in="speck"/></feMerge>
+    </filter>
     <pattern id="cloth-grain" width="4" height="4" patternUnits="userSpaceOnUse">
       <path d="M0 1h4M0 3h4" stroke="#000" stroke-opacity=".07" stroke-width=".6"/>
       <path d="M1 0v4M3 0v4" stroke="#fff" stroke-opacity=".05" stroke-width=".5"/>
@@ -690,42 +697,44 @@ const DpPostmark = ({ small }) => (
 // cloths from the hall's palette plus one quiet mist blue; [cloth, title ink, groove]
 const GH_INK = '#142420';
 const GH_CLOTHS = [
-  ['#22352F', '#B1BFA3', '#9DB8B6'],
-  ['#59523E', '#C9D3BC', '#9DB8B6'],
-  ['#748C76', GH_INK, '#2A403A'],
-  ['#B09C70', GH_INK, '#59523E'],
-  ['#8FA9A8', GH_INK, '#2A403A'],
+  ['#1B2B26'], ['#423C2D'], ['#4E6352'], ['#7E6E4B'], ['#56706F'],
 ];
+const GH_GOLD = '#9A8760', GH_PAPER = '#A9B29A';
 /* a storybook tome: flat painted cloth, one hard-edged cel shadow, ink outline, carved grooves and a stone-tablet label */
 function GhBook({ id, w, h, cloth, no, title, art, unread }){
-  const [c, ink, groove] = cloth;
+  const [c] = cloth;
   const mid = w/2, medR = Math.min(w/2 - 6, 13), medY = h - 30, gTop = 58, gBot = medY - medR - 12, gH = gBot - gTop;
   const maxChars = Math.max(4, Math.floor((gH - 10) / 6.4));
   const t = title.length > maxChars ? title.slice(0, maxChars - 1) + '…' : title;
   const S = ART && (ART.subjects[art] || ART.subjects.key);
+  const cid = 'ghb-' + id;
   return (
     <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} aria-hidden="true">
-      <rect x=".7" y=".7" width={w-1.4} height={h-1.4} rx="3" fill={c}/>
-      <path d={`M${w*0.66} 1.4H${w-3.5}a2.3 2.3 0 0 1 2.3 2.3V${h-3.7}a2.3 2.3 0 0 1-2.3 2.3H${w*0.66}Z`} fill={shade(c,-.22)}/>
-      <rect x="4" y="14" width="2.2" height={h-28} rx="1.1" fill={shade(c,.22)} opacity=".85"/>
-      <rect x=".7" y=".7" width={w-1.4} height="10" rx="3" fill={shade(c,-.32)}/>
-      <rect x=".7" y={h-10.7} width={w-1.4} height="10" rx="3" fill={shade(c,-.32)}/>
-      <path d={`M4 14.5H${w-4}M4 ${h-14.5}H${w-4}`} stroke="#B09C70" strokeWidth="1"/>
-      <rect x="4.5" y="19" width={w-14} height="24" rx="5" fill="#B1BFA3" stroke={GH_INK} strokeWidth="1.1"/>
-      <text x={mid-2.5} y="28.5" textAnchor="middle" fontFamily="Cinzel" fontSize="6.5" fill="#2A403A">Nº</text>
-      <text x={mid-2.5} y="38.5" textAnchor="middle" fontFamily="Cinzel" fontWeight="600" fontSize="10" fill="#2A403A">{no}</text>
-      <g fill="#B09C70"><circle cx={mid-5} cy="50" r="1.3"/><circle cx={mid} cy="50" r="1.3"/><circle cx={mid+5} cy="50" r="1.3"/></g>
-      <rect x="7" y={gTop} width={w-14} height={gH} rx={(w-14)/2} fill={shade(c,-.08)} stroke={groove} strokeWidth="1"/>
-      <text transform={`translate(${mid+4.6} ${gTop + gH/2}) rotate(-90)`} textAnchor="middle" fontFamily="EB Garamond" fontWeight="600" fontSize="13.5" letterSpacing=".02em" fill={ink}>{t}</text>
-      <path d={`M${mid-8} ${gBot+6}q2-3 4 0t4 0 4 0 4 0`} fill="none" stroke="#B09C70" strokeWidth="1" strokeLinecap="round"/>
-      <circle cx={mid} cy={medY} r={medR+3} fill="none" stroke="#B09C70" strokeWidth=".9"/>
-      <circle cx={mid} cy={medY} r={medR} fill="#B1BFA3" stroke={GH_INK} strokeWidth="1.2"/>
-      {S && <svg x={mid-medR*0.82} y={medY-medR*0.7} width={medR*1.64} height={medR*1.4} viewBox="0 0 64 52" fill="none" stroke="#59523E" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{__html:S.svg}} />}
-      <rect x=".7" y=".7" width={w-1.4} height={h-1.4} rx="3" fill="none" stroke={GH_INK} strokeWidth="1.4"/>
+      <defs><clipPath id={cid}><rect x=".7" y=".7" width={w-1.4} height={h-1.4} rx="3"/></clipPath></defs>
+      <g clipPath={`url(#${cid})`}>
+        <rect width={w} height={h} fill={c}/>
+        <rect x={w*0.68} width={w} height={h} fill={shade(c,-.16)}/>
+        <rect width={w} height={h} filter="url(#gh-age)"/>
+        <rect width={w} height="10.5" fill={shade(c,-.25)}/><rect y={h-10.5} width={w} height="10.5" fill={shade(c,-.25)}/>
+        <g fill="#C9C2A8" opacity=".16"><circle cx="0" cy="0" r="7"/><circle cx={w} cy="0" r="6"/><circle cx="0" cy={h} r="7"/><circle cx={w} cy={h} r="8"/></g>
+      </g>
+      <path d={`M4 14.5H${w-4}M4 ${h-14.5}H${w-4}`} stroke={GH_GOLD} strokeWidth="1" opacity=".85"/>
+      <rect x="4.5" y="19" width={w-14} height="24" rx="5" fill={GH_PAPER} stroke="#142420" strokeOpacity=".8"/>
+      <text x={mid-2.5} y="28.5" textAnchor="middle" fontFamily="Cinzel" fontSize="6.5" fill="#22302B">Nº</text>
+      <text x={mid-2.5} y="38.5" textAnchor="middle" fontFamily="Cinzel" fontWeight="600" fontSize="10" fill="#22302B">{no}</text>
+      <g fill={GH_GOLD} opacity=".9"><circle cx={mid-5} cy="50" r="1.2"/><circle cx={mid} cy="50" r="1.2"/><circle cx={mid+5} cy="50" r="1.2"/></g>
+      <rect x="7" y={gTop} width={w-14} height={gH} rx={(w-14)/2} fill={GH_PAPER} stroke={GH_GOLD} strokeWidth="1.1"/>
+      <rect x="9" y={gTop+2} width={w-18} height={gH-4} rx={(w-18)/2} fill="none" stroke="#142420" strokeOpacity=".25" strokeWidth=".6"/>
+      <text transform={`translate(${mid+4.6} ${gTop + gH/2}) rotate(-90)`} textAnchor="middle" fontFamily="EB Garamond" fontWeight="600" fontSize="13.5" letterSpacing=".02em" fill="#1E2B26">{t}</text>
+      <path d={`M${mid-8} ${gBot+6}q2-3 4 0t4 0 4 0 4 0`} fill="none" stroke={GH_GOLD} strokeWidth="1" strokeLinecap="round"/>
+      <circle cx={mid} cy={medY} r={medR+3} fill="none" stroke={GH_GOLD} strokeWidth=".9"/>
+      <circle cx={mid} cy={medY} r={medR} fill={GH_PAPER} stroke="#142420" strokeOpacity=".85" strokeWidth="1.1"/>
+      {S && <svg x={mid-medR*0.82} y={medY-medR*0.7} width={medR*1.64} height={medR*1.4} viewBox="0 0 64 52" fill="none" stroke="#423C2D" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{__html:S.svg}} />}
+      <rect x=".7" y=".7" width={w-1.4} height={h-1.4} rx="3" fill="none" stroke="#142420" strokeOpacity=".9" strokeWidth="1.2"/>
       {unread && <React.Fragment>
-        <path d={`M${w-7.5} -6q2-3 4 0v62l-2-3-2 3z`} fill="#8C2020" stroke={GH_INK} strokeWidth=".6"/>
-        <g transform={`translate(${w-4.5} 60) rotate(-8)`}><path d="M-5 0h10v12l-5 3.6-5-3.6z" fill="#B1BFA3" stroke={GH_INK} strokeWidth=".7"/>
-          <circle cy="3.8" r="1.2" fill="none" stroke="#59523E" strokeWidth=".6"/><path d="M-2.3 8.4h4.6" stroke="#8C2020" strokeWidth=".8"/></g>
+        <path d={`M${w-7.5} -6q2-3 4 0v62l-2-3-2 3z`} fill="#7E1E1E" stroke="#142420" strokeWidth=".6"/>
+        <g transform={`translate(${w-4.5} 60) rotate(-8)`}><path d="M-5 0h10v12l-5 3.6-5-3.6z" fill={GH_PAPER} stroke="#142420" strokeWidth=".7"/>
+          <circle cy="3.8" r="1.2" fill="none" stroke="#423C2D" strokeWidth=".6"/><path d="M-2.3 8.4h4.6" stroke="#8C2020" strokeWidth=".8"/></g>
       </React.Fragment>}
     </svg>
   );
