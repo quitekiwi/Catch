@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Catch</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=Cinzel:wght@400;600&family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Marcellus+SC&family=Old+Standard+TT:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=Cinzel:wght@400;600&family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Marcellus+SC&family=Old+Standard+TT:ital@0;1&display=swap" rel="stylesheet">
 <style>
   /* ---------- theme tokens: three rooms, each lit for day and night ---------- */
   :root{
@@ -13,6 +13,9 @@
     --spot:#73303C; --spot-halo:transparent;
   }
   /* Oxblood Art Nouveau */
+  [data-theme="oxblood"]{ --font-body:'Arapey',serif; }
+  [data-theme="oxblood"][data-mode="night"]{ --orn:#AC9B86; --fr-stroke:#AC9B86; --cord:#AC9B86; --pl-stroke:#AC9B86; --n-ink:#40101D; --ti-ink:#40101D; --gh:#AC9B86; --cap:#AC9B86; }
+  [data-theme="oxblood"][data-mode="day"]{ --orn:#D9B88F; --fr-stroke:#1A1519; --cord:#40101D; --pl-stroke:#40101D; --n-ink:#73303C; --ti-ink:#1A1519; --gh:#73303C; --cap:#73303C; }
   [data-theme="oxblood"][data-mode="night"]{
     --bg:#1A1519; --chrome:#40101D; --chrome-ink:#D9B88F; --ink:#D9B88F; --ink2:#AC9B86; --line:rgba(172,155,134,.35);
     --paper:#D9B88F; --paper-ink:#40101D; --btn:#D9B88F; --btn-ink:#40101D; --field:#241C20; --field-ink:#D9B88F;
@@ -234,6 +237,72 @@
 
   .count-footer{ text-align:center; padding:10px 0 20px; font:12px var(--font-label); letter-spacing:.14em; text-transform:uppercase; }
 
+
+  /* ---------- Oxblood: lifted from the approved salon sketches ---------- */
+  [data-theme="oxblood"] .wall{ display:none; }
+  [data-theme="oxblood"][data-mode="night"] body{ background-image:radial-gradient(ellipse 420px 300px at 50% 0,rgba(64,16,29,.55),transparent 70%); }
+  .ox-mast{ position:relative; height:166px; width:390px; max-width:100%; margin:0 auto; text-align:center; }
+  .ox-mast > svg{ position:absolute; left:0; top:0; }
+  .ox-mast .ln{ fill:none; stroke:var(--orn); stroke-linecap:round; stroke-linejoin:round; }
+  .ox-mast h1{ position:absolute; top:44px; left:0; right:0; margin:0; font:700 43px/1 "Cinzel Decorative",serif; letter-spacing:5px; padding-left:5px; color:#D9B88F; }
+  [data-mode="day"] .ox-mast h1{ color:#40101D; }
+  .ox-mast .sub{ position:absolute; top:96px; left:0; right:0; font:11px "Marcellus SC",serif; letter-spacing:3.4px; color:#AC9B86; }
+  [data-mode="day"] .ox-mast .sub{ color:#73303C; }
+  .ox-mast .tag{ position:absolute; top:116px; left:0; right:0; font-style:italic; font-size:15px; color:#D9B88F; }
+  [data-mode="day"] .ox-mast .tag{ color:#1A1519; }
+  .ox-mast .cnt{ position:absolute; top:146px; left:0; right:0; font:11px "Marcellus SC",serif; letter-spacing:2px; color:#AC9B86; }
+  [data-mode="day"] .ox-mast .cnt{ color:#40101D; }
+  [data-theme="oxblood"] .search-row input{ border-radius:16px 3px 16px 3px; border-color:var(--orn); background:transparent; }
+  [data-theme="oxblood"][data-mode="day"] .search-row input{ border-color:#40101D; background:rgba(217,184,143,.55); }
+  [data-theme="oxblood"] .search-row{ gap:8px; }
+  [data-theme="oxblood"] .filter-toggle{ border-radius:3px 16px 3px 16px; border-color:var(--orn); font-family:"Marcellus SC",serif; letter-spacing:2px; }
+  [data-theme="oxblood"][data-mode="day"] .filter-toggle{ background:#D9B88F; color:#40101D; border-color:#40101D; }
+  .rail{ display:block; width:100%; height:20px; margin:4px 0 2px; }
+  .rail .ln{ fill:none; stroke:var(--orn); stroke-linecap:round; }
+  .salon2{ display:grid; grid-template-columns:repeat(auto-fill,120px); justify-content:center; gap:4px 0; }
+  [data-theme="oxblood"] .room{ padding:4px 6px 30px; }
+  [data-theme="oxblood"] .room-label{ display:none; }
+  .hang2{ display:block; width:120px; height:214px; background:none; border:none; padding:0; cursor:pointer; font:inherit; }
+  .hang2 svg{ display:block; overflow:visible; }
+  .hang2 .fr{ fill:#40101D; stroke:var(--fr-stroke); stroke-width:1; }
+  .hang2 .mat{ fill:#D9B88F; }
+  .hang2 .th{ fill:none; stroke:var(--fr-stroke); stroke-width:.6; }
+  .hang2 .cord{ fill:none; stroke:var(--cord); stroke-width:.7; }
+  .hang2 .pl{ fill:#D9B88F; stroke:var(--pl-stroke); stroke-width:.8; }
+  .hang2 .pli{ fill:none; stroke:var(--plaque-outline); stroke-width:1; }
+  .hang2 .n{ font:9px "Marcellus SC",serif; letter-spacing:1.6px; fill:var(--n-ink); }
+  .hang2 .ti{ font:14px Arapey,serif; fill:var(--ti-ink); }
+  .hang2 .dm{ font:italic 11px Arapey,serif; fill:#40101D; }
+  .hang2 .ornl{ fill:none; stroke:var(--orn); stroke-width:.9; stroke-linecap:round; }
+  .hang2.closed .paint{ filter:saturate(.35) brightness(.75); }
+  .hang2:focus-visible{ outline:2px solid var(--orn); outline-offset:-4px; }
+  .ghost2{ width:120px; height:214px; }
+  .ghost2 .gh{ fill:none; stroke:var(--gh); stroke-width:.8; stroke-dasharray:2 3; opacity:.6; }
+  .ghost2 .cap{ font:10px "Marcellus SC",serif; letter-spacing:2.2px; fill:var(--cap); }
+  .wall-cap{ text-align:center; font:11px "Marcellus SC",serif; letter-spacing:2.2px; color:var(--cap); margin:6px 0 10px; }
+  @media (prefers-reduced-motion:no-preference){ .hang2.just{ animation:swing 1.4s cubic-bezier(.3,1.6,.5,1); transform-origin:60px 6px; } }
+  @keyframes swing{ 0%{ transform:rotate(-7deg); } 40%{ transform:rotate(4deg); } 70%{ transform:rotate(-2deg); } 100%{ transform:none; } }
+  [data-theme="oxblood"] .save-block{ background:#40101D; color:#AC9B86; }
+  .iron{ display:none; }
+  [data-theme="oxblood"] .iron{ display:block; width:100%; height:30px; margin:-26px 0 2px; }
+  [data-theme="oxblood"] .dock-label{ display:block; text-align:center; font:11px "Marcellus SC",serif; letter-spacing:2.6px; color:#AC9B86; }
+  [data-theme="oxblood"][data-mode="day"] .dock-label span{ background:#D9B88F; color:#40101D; padding:4px 14px 3px; border-radius:10px 2px 10px 2px; }
+  [data-theme="oxblood"] .save-row input{ border-radius:16px 3px 16px 3px; border-color:#AC9B86; background:rgba(26,21,25,.45); color:#D9B88F; }
+  [data-theme="oxblood"][data-mode="day"] .save-row input{ background:#E6CFAF; color:#1A1519; border-color:#D9B88F; }
+  [data-theme="oxblood"] .save-btn{ border-radius:3px 16px 3px 16px; background:#D9B88F; color:#40101D; font:700 15px "Cinzel Decorative",serif; letter-spacing:1.5px; }
+  [data-theme="oxblood"] .fine{ display:block; }
+  .fine{ display:none; text-align:center; font-style:italic; font-size:12px; color:#AC9B86; margin-top:2px; }
+  [data-theme="oxblood"] .save-block .detail-row input, [data-theme="oxblood"] .save-block .detail-row select{ color:#D9B88F; border-color:#AC9B86; }
+  /* menu button + sheet */
+  .menu-icon{ padding:0 12px; }
+  .menu-btn{ position:absolute; top:10px; right:12px; z-index:5; font:12px var(--font-label); letter-spacing:.12em; text-transform:uppercase;
+    background:transparent; color:inherit; border:1px solid currentColor; border-radius:2px; padding:7px 10px; cursor:pointer; min-height:36px; }
+  [data-theme="oxblood"] .menu-btn{ color:#AC9B86; border-radius:3px 12px 3px 12px; }
+  [data-theme="oxblood"][data-mode="day"] .menu-btn{ color:#D9B88F; }
+  .sheet .opts{ display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 14px; }
+  .sheet .opts button{ font:14px var(--font-label); letter-spacing:.06em; padding:10px 14px; border:1px solid currentColor; border-radius:2px; background:transparent; color:inherit; cursor:pointer; min-height:44px; }
+  .sheet .opts button[aria-pressed="true"]{ background:var(--paper-ink); color:var(--paper); }
+
   /* ---------- link sheet ---------- */
   .overlay{ position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:20000; display:flex; align-items:flex-end; justify-content:center; }
   @media (min-width:640px){ .overlay{ align-items:center; } }
@@ -308,7 +377,8 @@
   </defs>
 </svg>
 <div id="root"></div>
-<script src="motifs.js"></script>
+<script src="motifs.js?v=2"></script>
+<script src="oxblood-art.js?v=2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
@@ -438,6 +508,61 @@ function BookSpine({ id, w, h, cloth, light, no, title, art }){
   );
 }
 
+/* ---------- Oxblood salon pieces (geometry lifted from the approved sketches) ---------- */
+const OX_MAST = {
+  night: `<path fill="#40101D" d="M70 166V160C69 128 42 112 45 76 48 46 100 30 195 28 290 30 342 46 345 76 348 112 321 128 320 160V166Z"/>
+    <path class="ln" stroke-width="1" d="M52 163.5H338M88 166H302"/>
+    <use href="#half"/><use href="#half" transform="translate(390 0) scale(-1 1)"/>
+    <g class="ln" stroke-width="1"><path d="M195 20c-5-5-5-12 0-17 5 5 5 12 0 17zM195 20c-7-1-12-6-13-12 6 1 11 6 13 12zM195 20c7-1 12-6 13-12-6 1-11 6-13 12z"/>
+    <path stroke-width=".8" d="M150 112h34M206 112h34M195 108l4 4-4 4-4-4z"/></g>`,
+  day: `<rect width="390" height="166" fill="#40101D"/>
+    <use href="#half"/><use href="#half" transform="translate(390 0) scale(-1 1)"/>
+    <path fill="#E6CFAF" stroke="#73303C" stroke-width="2" d="M70 166V160C69 128 42 112 45 76 48 46 100 30 195 28 290 30 342 46 345 76 348 112 321 128 320 160V166Z"/>
+    <path fill="none" stroke="#73303C" stroke-width=".7" d="M78 166V160C77 130 51 114 54 78 57 52 106 38 195 36 284 38 333 52 336 78 339 114 313 130 312 160V166"/>
+    <g class="ln" stroke-width="1"><path d="M195 20c-5-5-5-12 0-17 5 5 5 12 0 17zM195 20c-7-1-12-6-13-12 6 1 11 6 13 12zM195 20c7-1 12-6 13-12-6 1-11 6-13 12z"/></g>
+    <path fill="none" stroke="#73303C" stroke-width=".8" d="M150 112h34M206 112h34M195 108l4 4-4 4-4-4z"/>`
+};
+const OX_FRAMES = {
+  arch:   { fr:'M12 150V72a48 48 0 0 1 96 0v78z', ln:'M15 147V72a45 45 0 0 1 90 0v75z', mat:'M20 142V72a40 40 0 0 1 80 0v70z',
+            clip:'M23 139V72a37 37 0 0 1 74 0v67z', box:[23,35,74,104], ros:[96,52], cords:'M60 6L32 40M60 6L88 40',
+            curls:'M12 150c-6-3-8-11-2-12 4-1 5 4 2 5M108 150c6-3 8-11 2-12-4-1-5 4-2 5' },
+  oval:   { el:[60,96,38,48], ln:[35,45], mat:[31,41], clip:[28,38], box:[32,58,56,76], ros:[80,48], cords:'M60 6L44 52M60 6L76 52' },
+  rect:   { rect:[22,52,76,88], ln:[26,56,68,80], mat:[30,60,60,72], clipR:[32,62,56,68], box:[32,62,56,68], ros:[88,38], cords:'M60 6L34 52M60 6L86 52' },
+  cusped: { fr:'M32 56h56a10 10 0 0 0 10 10v74H22v-74a10 10 0 0 0 10-10z', mat:'M36 64h48a6 6 0 0 0 6 6v62H30v-62a6 6 0 0 0 6-6z',
+            clip:'M38 68h44a4 4 0 0 0 4 4v56H34v-56a4 4 0 0 0 4-4z', box:[34,68,52,60], ros:[90,44], cords:'M60 6L36 58M60 6L84 58' },
+};
+const OX_SHAPES = ['oval','rect','cusped'];
+function frameParts(f){
+  if(f.el) return { frame:<React.Fragment><ellipse className="fr" cx={f.el[0]} cy={f.el[1]} rx={f.el[2]} ry={f.el[3]}/>
+      <ellipse className="ornl" cx={f.el[0]} cy={f.el[1]} rx={f.ln[0]} ry={f.ln[1]} strokeWidth=".6"/>
+      <ellipse className="mat" cx={f.el[0]} cy={f.el[1]} rx={f.mat[0]} ry={f.mat[1]}/></React.Fragment>,
+    clip:<ellipse cx={f.el[0]} cy={f.el[1]} rx={f.clip[0]} ry={f.clip[1]}/> };
+  if(f.rect) return { frame:<React.Fragment><rect className="fr" x={f.rect[0]} y={f.rect[1]} width={f.rect[2]} height={f.rect[3]} rx="2"/>
+      <rect className="ornl" x={f.ln[0]} y={f.ln[1]} width={f.ln[2]} height={f.ln[3]} strokeWidth=".6"/>
+      <rect className="mat" x={f.mat[0]} y={f.mat[1]} width={f.mat[2]} height={f.mat[3]}/></React.Fragment>,
+    clip:<rect x={f.clipR[0]} y={f.clipR[1]} width={f.clipR[2]} height={f.clipR[3]}/> };
+  return { frame:<React.Fragment><path className="fr" d={f.fr}/>{f.ln && <path className="ornl" d={f.ln} strokeWidth=".6"/>}<path className="mat" d={f.mat}/>
+      {f.curls && <path className="ornl" d={f.curls}/>}</React.Fragment>, clip:<path d={f.clip}/> };
+}
+/* a painted miniature: the hand-painted scene for the subject if one exists, else a lamp-lit vignette around its drawing */
+function OxPainting({ k, box }){
+  const P = window.OxbloodArt && window.OxbloodArt.paintings[k];
+  const [x,y,w,h] = box;
+  if(P){
+    const [bx,by,bw,bh] = P.box;
+    return <svg x={x} y={y} width={w} height={h} viewBox={`${bx} ${by} ${bw} ${bh}`} preserveAspectRatio="xMidYMid slice" dangerouslySetInnerHTML={{__html:P.svg}} />;
+  }
+  const S = ART && (ART.subjects[k] || ART.subjects.key);
+  return (
+    <svg x={x} y={y} width={w} height={h} viewBox="0 0 60 80" preserveAspectRatio="xMidYMid slice">
+      <g filter="url(#w-brush)"><rect width="60" height="80" fill="url(#w-room)"/><circle cx="16" cy="28" r="36" fill="url(#w-glow)"/>
+        <path d="M0 62l60-3v21H0z" fill="url(#w-cloth)"/></g>
+      {S && <svg x="7" y="20" width="46" height="38" viewBox="0 0 64 52" fill="none" stroke="#D9B88F" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{__html:S.svg}} />}
+      <rect width="60" height="80" filter="url(#w-canvas)" opacity=".2"/><rect width="60" height="80" fill="url(#w-vig)"/>
+    </svg>
+  );
+}
+
 const Rosette = () => (
   <svg className="rosette" viewBox="0 0 24 30" aria-hidden="true">
     <path d="M8 16l-3 13 5-3 2 4 1-14zM16 16l3 13-5-3-2 4-1-14z" fill="#73303C"/>
@@ -521,6 +646,7 @@ function App(){
   const [savedFlash, setSavedFlash] = useState(false);
   const [artOverrides, setArtOverrides] = useState(() => readJSON('catch:art', {}));
   const [showPicker, setShowPicker] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const [justCaught, setJustCaught] = useState(null);
   const [wide, setWide] = useState(() => window.innerWidth >= 640);
   const inputRef = useRef(null);
@@ -603,7 +729,7 @@ function App(){
   }
 
   async function handleSaveClick(){
-    if(!inputVal.trim()) return;
+    if(!inputVal.trim()){ inputRef.current && inputRef.current.focus(); return; }
     if(!normalizeUrl(inputVal)){ setSaveError("That doesn't look like a link. Try something like example.com"); return; }
     setSaveError('');
     setSaving(true);
@@ -650,6 +776,12 @@ function App(){
   const artOf = l => artOverrides[l.id] || autoArt(l);
 
   useEffect(() => {
+    if(!showMenu) return;
+    const onKey = e => { if(e.key === 'Escape') setShowMenu(false); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [showMenu]);
+  useEffect(() => {
     if(!selectedId) return;
     const onKey = e => { if(e.key === 'Escape') closeSheet(); };
     document.addEventListener('keydown', onKey);
@@ -688,31 +820,55 @@ function App(){
 
   /* ---------- the three rooms ---------- */
   function Salon(){
+    // like the sketch: on a three-across wall the newest hangs in the centre of the first row
+    const list = (!wide && sortMode === 'newest' && visible.length >= 2) ? [visible[1], visible[0], ...visible.slice(2)] : visible;
+    const ghosts = (!query && folderFilter==='all' && statusFilter==='all') ? [0,1] : [];
     return (
-      <div className="salon">
-        {visible.map(l => {
-          const h = hashStr(l.id);
-          const newest = l.id === newestId;
-          return (
-            <div className="hang" key={l.id}>
-              <div className="wire"></div>
-              <button className={"item frame " + SHAPES[h % 3] + (newest ? " newest" : "") + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "")}
-                aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
-                <div className="painting" style={{ background: GROUNDS[(h >>> 3) % GROUNDS.length] }}><Motif k={artOf(l)} /></div>
-                {!l.read && <Rosette />}
+      <React.Fragment>
+        <svg className="rail" viewBox="0 0 390 20" preserveAspectRatio="none" aria-hidden="true">
+          <path className="ln" strokeWidth="1.1" d="M0 12H390"/><path className="ln" strokeWidth=".5" opacity=".6" d="M0 16H390"/>
+          <path className="ln" strokeWidth=".8" d="M180 12c4-6 11-6 15 0 4-6 11-6 15 0M195 12v-5"/>
+        </svg>
+        <div className="salon2">
+          {list.map(l => {
+            const h = hashStr(l.id);
+            const newest = l.id === newestId;
+            const f = OX_FRAMES[newest ? 'arch' : OX_SHAPES[h % 3]];
+            const parts = frameParts(f);
+            const t = displayTitle(l);
+            const title = t.length > 14 ? t.slice(0,13) + '…' : t;
+            const cid = 'clip-' + l.id;
+            return (
+              <button key={l.id} className={"hang2" + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "")} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
+                <svg width="120" height="214" viewBox="0 0 120 214" aria-hidden="true">
+                  <defs><clipPath id={cid}>{parts.clip}</clipPath></defs>
+                  <path className="cord" d={f.cords}/>
+                  <use href="#nail" x="60" y="6"/>
+                  {parts.frame}
+                  <g className="paint" clipPath={`url(#${cid})`}><OxPainting k={artOf(l)} box={f.box} /></g>
+                  {!l.read && <use href="#ros" x={f.ros[0]} y={f.ros[1]} width="22" height="28"/>}
+                  {newest
+                    ? <React.Fragment><path className="pl" d="M22 160h76a6 6 0 0 0 6 6v30a6 6 0 0 0-6 6H22a6 6 0 0 0-6-6v-30a6 6 0 0 0 6-6z"/>
+                        <path className="pli" d="M22 163h76a3 3 0 0 0 3 3v30a3 3 0 0 0-3 3H22a3 3 0 0 0-3-3v-30a3 3 0 0 0 3-3z"/></React.Fragment>
+                    : <React.Fragment><rect className="pl" x="16" y="160" width="88" height="42" rx="3"/><rect className="pli" x="19" y="163" width="82" height="36" rx="2"/></React.Fragment>}
+                  <text x="60" y="173" textAnchor="middle" className="n" style={newest ? { fontSize:'8px', letterSpacing:'.06em' } : null}>Nº {pad(l.sessionNo)}{newest ? ' · Newest' : ''}</text>
+                  <text x="60" y="188" textAnchor="middle" className="ti" style={title.length > 11 ? { fontSize:'12.5px' } : null}>{title}</text>
+                  <text x="60" y="198" textAnchor="middle" className="dm">{l.domain.length > 18 ? l.domain.slice(0,17) + '…' : l.domain}</text>
+                </svg>
               </button>
-              <div className="plaque" aria-hidden="true">
-                <div className="no">Nº {pad(l.sessionNo)}{newest ? ' · Newest' : ''}</div>
-                <div className="t">{displayTitle(l).slice(0,32)}</div>
-                <div className="d">{l.domain}</div>
-              </div>
-            </div>
-          );
-        })}
-        {!query && folderFilter==='all' && statusFilter==='all' && [0,1].map(i => (
-          <div className="slot" key={'s'+i} aria-hidden="true"><div className="frame-empty">{pad(nextNo + i)}</div></div>
-        ))}
-      </div>
+            );
+          })}
+          {ghosts.map(i => (
+            <svg key={'g'+i} className="ghost2" viewBox="0 0 120 214" aria-hidden="true">
+              <use href="#nail" x="60" y="6"/>
+              {i === 0 ? <rect className="gh" x="24" y="52" width="72" height="84" rx="2"/> : <ellipse className="gh" cx="60" cy="96" rx="34" ry="42"/>}
+              <rect className="gh" x="16" y="160" width="88" height="42" rx="3" style={{ opacity:.3 }}/>
+              <text x="60" y="100" textAnchor="middle" className="cap">{pad(nextNo + i)}</text>
+            </svg>
+          ))}
+        </div>
+        <div className="wall-cap">Sessions {pad(Math.min(...visible.map(l=>l.sessionNo)))} — {pad(Math.max(...visible.map(l=>l.sessionNo)))} · room for more</div>
+      </React.Fragment>
     );
   }
   function Shelves(){
@@ -774,24 +930,23 @@ function App(){
 
   return (
     <div className="app">
-      <header className="mast">
-        <div className="tools">
-          <div className="seg" role="group" aria-label="Room">
-            {THEMES.map(([k,label]) => (
-              <button key={k} aria-pressed={theme===k} onClick={()=>chooseTheme(k)}><span>{label}</span></button>
-            ))}
-          </div>
-          <button className="mode-btn" onClick={cycleMode} aria-label={`Lighting: ${modePref}. Tap to change.`}>
-            {modePref === 'auto' ? 'Auto' : modePref === 'day' ? 'Day' : 'Night'}
-          </button>
-          <button className="privacy-link" onClick={()=>setShowPrivacy(true)}>Privacy</button>
-        </div>
-        <div className="orn" aria-hidden="true"><i></i><b></b><i></i></div>
-        <h1>Catch</h1>
-        <div className="subtitle">{room.subtitle}</div>
-        <div className="tagline">Paste it, find it later. Nothing else.</div>
-        {links && links.length > 0 && <div className="count">{links.length} caught · {unreadCount} open</div>}
-      </header>
+      {theme === 'oxblood' ? (
+        <header className="ox-mast">
+          <svg width="390" height="166" viewBox="0 0 390 166" aria-hidden="true" dangerouslySetInnerHTML={{__html: OX_MAST[mode]}} />
+          <h1>Catch</h1>
+          <div className="sub">{room.subtitle}</div>
+          <div className="tag">Paste it, find it later. Nothing else.</div>
+          {links && links.length > 0 && <div className="cnt">{links.length} caught · {unreadCount} open</div>}
+        </header>
+      ) : (
+        <header className="mast">
+          <div className="orn" aria-hidden="true"><i></i><b></b><i></i></div>
+          <h1>Catch</h1>
+          <div className="subtitle">{room.subtitle}</div>
+          <div className="tagline">Paste it, find it later. Nothing else.</div>
+          {links && links.length > 0 && <div className="count">{links.length} caught · {unreadCount} open</div>}
+        </header>
+      )}
 
       {syncError && (
         <div className="banner" role="status">
@@ -807,13 +962,20 @@ function App(){
       )}
 
       <div className={"save-block" + (inputVal.trim() || nameVal ? " has-text" : "")}>
-        <div className="dock-label">{room.dock} · Nº {pad(nextNo)}</div>
+        <svg className="iron" viewBox="0 0 390 30" preserveAspectRatio="none" aria-hidden="true">
+          <defs><pattern id="iron" width="40" height="30" patternUnits="userSpaceOnUse"><path fill="none" stroke="#AC9B86" strokeWidth=".8" opacity=".85" d="M0 13C10 3 20 3 20 13S30 23 40 13M20 13c-4 0-5-4-2-5 2 0 3 2 1 3M0 13c4 0 5 4 2 5-2 0-3-2-1-3M40 13c-4 0-5 4-2 5 2 0 3-2 1-3"/></pattern></defs>
+          <path d="M0 13H390" stroke="#40101D" strokeWidth="12"/><rect x="0" y="0" width="390" height="30" fill="url(#iron)"/>
+          <path fill="#40101D" stroke="#AC9B86" d="M195 2c9 0 17 5 20 11-3 6-11 11-20 11s-17-5-20-11c3-6 11-11 20-11z"/>
+          <path fill="none" stroke="#AC9B86" d="M195 19c-3-3-3-8 0-11 3 3 3 8 0 11zM195 19c-5 0-8-3-9-7 4 0 7 3 9 7zM195 19c5 0 8-3 9-7-4 0-7 3-9 7z"/>
+        </svg>
+        <div className="dock-label"><span>{room.dock} · Nº {pad(nextNo)}</span></div>
         <div className="save-row">
           <input ref={inputRef} type="text" inputMode="url" aria-label="Link to save" placeholder="paste a link…" value={inputVal}
             onChange={e=>{ setInputVal(e.target.value); setSaveError(''); }} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
-          <button className="save-btn" onClick={handleSaveClick} disabled={!inputVal.trim() || saving}>{saving ? '···' : 'Catch'}</button>
+          <button className="save-btn" onClick={handleSaveClick} disabled={saving}>{saving ? '···' : 'Catch'}</button>
         </div>
         {saveError && <div className="save-error" role="alert">{saveError}</div>}
+        <div className="fine">One link at a time — kept until you need it.</div>
         <div className="detail-row">
           <input type="text" aria-label="Name (optional)" placeholder="name it (optional)…" value={nameVal}
             onChange={e=>setNameVal(e.target.value)} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
@@ -829,6 +991,9 @@ function App(){
         <input type="text" aria-label="Search the archive" placeholder="search the archive…" value={query} onChange={e=>setQuery(e.target.value)} />
         <button className="filter-toggle" aria-expanded={showFilters} onClick={()=>setShowFilters(v=>!v)}>
           {filtersActive && <span className="pip"></span>}Filter
+        </button>
+        <button className="filter-toggle menu-icon" aria-label="Menu: room, lighting, about" onClick={()=>setShowMenu(true)}>
+          <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><path d="M1 2h16M1 7h16M1 12h16"/></svg>
         </button>
       </div>
       {!showFilters && filtersActive && (
@@ -849,20 +1014,19 @@ function App(){
             <button key={v} className="chip" aria-pressed={sortMode===v} onClick={()=>setSortMode(v)}>{label}</button>
           ))}
         </div>
-      </React.Fragment>}
-
-      <div className="row-label">Folders</div>
-      <div className="catalog">
-        <button className="card" aria-pressed={folderFilter==='all'} onClick={()=>setFolderFilter('all')}>
-          <div className="fname">All</div><div className="fcount">{links ? links.length : 0}</div>
-        </button>
-        {folders.map(f => (
-          <button key={f.id} className="card" aria-pressed={folderFilter===f.id} onClick={()=>setFolderFilter(f.id)}>
-            <div className="fname">{f.name}</div><div className="fcount">{links ? links.filter(l=>l.folderId===f.id).length : 0}</div>
+  <div className="row-label">Folders</div>
+        <div className="catalog">
+          <button className="card" aria-pressed={folderFilter==='all'} onClick={()=>setFolderFilter('all')}>
+            <div className="fname">All</div><div className="fcount">{links ? links.length : 0}</div>
           </button>
-        ))}
-        <button className="card" aria-label="New folder" onClick={createFolder}><div className="fname">+ new</div></button>
-      </div>
+          {folders.map(f => (
+            <button key={f.id} className="card" aria-pressed={folderFilter===f.id} onClick={()=>setFolderFilter(f.id)}>
+              <div className="fname">{f.name}</div><div className="fcount">{links ? links.filter(l=>l.folderId===f.id).length : 0}</div>
+            </button>
+          ))}
+          <button className="card" aria-label="New folder" onClick={createFolder}><div className="fname">+ new</div></button>
+        </div>
+      </React.Fragment>}
 
       <main className="room">
         {links === null && <div className="empty">opening the archive…</div>}
@@ -876,9 +1040,9 @@ function App(){
         )}
         {links !== null && visible.length > 0 && <React.Fragment>
           <div className="room-label">{room.label}</div>
-          {theme === 'oxblood' && <Salon />}
-          {theme === 'hall' && <Shelves />}
-          {theme === 'dispatch' && <Stamps />}
+          {theme === 'oxblood' && Salon()}
+          {theme === 'hall' && Shelves()}
+          {theme === 'dispatch' && Stamps()}
         </React.Fragment>}
       </main>
 
@@ -938,6 +1102,21 @@ function App(){
         </div>
       )}
 
+      {showMenu && (
+        <div className="overlay" onClick={()=>setShowMenu(false)}>
+          <div className="sheet" role="dialog" aria-modal="true" aria-label="Menu" onClick={e=>e.stopPropagation()}>
+            <div className="num">Room</div>
+            <div className="opts">{THEMES.map(([k,label]) => <button key={k} aria-pressed={theme===k} onClick={()=>chooseTheme(k)}>{label}</button>)}</div>
+            <div className="num">Lighting</div>
+            <div className="opts">{[['auto','Auto'],['day','Day'],['night','Night']].map(([k,label]) => (
+              <button key={k} aria-pressed={modePref===k} onClick={()=>{ setModePref(k); writeJSON('catch:mode', k); }}>{label}</button>))}</div>
+            <div className="actions">
+              <button onClick={()=>{ setShowMenu(false); setShowPrivacy(true); }}>About your data</button>
+              <button className="primary" onClick={()=>setShowMenu(false)}>Done</button>
+            </div>
+          </div>
+        </div>
+      )}
       {showPrivacy && <PrivacyModal onClose={()=>setShowPrivacy(false)} />}
     </div>
   );
