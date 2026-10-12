@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Catch</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#40101D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=Cinzel:wght@400;600&family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Marcellus+SC&family=Old+Standard+TT:ital@0;1&display=swap" rel="stylesheet">
 <style>
@@ -74,7 +78,15 @@
 
   #root{ position:relative; z-index:2; }
   .app{ min-height:100vh; display:flex; flex-direction:column; max-width:760px; margin:0 auto;
-    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0; }
+    padding:0 0 env(safe-area-inset-bottom) 0; }
+  /* the strip behind the iPhone clock belongs to each room */
+  html{ overflow-x:clip; }
+  .ox-top{ position:relative; padding-top:env(safe-area-inset-top); }
+  .ox-top::before{ content:""; position:absolute; top:0; left:50%; width:100vw; transform:translateX(-50%); height:env(safe-area-inset-top); background:#40101D; }
+  [data-mode="day"] .ox-top::before{ height:100%; }
+  .gh-top{ height:env(safe-area-inset-top); width:100vw; margin-left:calc(50% - 50vw); background-color:#2A403A;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='39' height='31'%3E%3Crect width='39' height='31' fill='%232A403A'/%3E%3Crect x='2.5' y='2.5' width='34' height='26' fill='%2359523E' stroke='%23B09C70' stroke-width='.6'/%3E%3Crect x='7.5' y='6.5' width='24' height='18' fill='%232A403A' stroke='%23B09C70' stroke-width='.4'/%3E%3Ccircle cx='19.5' cy='15.5' r='2' fill='%23B09C70'/%3E%3C/svg%3E");
+    background-position:center bottom; }
   .app > *{ min-width:0; }
 
   /* ---------- masthead ---------- */
@@ -307,9 +319,10 @@
   [data-theme="dispatch"][data-mode="day"]{ --d-floor:#BFB493; --d-ink:#403822; --d-perf:#403822; --d-field:#BFB493; --d-tile-op:.42; --d-halo:transparent; }
   [data-theme="dispatch"][data-mode="night"]{ --d-floor:#403822; --d-ink:#BFB493; --d-perf:#BFB493; --d-field:#393D3C; --d-tile-op:.22; --d-halo:#BFB493; }
   [data-theme="dispatch"] .wall, [data-theme="dispatch"] .edge-band, [data-theme="dispatch"] .grain{ display:none; }
-  [data-theme="dispatch"] body{ background-color:#393D3C;
+  [data-theme="dispatch"] html{ background:#393D3C; }
+  [data-theme="dispatch"] body{ display:flow-root; background-color:#393D3C;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Cpath d='M7 2.2L11.8 7 7 11.8 2.2 7z' fill='none' stroke='%23A69981' stroke-width='.8' opacity='.55'/%3E%3Ccircle cx='7' cy='7' r='1' fill='%23A69981' opacity='.5'/%3E%3C/svg%3E"); }
-  [data-theme="dispatch"] .app{ margin:14px auto 0; width:calc(100% - 28px); max-width:732px; min-height:calc(100vh - 14px); position:relative;
+  [data-theme="dispatch"] .app{ margin:calc(14px + env(safe-area-inset-top)) auto 0; width:calc(100% - 28px); max-width:732px; min-height:calc(100vh - 14px); position:relative;
     background-color:var(--d-floor); color:var(--d-ink); outline:1px solid rgba(64,56,34,.45); outline-offset:-4px; }
   [data-theme="dispatch"][data-mode="night"] .app{ outline-color:rgba(191,180,147,.55); }
   [data-theme="dispatch"] .app::before{ content:""; position:absolute; inset:0; pointer-events:none; opacity:var(--d-tile-op); background-position:-2px 6px;
@@ -317,7 +330,7 @@
   [data-theme="dispatch"] .app::after{ content:""; position:fixed; inset:0; pointer-events:none; z-index:9997; opacity:.55; mix-blend-mode:multiply;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .25 0 0 0 0 .22 0 0 0 0 .13 0 0 0 .32 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E"); }
   [data-theme="dispatch"][data-mode="night"] .app::after{ mix-blend-mode:overlay; opacity:.35; }
-  [data-theme="dispatch"] .app > *{ position:relative; }
+  [data-theme="dispatch"] .app > *:not(.overlay){ position:relative; }
   .dp-mast{ text-align:center; padding:20px 18px 0; color:var(--d-ink); }
   .dp-mast .orn2{ display:flex; align-items:center; justify-content:center; gap:8px; height:10px; }
   .dp-mast .orn2 i{ width:56px; border-top:1px solid currentColor; opacity:.55; }
@@ -391,7 +404,7 @@
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='390' height='844'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='turbulence' baseFrequency='.0045 .011' numOctaves='5' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .694 0 0 0 0 .749 0 0 0 0 .639 -2.4 0 0 0 .62'/%3E%3C/filter%3E%3Crect width='390' height='844' filter='url(%23m)' opacity='.55'/%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='390' height='844'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='turbulence' baseFrequency='.005 .012' numOctaves='5' seed='23'/%3E%3CfeColorMatrix values='0 0 0 0 .165 0 0 0 0 .251 0 0 0 0 .227 -2.6 0 0 0 .6'/%3E%3C/filter%3E%3Crect width='390' height='844' filter='url(%23m)' opacity='.32'/%3E%3C/svg%3E");
     background-size:auto, auto, cover, cover; background-attachment:fixed; }
-  .gh-ceil{ display:block; width:100%; height:52px; }
+  .gh-ceil{ display:block; width:100vw; margin-left:calc(50% - 50vw); height:52px; }
   .gh-mast{ text-align:center; margin-top:8px; }
   .gh-mast h1{ margin:0; font-family:Cinzel,serif; font-weight:500; font-size:40px; line-height:1; letter-spacing:.34em; padding-left:.34em; color:#B09C70; text-shadow:0 1px 0 rgba(89,82,62,.9); }
   .gh-mast .orn3{ display:block; margin:6px auto 0; width:300px; max-width:90%; height:14px; }
@@ -901,6 +914,8 @@ function App(){
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     document.documentElement.setAttribute('data-mode', mode);
+    const tc = document.querySelector('meta[name="theme-color"]');
+    if(tc) tc.setAttribute('content', theme === 'hall' ? '#2A403A' : theme === 'dispatch' ? '#393D3C' : '#40101D');
   }, [theme, mode]);
 
   function chooseTheme(t){ setTheme(t); writeJSON('catch:room', t); }
@@ -1162,13 +1177,13 @@ function App(){
   return (
     <div className="app">
       {theme === 'oxblood' ? (
-        <header className="ox-mast">
+        <div className="ox-top"><header className="ox-mast">
           <svg width="390" height="166" viewBox="0 0 390 166" aria-hidden="true" dangerouslySetInnerHTML={{__html: OX_MAST[mode]}} />
           <h1>Catch</h1>
           <div className="sub">{room.subtitle}</div>
           <div className="tag">Paste it, find it later. Nothing else.</div>
           {links && links.length > 0 && <div className="cnt">{links.length} caught · {unreadCount} open</div>}
-        </header>
+        </header></div>
       ) : theme === 'dispatch' ? (
         <header className="dp-mast">
           <div className="orn2" aria-hidden="true"><i></i><svg width="10" height="10" viewBox="0 0 10 10"><path d="M5 .5L9.5 5 5 9.5.5 5z" fill="none" stroke="currentColor" strokeWidth=".8"/><circle cx="5" cy="5" r="1.2" fill="currentColor"/></svg><i></i></div>
@@ -1178,6 +1193,7 @@ function App(){
         </header>
       ) : theme === 'hall' ? (
         <React.Fragment>
+          <div className="gh-top" aria-hidden="true"></div>
           <GhCeiling />
           <header className="gh-mast">
             <h1>CATCH</h1>
