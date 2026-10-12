@@ -587,7 +587,7 @@ function normalizeUrl(raw){
   try{ const u = new URL(v); return (u.hostname.includes('.') || u.hostname === 'localhost') ? v : null; }catch(e){ return null; }
 }
 function pad(n){ return String(n).padStart(3,'0'); }
-function displayTitle(l){ return l.name ? l.name : l.url.replace(/^https?:\/\//,''); }
+function displayTitle(l){ return l.name ? l.name : l.url.replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/\/$/,''); }
 function hashStr(s){ let h=0; for(let i=0;i<s.length;i++){ h = (h*31 + s.charCodeAt(i)) >>> 0; } return h; }
 function chunk(arr, size){ const out=[]; for(let i=0;i<arr.length;i+=size) out.push(arr.slice(i,i+size)); return out; }
 function readJSON(key, fallback){ try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }catch(e){ return fallback; } }
