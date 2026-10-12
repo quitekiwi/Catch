@@ -530,6 +530,14 @@
 <div id="root"></div>
 <script src="motifs.js?v=2"></script>
 <script src="oxblood-art.js?v=2"></script>
+<script src="art/ox-1.js?v=1"></script>
+<script src="art/ox-2.js?v=1"></script>
+<script src="art/ox-3.js?v=1"></script>
+<script src="art/ox-4.js?v=1"></script>
+<script src="art/dp-1.js?v=1"></script>
+<script src="art/dp-2.js?v=1"></script>
+<script src="art/gh-1.js?v=1"></script>
+<script src="art/gh-2.js?v=1"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
@@ -680,7 +688,7 @@ const DP_RINGS = [
   'M40 5C14 10 3 34 6 60c3 30 24 48 52 45 27-3 39-28 36-56C91 21 72 4 48 5 38 6 28 10 21 17',
 ];
 function DpDrawing({ k }){
-  const own = DP_DRAW[k];
+  const own = DP_DRAW[k] || (window.DPDraw && window.DPDraw[k]);
   if(own) return <svg viewBox="0 0 62 52" aria-hidden="true" style={{ color:'#BFB493' }} dangerouslySetInnerHTML={{__html: own}} />;
   const S = ART && (ART.subjects[k] || ART.subjects.key);
   return S ? <svg viewBox="0 0 64 52" aria-hidden="true" style={{ color:'#BFB493' }} dangerouslySetInnerHTML={{__html: S.svg}} /> : null;
@@ -708,6 +716,7 @@ function GhBook({ id, w, h, cloth, no, title, art, unread }){
   const t = title.length > maxChars ? title.slice(0, maxChars - 1) + '…' : title;
   const S = ART && (ART.subjects[art] || ART.subjects.key);
   const cid = 'ghb-' + id;
+  const EM = window.GHEmblem && window.GHEmblem[art];
   return (
     <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} aria-hidden="true">
       <defs><clipPath id={cid}><rect x=".7" y=".7" width={w-1.4} height={h-1.4} rx="3"/></clipPath></defs>
@@ -729,7 +738,7 @@ function GhBook({ id, w, h, cloth, no, title, art, unread }){
       <path d={`M${mid-8} ${gBot+6}q2-3 4 0t4 0 4 0 4 0`} fill="none" stroke={GH_GOLD} strokeWidth="1" strokeLinecap="round"/>
       <circle cx={mid} cy={medY} r={medR+3} fill="none" stroke={GH_GOLD} strokeWidth=".9"/>
       <circle cx={mid} cy={medY} r={medR} fill={GH_PAPER} stroke="#142420" strokeOpacity=".85" strokeWidth="1.1"/>
-      {S && <svg x={mid-medR*0.82} y={medY-medR*0.7} width={medR*1.64} height={medR*1.4} viewBox="0 0 64 52" fill="none" stroke="#423C2D" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{__html:S.svg}} />}
+      {(EM || S) && <svg x={mid-medR*0.82} y={medY-medR*0.7} width={medR*1.64} height={medR*1.4} viewBox="0 0 64 52" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ color:'#423C2D' }} dangerouslySetInnerHTML={{__html: EM || S.svg}} />}
       <rect x=".7" y=".7" width={w-1.4} height={h-1.4} rx="3" fill="none" stroke="#142420" strokeOpacity=".9" strokeWidth="1.2"/>
       {unread && <React.Fragment>
         <path d={`M${w-7.5} -6q2-3 4 0v62l-2-3-2 3z`} fill="#7E1E1E" stroke="#142420" strokeWidth=".6"/>

@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Catch · picture library</title>
+<style>
+body{margin:0;background:#1b1a18;color:#e9e3d6;font:15px/1.4 Georgia,serif;padding:20px 14px}
+h1{font-weight:400;font-size:22px;margin:0 0 4px} p{margin:0 0 18px;color:#bdb4a2}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:#24221f;border:1px solid #3a3631;border-radius:8px;padding:10px}
+.card h2{font-weight:400;font-size:15px;margin:0 0 8px} .card h2 small{color:#9d9483;font-size:12px}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.ox{width:72px;height:96px;border-radius:50% 50% 4px 4px/38% 38% 4px 4px;overflow:hidden;border:4px solid #40101D;box-shadow:0 0 0 1px #AC9B86}
+.dp{width:80px;height:92px;background:radial-gradient(circle,transparent 2.4px,#403822 2.8px) -3.5px -3.5px/7px 7px;position:relative}
+.dp i{position:absolute;inset:6px;background:#393D3C;display:flex;align-items:center;justify-content:center;color:#BFB493}
+.dp svg{width:62px;height:52px}
+.gh{width:64px;height:64px;border-radius:50%;background:#A9B29A;border:2px solid #142420;box-shadow:0 0 0 4px #1B2B26,0 0 0 5px #9A8760;display:flex;align-items:center;justify-content:center;color:#423C2D}
+.gh svg{width:40px;height:33px}
+.miss{font-size:11px;color:#c98}
+</style></head><body>
+<h1>Catch picture library</h1><p>Each subject in all three rooms: Oxblood painting · Dispatch stamp · Green Hall emblem. Missing ones are still being drawn.</p>
+<div class="grid" id="g"></div>
+<script src="../motifs.js?v=2"></script><script src="../oxblood-art.js?v=2"></script>
+<script src="ox-1.js"></script><script src="ox-2.js"></script><script src="ox-3.js"></script><script src="ox-4.js"></script>
+<script src="dp-1.js"></script><script src="dp-2.js"></script><script src="gh-1.js"></script><script src="gh-2.js"></script>
+<script>
+const DPX={synth:1,map:1,mystic:1,beats:1};
+const A=window.CatchArt, P=(window.OxbloodArt||{}).paintings||{}, D=window.DPDraw||{}, G=window.GHEmblem||{};
+const ns='http://www.w3.org/2000/svg';
+document.getElementById('g').innerHTML = A.order.map(k=>{
+  const p=P[k]; const ox = p ? `<svg width="72" height="96" viewBox="${p.box.join(' ')}" preserveAspectRatio="xMidYMid slice">${p.svg}</svg>` : '<span class="miss">painting pending</span>';
+  const d = D[k] || (DPX[k] ? null : null);
+  const dp = d ? `<svg viewBox="0 0 62 52" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">${d}</svg>` : (DPX[k] ? '<span class="miss">in app</span>' : '<span class="miss">pending</span>');
+  const g = G[k] ? `<svg viewBox="0 0 64 52" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${G[k]}</svg>` : '<span class="miss">pending</span>';
+  return `<div class="card"><h2>${A.subjects[k].label} <small>${k}</small></h2><div class="row"><div class="ox">${ox}</div><div class="dp"><i>${dp}</i></div><div class="gh">${g}</div></div></div>`;
+}).join('');
+</script></body></html>
