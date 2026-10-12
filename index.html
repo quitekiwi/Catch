@@ -502,11 +502,14 @@ function App(){
   const [showHint, setShowHint] = useState(true);
   const [saving, setSaving] = useState(false);
   const [syncError, setSyncError] = useState(false);
+  // ?room=hall&mode=night opens a specific room without changing the saved choice
+  const urlRoom = new URLSearchParams(window.location.search).get('room');
+  const urlMode = new URLSearchParams(window.location.search).get('mode');
   const [theme, setTheme] = useState(() => {
-    const t = readJSON('catch:room', null);
+    const t = urlRoom || readJSON('catch:room', null);
     return THEMES.some(([k]) => k === t) ? t : 'oxblood';
   });
-  const [modePref, setModePref] = useState(() => readJSON('catch:mode', 'auto'));
+  const [modePref, setModePref] = useState(() => ['day','night','auto'].includes(urlMode) ? urlMode : readJSON('catch:mode', 'auto'));
   const [systemDark, setSystemDark] = useState(() => !window.matchMedia || window.matchMedia('(prefers-color-scheme: dark)').matches);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
