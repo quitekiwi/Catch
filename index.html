@@ -303,6 +303,81 @@
   .sheet .opts button{ font:14px var(--font-label); letter-spacing:.06em; padding:10px 14px; border:1px solid currentColor; border-radius:2px; background:transparent; color:inherit; cursor:pointer; min-height:44px; }
   .sheet .opts button[aria-pressed="true"]{ background:var(--paper-ink); color:var(--paper); }
 
+  /* ---------- Dispatch: lifted from the approved r9 day/night sketches (same five colours, re-allocated) ---------- */
+  [data-theme="dispatch"][data-mode="day"]{ --d-floor:#BFB493; --d-ink:#403822; --d-perf:#403822; --d-field:#BFB493; --d-tile-op:.42; --d-halo:transparent; }
+  [data-theme="dispatch"][data-mode="night"]{ --d-floor:#403822; --d-ink:#BFB493; --d-perf:#BFB493; --d-field:#393D3C; --d-tile-op:.22; --d-halo:#BFB493; }
+  [data-theme="dispatch"] .wall, [data-theme="dispatch"] .edge-band, [data-theme="dispatch"] .grain{ display:none; }
+  [data-theme="dispatch"] body{ background-color:#393D3C;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Cpath d='M7 2.2L11.8 7 7 11.8 2.2 7z' fill='none' stroke='%23A69981' stroke-width='.8' opacity='.55'/%3E%3Ccircle cx='7' cy='7' r='1' fill='%23A69981' opacity='.5'/%3E%3C/svg%3E"); }
+  [data-theme="dispatch"] .app{ margin:14px auto 0; width:calc(100% - 28px); max-width:732px; min-height:calc(100vh - 14px); position:relative;
+    background-color:var(--d-floor); color:var(--d-ink); outline:1px solid rgba(64,56,34,.45); outline-offset:-4px; }
+  [data-theme="dispatch"][data-mode="night"] .app{ outline-color:rgba(191,180,147,.55); }
+  [data-theme="dispatch"] .app::before{ content:""; position:absolute; inset:0; pointer-events:none; opacity:var(--d-tile-op); background-position:-2px 6px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46'%3E%3Cg fill='none' stroke='%23A69981' stroke-width='.9'%3E%3Cpath d='M23 0L46 23 23 46 0 23z'/%3E%3Ccircle cx='23' cy='19' r='4'/%3E%3Ccircle cx='27' cy='23' r='4'/%3E%3Ccircle cx='23' cy='27' r='4'/%3E%3Ccircle cx='19' cy='23' r='4'/%3E%3C/g%3E%3Cg fill='%23393D3C' opacity='.3'%3E%3Cpath d='M0 0h3L0 3zM46 0v3L43 0zM0 46v-3L3 46zM46 46h-3L46 43z'/%3E%3Ccircle cx='23' cy='23' r='1.3'/%3E%3C/g%3E%3C/svg%3E"); }
+  [data-theme="dispatch"] .app::after{ content:""; position:fixed; inset:0; pointer-events:none; z-index:9997; opacity:.55; mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .25 0 0 0 0 .22 0 0 0 0 .13 0 0 0 .32 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  [data-theme="dispatch"][data-mode="night"] .app::after{ mix-blend-mode:overlay; opacity:.35; }
+  [data-theme="dispatch"] .app > *{ position:relative; }
+  .dp-mast{ text-align:center; padding:20px 18px 0; color:var(--d-ink); }
+  .dp-mast .orn2{ display:flex; align-items:center; justify-content:center; gap:8px; height:10px; }
+  .dp-mast .orn2 i{ width:56px; border-top:1px solid currentColor; opacity:.55; }
+  .dp-mast h1{ margin:6px 0 0; font-family:"Bodoni Moda",serif; font-variation-settings:"opsz" 96; font-weight:500; font-size:50px; line-height:1; letter-spacing:.2em; padding-left:.2em; color:var(--d-ink); }
+  .dp-mast .sub{ font-variant:small-caps; font-size:14px; letter-spacing:.24em; margin-top:5px; }
+  .dp-mast .sub::before, .dp-mast .sub::after{ content:""; display:inline-block; width:18px; border-top:1px solid currentColor; vertical-align:middle; margin:0 9px 2px; }
+  .dp-mast .tag{ font-style:italic; font-size:14px; margin:6px 0 4px; }
+  [data-theme="dispatch"] .search-row{ padding:8px 18px 0; gap:8px; }
+  [data-theme="dispatch"] .search-row input{ height:38px; border:1px solid var(--d-ink); background:var(--d-field); color:var(--d-ink); font:italic 15px "Old Standard TT",serif;
+    box-shadow:inset 0 0 0 3px var(--d-field), inset 0 0 0 3.8px rgba(128,118,90,.5); border-radius:0; }
+  [data-theme="dispatch"] .search-row input::placeholder{ color:var(--d-ink); opacity:.75; }
+  [data-theme="dispatch"] .filter-toggle{ min-height:38px; border:1px solid var(--d-ink); background:var(--d-field); color:var(--d-ink); border-radius:0;
+    font:15px "Old Standard TT",serif; font-variant:small-caps; text-transform:none; letter-spacing:.14em; }
+  .dp-meta{ display:flex; align-items:center; gap:8px; margin:14px 18px 12px; font-variant:small-caps; font-size:13px; letter-spacing:.16em; }
+  .dp-meta i{ flex:1; border-top:1px solid currentColor; opacity:.45; }
+  [data-theme="dispatch"] .room{ padding:0 18px 20px; }
+  [data-theme="dispatch"] .room-label, [data-theme="dispatch"] .count-footer{ display:none; }
+  .dp-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(98px,1fr)); gap:8px 14px; }
+  .dp-c{ position:relative; text-align:center; padding-top:9px; }
+  .dp-st{ position:relative; display:block; width:91px; height:105px; margin:0 auto; padding:0; border:0; cursor:pointer;
+    background:radial-gradient(circle,transparent 2.4px,var(--d-perf) 2.8px) -3.5px -3.5px/7px 7px; filter:drop-shadow(0 1px 1.4px rgba(64,56,34,.45)); }
+  .dp-st .face{ position:absolute; inset:6px; background:#393D3C; border:1px solid var(--d-perf); display:flex; align-items:center; justify-content:center; }
+  [data-mode="night"] .dp-st .face{ inset:5px; border:0; }
+  .dp-st .face::after{ content:""; position:absolute; inset:2.5px; border:.6px solid rgba(191,180,147,.5); }
+  .dp-st .face svg{ width:74px; height:62px; fill:none; stroke:#BFB493; stroke-width:1; stroke-linecap:round; stroke-linejoin:round; }
+  .dp-st .face em{ position:absolute; right:6px; bottom:3px; font:italic 10px "Old Standard TT",serif; color:#BFB493; }
+  .dp-ring{ position:absolute; left:-13px; top:-12px; width:calc(100% + 26px); height:calc(100% + 24px); fill:none; stroke-linecap:round; overflow:visible; pointer-events:none; }
+  .dp-ring .h{ stroke:var(--d-halo); stroke-width:2.8; }
+  .dp-ring .k{ stroke:#8C2020; stroke-width:1.6; opacity:.9; }
+  .dp-pm{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; fill:none; stroke:var(--d-ink); stroke-width:1.3; stroke-linecap:round; }
+  .dp-pm text{ fill:var(--d-ink); stroke:none; font-family:"Old Standard TT",serif; text-anchor:middle; }
+  .dp-c.closed .face{ opacity:.85; }
+  .dp-code{ font-family:"Bodoni Moda",serif; font-variation-settings:"opsz" 11; font-size:13px; letter-spacing:.12em; margin-top:15px; line-height:15px; }
+  .dp-t{ font-size:15px; line-height:17px; margin-top:2px; overflow-wrap:anywhere; }
+  .dp-t small{ display:block; font-style:italic; font-size:12px; line-height:15px; }
+  .dp-new{ display:block; font-style:italic; font-size:12px; line-height:13px; margin-top:1px; }
+  .dp-new::before, .dp-new::after{ content:""; display:inline-block; width:9px; border-top:1px solid currentColor; vertical-align:middle; margin:0 5px 2px; opacity:.6; }
+  .dp-r .tile{ width:78px; height:78px; margin:14px auto 0; border:1px solid rgba(128,118,90,.6); position:relative; display:flex; align-items:center; justify-content:center;
+    font-family:"Bodoni Moda",serif; font-size:15px; letter-spacing:.08em; }
+  .dp-r .tile::before{ content:""; position:absolute; inset:11px; border:1px solid currentColor; transform:rotate(45deg) scale(.74); opacity:.5; }
+  .dp-r .tile span{ position:relative; }
+  .dp-r .dp-code{ font-family:"Old Standard TT",serif; font-variant:small-caps; font-size:12px; letter-spacing:.2em; margin-top:14px; }
+  .dp-more{ display:flex; align-items:center; gap:10px; margin:12px 0 0; font-style:italic; font-size:13px; }
+  .dp-more i{ flex:1; border-top:1px dashed currentColor; opacity:.5; }
+  .dp-key{ display:flex; align-items:center; gap:12px; margin-top:12px; padding-top:10px; border-top:1px solid rgba(128,118,90,.6); }
+  .dp-key .lb{ font-variant:small-caps; font-size:12px; letter-spacing:.2em; }
+  .dp-key p{ margin:0; font-style:italic; font-size:14px; line-height:17px; }
+  .dp-ms{ position:relative; flex:none; width:104px; height:50px; }
+  .dp-ms .dp-st{ width:35px; height:42px; margin:4px 0 0; cursor:default; }
+  .dp-ms .dp-st .face{ inset:3px; } .dp-ms .dp-st .face::after{ inset:1.5px; }
+  .dp-ms .dp-st .face svg{ width:24px; height:20px; stroke-width:1.6; }
+  .dp-ms .dp-pm{ left:12px; width:92px; height:50px; }
+  [data-theme="dispatch"] .save-block{ background:#393D3C; color:#BFB493; border-top:1px solid var(--d-perf); padding-top:12px; }
+  [data-theme="dispatch"][data-mode="night"] .save-block{ border-top-color:#BFB493; }
+  [data-theme="dispatch"] .save-block .dock-label{ display:flex; justify-content:space-between; gap:10px; white-space:nowrap; font:12.5px "Old Standard TT",serif; font-variant:small-caps; text-transform:none; letter-spacing:.12em; color:#BFB493; }
+  [data-theme="dispatch"] .save-row input{ border:0; border-bottom:1px solid #BFB493; border-radius:0; background:transparent; color:#BFB493; font:italic 16px "Old Standard TT",serif; padding:10px 2px; }
+  [data-theme="dispatch"] .save-btn{ font-family:"Bodoni Moda",serif; font-weight:600; font-size:15px; letter-spacing:.22em; color:#403822; background:#BFB493; border-radius:0;
+    outline:1px solid #BFB493; outline-offset:3px; margin:3px 3px 3px 0; }
+  @media (min-width:641px){ [data-theme="dispatch"] .save-block{ margin:0 18px; } }
+
   /* ---------- link sheet ---------- */
   .overlay{ position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:20000; display:flex; align-items:flex-end; justify-content:center; }
   @media (min-width:640px){ .overlay{ align-items:center; } }
@@ -562,6 +637,34 @@ function OxPainting({ k, box }){
     </svg>
   );
 }
+
+/* ---------- Dispatch pieces (lifted from the approved r9 sketches) ---------- */
+// the sketch's own engravings for the first four subjects; every other subject uses its library drawing
+const DP_DRAW = {
+  synth: '<path d="M5 30.5l52-.8.3 13.6-52.4.5z"/><path d="M11 30.3v13M17.2 30.4l.1 12.8M23.5 30v13.2M29.6 30.2v13M36 30.1l-.2 13M42.1 30v13.1M48.3 30.2v12.9"/><path d="M14.2 30.5v7.4h3.1v-7.5M26.6 30.3l.2 7.6 3-.1v-7.4M39 30.2v7.6h3M45.4 30.3l-.1 7.4 3 .1"/><path d="M6 30.4c.2-6.2.1-9 .4-11.8l50.3-.6.4 11.6"/><circle cx="13" cy="24" r="2.3"/><circle cx="21" cy="24.2" r="2.2"/><path d="M30 22h14.5M30.5 25.8l13.8-.2M49.5 21.4l3.6 5"/>',
+  map: '<path d="M8 12.5l14.6-4.8 15.8 5.4 15.6-5 .3 31.8-15.4 5.2-16-5.6L8.4 44z"/><path d="M22.6 7.8l.4 31.5M38.4 13.2l.6 31.8"/><path d="M13 19c3 4 6 1 9 4s3 7 6 7 5-5 9-3 2 7 8 6" stroke-dasharray="2 2.4"/><path d="M45.4 30.2l3.5 3.4M48.8 30.1l-3.3 3.6"/><path d="M14.5 34.6c1-.8 2.4-.6 3 .4"/><path d="M12 40.5l4-1.3M29 41.6l5 1.6"/>',
+  mystic: '<path d="M4.6 26.4C13 14.2 22 9.8 31.3 10c9.6.1 18.4 5 26.4 16.3-8 11.4-17 15.6-26.6 15.4C21.6 41.6 12.4 37 4.6 26.4z"/><circle cx="31" cy="26" r="9.4"/><circle cx="31.2" cy="25.8" r="3.6" fill="currentColor"/><path d="M27.4 21.6l1.8 1.4"/><path d="M14.8 15l-2.6-4.4M22.4 11l-1.2-4.6M31 9.6V4.8M39.6 11l1.4-4.6M47.4 15.2l2.8-4.2"/><path d="M20 39.6c-1.2 4.4-.3 7.4 3 8.6"/>',
+  beats: '<path d="M3.8 22.2l53.8-.6.6 12.2L4.2 34.6z"/><path d="M8 22.2l1-6.8 44.2-.4.8 6.6"/><path d="M8.2 27.8l7.6-.1M18.4 27.6h7.8M28.6 27.8h7.6M38.8 27.6l7.6.1M49 27.8h5.6"/><path d="M7.6 31.4h46.8" stroke-dasharray="1.2 2"/><path d="M15 15.4c1.4-4 4-6.6 8-7.6M44.4 15c-.6-3.8-2.6-6.8-6.4-7.4"/><circle cx="31" cy="18.6" r="1.4"/><path d="M12 18.6h6M38 18.6h10"/>',
+};
+const DP_RINGS = [
+  'M58 4C26 1 4 22 5 55c1 33 20 53 49 52 30-1 43-25 41-54C93 22 74 5 48 6 36 8 27 12 22 16',
+  'M30 10C10 20 2 45 8 70c6 26 30 38 55 34 26-4 35-30 32-58C92 18 72 3 46 5 33 6 22 13 16 19',
+  'M64 6C30 0 6 20 6 52c0 34 18 54 48 54s42-24 40-54C92 22 76 7 50 6 40 6 30 10 24 15',
+  'M40 5C14 10 3 34 6 60c3 30 24 48 52 45 27-3 39-28 36-56C91 21 72 4 48 5 38 6 28 10 21 17',
+];
+function DpDrawing({ k }){
+  const own = DP_DRAW[k];
+  if(own) return <svg viewBox="0 0 62 52" aria-hidden="true" style={{ color:'#BFB493' }} dangerouslySetInnerHTML={{__html: own}} />;
+  const S = ART && (ART.subjects[k] || ART.subjects.key);
+  return S ? <svg viewBox="0 0 64 52" aria-hidden="true" style={{ color:'#BFB493' }} dangerouslySetInnerHTML={{__html: S.svg}} /> : null;
+}
+const DpPostmark = ({ small }) => (
+  <svg className="dp-pm" viewBox="0 0 92 50" preserveAspectRatio={small ? 'xMinYMid meet' : 'none'} aria-hidden="true">
+    <path d="M0 14c4-3 8 3 12 0s8 3 12 0 8 3 12 0 8 3 12 0M0 22c4-3 8 3 12 0s8 3 12 0 8 3 12 0 8 3 12 0M0 30c4-3 8 3 12 0s8 3 12 0 8 3 12 0 8 3 12 0M0 38c4-3 8 3 12 0s8 3 12 0 8 3 12 0 8 3 12 0"/>
+    <circle cx="70" cy="25" r="19"/><circle cx="70" cy="25" r="15.5" strokeWidth=".7"/><path d="M57 25h26" strokeWidth=".6"/>
+    <text x="70" y="22" fontSize="6.4" letterSpacing=".5">CLOSED</text>
+  </svg>
+);
 
 const Rosette = () => (
   <svg className="rosette" viewBox="0 0 24 30" aria-hidden="true">
@@ -899,32 +1002,38 @@ function App(){
     ));
   }
   function Stamps(){
+    const showReserved = !query && folderFilter==='all' && statusFilter==='all';
     return (
-      <div className="stamps">
-        {visible.map(l => (
-          <div key={l.id} className="cell">
-            <button className={"item stamp-wrap" + (justCaught===l.id ? " just" : "")} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
-              <span className="stamp"></span>
-              <span className="stamp-face"><Motif k={artOf(l)} /><span className="val">{l.sessionNo}</span></span>
-              {l.read ? <Postmark /> : (
-                <svg className="ring" viewBox="0 0 106 118" preserveAspectRatio="none" aria-hidden="true">
-                  <path className="halo" d="M60 4C28 0 5 22 5 57c0 33 20 56 50 55 31-1 47-25 46-56C100 24 80 6 52 6 40 6 30 10 24 16"/>
-                  <path className="ink" d="M60 4C28 0 5 22 5 57c0 33 20 56 50 55 31-1 47-25 46-56C100 24 80 6 52 6 40 6 30 10 24 16"/>
-                </svg>
-              )}
-            </button>
-            <div className="caption" aria-hidden="true">
-              <div className="code">S-{pad(l.sessionNo)}</div>
-              <div className="t">{displayTitle(l).slice(0,32)}</div>
-              <div className="d">{l.domain}</div>
-              {l.id === newestId && <div className="newest">— newest —</div>}
+      <React.Fragment>
+        <div className="dp-grid">
+          {visible.map(l => (
+            <div key={l.id} className={"dp-c" + (l.read ? " closed" : "")}>
+              <button className={"dp-st" + (justCaught===l.id ? " just" : "")} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
+                <span className="face"><DpDrawing k={artOf(l)} /><em>{l.sessionNo}</em></span>
+                {l.read ? <DpPostmark /> : (
+                  <svg className="dp-ring" viewBox="0 0 100 112" preserveAspectRatio="none" aria-hidden="true">
+                    <path className="h" d={DP_RINGS[(l.sessionNo || 0) % 4]}/><path className="k" d={DP_RINGS[(l.sessionNo || 0) % 4]}/>
+                  </svg>
+                )}
+              </button>
+              <div className="dp-code">S-{pad(l.sessionNo)}</div>
+              <div className="dp-t">{displayTitle(l).slice(0,40)}<small>{l.domain}</small></div>
+              {l.id === newestId && <span className="dp-new">newest</span>}
             </div>
+          ))}
+          {showReserved && [0,1].map(i => (
+            <div key={'r'+i} className="dp-c dp-r" aria-hidden="true"><div className="tile"><span>{pad(nextNo + i)}</span></div><div className="dp-code">reserved</div></div>
+          ))}
+        </div>
+        {showReserved && <div className="dp-more"><i></i><span>{pad(nextNo + 2)} onward · more room below</span><i></i></div>}
+        <div className="dp-key">
+          <div className="dp-ms">
+            <span className="dp-st"><span className="face"><DpDrawing k="mystic" /></span></span>
+            <DpPostmark small />
           </div>
-        ))}
-        {!query && folderFilter==='all' && statusFilter==='all' && [0,1].map(i => (
-          <div key={'r'+i} aria-hidden="true"><div className="reserved">{pad(nextNo + i)}</div></div>
-        ))}
-      </div>
+          <div><div className="lb">Key</div><p>read links get postmarked</p></div>
+        </div>
+      </React.Fragment>
     );
   }
 
@@ -937,6 +1046,13 @@ function App(){
           <div className="sub">{room.subtitle}</div>
           <div className="tag">Paste it, find it later. Nothing else.</div>
           {links && links.length > 0 && <div className="cnt">{links.length} caught · {unreadCount} open</div>}
+        </header>
+      ) : theme === 'dispatch' ? (
+        <header className="dp-mast">
+          <div className="orn2" aria-hidden="true"><i></i><svg width="10" height="10" viewBox="0 0 10 10"><path d="M5 .5L9.5 5 5 9.5.5 5z" fill="none" stroke="currentColor" strokeWidth=".8"/><circle cx="5" cy="5" r="1.2" fill="currentColor"/></svg><i></i></div>
+          <h1>CATCH</h1>
+          <div className="sub">Catalogue of Sessions</div>
+          <div className="tag">Paste it, find it later. Nothing else.</div>
         </header>
       ) : (
         <header className="mast">
@@ -968,7 +1084,7 @@ function App(){
           <path fill="#40101D" stroke="#AC9B86" d="M195 2c9 0 17 5 20 11-3 6-11 11-20 11s-17-5-20-11c3-6 11-11 20-11z"/>
           <path fill="none" stroke="#AC9B86" d="M195 19c-3-3-3-8 0-11 3 3 3 8 0 11zM195 19c-5 0-8-3-9-7 4 0 7 3 9 7zM195 19c5 0 8-3 9-7-4 0-7 3-9 7z"/>
         </svg>
-        <div className="dock-label"><span>{room.dock} · Nº {pad(nextNo)}</span></div>
+        <div className="dock-label"><span>{room.dock} {theme === 'dispatch' ? '' : '· '}Nº {pad(nextNo)}</span>{theme === 'dispatch' && <span>one link · nothing else</span>}</div>
         <div className="save-row">
           <input ref={inputRef} type="text" inputMode="url" aria-label="Link to save" placeholder="paste a link…" value={inputVal}
             onChange={e=>{ setInputVal(e.target.value); setSaveError(''); }} onKeyDown={e=>{ if(e.key==='Enter') handleSaveClick(); }} />
@@ -1028,6 +1144,9 @@ function App(){
         </div>
       </React.Fragment>}
 
+      {theme === 'dispatch' && links && links.length > 0 && (
+        <div className="dp-meta"><span>Section A · {pad(Math.min(...links.map(l=>l.sessionNo)))}–{pad(nextNo + 2)}</span><i></i><b style={{ fontWeight:400 }}>{links.length} caught · {unreadCount} open</b></div>
+      )}
       <main className="room">
         {links === null && <div className="empty">opening the archive…</div>}
         {links !== null && links.length === 0 && (
