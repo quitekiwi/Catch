@@ -531,7 +531,7 @@ const OX_FRAMES = {
   cusped: { fr:'M32 56h56a10 10 0 0 0 10 10v74H22v-74a10 10 0 0 0 10-10z', mat:'M36 64h48a6 6 0 0 0 6 6v62H30v-62a6 6 0 0 0 6-6z',
             clip:'M38 68h44a4 4 0 0 0 4 4v56H34v-56a4 4 0 0 0 4-4z', box:[34,68,52,60], ros:[90,44], cords:'M60 6L36 58M60 6L84 58' },
 };
-const OX_SHAPES = ['oval','rect','cusped'];
+const OX_SHAPES = ['oval','cusped','rect'];  // by session number: …003 oval, 001 cusped, 002 rect, as in the sketch
 function frameParts(f){
   if(f.el) return { frame:<React.Fragment><ellipse className="fr" cx={f.el[0]} cy={f.el[1]} rx={f.el[2]} ry={f.el[3]}/>
       <ellipse className="ornl" cx={f.el[0]} cy={f.el[1]} rx={f.ln[0]} ry={f.ln[1]} strokeWidth=".6"/>
@@ -833,7 +833,7 @@ function App(){
           {list.map(l => {
             const h = hashStr(l.id);
             const newest = l.id === newestId;
-            const f = OX_FRAMES[newest ? 'arch' : OX_SHAPES[h % 3]];
+            const f = OX_FRAMES[newest ? 'arch' : OX_SHAPES[(l.sessionNo || 0) % 3]];
             const parts = frameParts(f);
             const t = displayTitle(l);
             const title = t.length > 14 ? t.slice(0,13) + '…' : t;
