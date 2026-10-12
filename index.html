@@ -185,22 +185,22 @@
     font:13px 'Marcellus SC',serif; letter-spacing:.1em; margin-top:16px; }
 
   /* Green Hall: the bookshelf */
-  .shelf{ position:relative; display:flex; align-items:flex-end; gap:5px; padding:0 4px; margin-bottom:34px; min-height:200px; }
+  .shelf{ position:relative; display:flex; align-items:flex-end; gap:5px; padding:0 4px; margin-bottom:58px; min-height:236px; }
   .shelf::after{ content:""; position:absolute; left:-6px; right:-6px; bottom:-10px; height:10px; background:var(--shelf);
     box-shadow:0 1px 0 rgba(0,0,0,.25), 0 6px 10px rgba(0,0,0,.25); }
-  .bookend{ width:30px; height:150px; flex-shrink:0; }
+  .bookend{ width:32px; height:200px; flex-shrink:0; }
   .bookend.right{ transform:scaleX(-1); margin-left:auto; }
   .book{ position:relative; display:flex; flex-direction:column; align-items:center; border-radius:2px 2px 0 0; color:#B1BFA3;
     box-shadow:inset 0 0 0 1px rgba(176,156,112,.7), 2px 0 3px rgba(0,0,0,.25); padding:8px 0 10px; }
   .book .bands{ position:absolute; left:2px; right:2px; height:6px; border-top:1px solid #B09C70; border-bottom:1px solid #B09C70; opacity:.8; }
-  .book .cart{ background:#B1BFA3; color:#2A403A; border:1px solid #59523E; border-radius:6px; padding:2px 3px; font:9px 'Cinzel',serif; letter-spacing:.04em; line-height:1.1; min-width:28px; }
-  .book .cart b{ display:block; font-size:11px; font-weight:600; }
-  .book .spine-title{ flex:1; writing-mode:vertical-rl; transform:rotate(180deg); font:15px 'EB Garamond',serif; margin:8px 0; overflow:hidden;
+  .book .cart{ background:#B1BFA3; color:#2A403A; border:1px solid #59523E; border-radius:5px; padding:2px 2px; font:8px 'Cinzel',serif; line-height:1.05; width:calc(100% - 10px); margin-top:4px; }
+  .book .cart b{ display:block; font-size:10.5px; font-weight:600; letter-spacing:0; }
+  .book .spine-title{ flex:1; min-height:0; writing-mode:vertical-rl; transform:rotate(180deg); font:14px 'EB Garamond',serif; margin:6px 0; overflow:hidden;
     white-space:nowrap; text-overflow:ellipsis; max-height:100%; }
   .book.light .spine-title{ color:#1C2B26; }
   .book .seal{ width:30px; height:26px; border-radius:50%; background:#B1BFA3; color:#59523E; border:1px solid #B09C70; display:flex; align-items:center; justify-content:center; }
   .book .seal .motif{ width:24px; stroke-width:1.6; }
-  .book .ribbon{ position:absolute; top:-4px; right:7px; width:5px; height:58px; background:#8C2020; }
+  .book .ribbon{ position:absolute; bottom:-30px; right:6px; width:5px; height:34px; background:#8C2020; z-index:2; }
   .book .ribbon::after{ content:""; position:absolute; left:-4px; bottom:-14px; width:13px; height:14px; background:#B1BFA3; border:1px solid #59523E;
     clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%); }
   .book.closed{ filter:brightness(.7) saturate(.6); }
@@ -379,7 +379,7 @@ const Rosette = () => (
   </svg>
 );
 const Lily = ({ right }) => (
-  <svg className={"bookend" + (right ? " right" : "")} viewBox="0 0 30 150" aria-hidden="true">
+  <svg className={"bookend" + (right ? " right" : "")} viewBox="0 0 30 150" preserveAspectRatio="none" aria-hidden="true">
     <path d="M2 150V22A13 13 0 0 1 28 22V150Z" fill="var(--bookend)" stroke="var(--bookend-line)"/>
     <g fill="none" stroke="var(--bookend-line)" strokeWidth="1.1" strokeLinecap="round">
       <path d="M15 142C15 110 13 80 15 50M15 120c-7-6-8-16-4-24M15 100c7-6 8-16 4-24M10 50c1 6 9 6 10 0M15 50c-2-5-1-9 0-12 1 3 2 7 0 12z"/>
@@ -627,7 +627,7 @@ function App(){
               <div className="wire"></div>
               <button className={"item frame " + SHAPES[h % 3] + (newest ? " newest" : "") + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "")}
                 aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
-                <div className="painting" style={{ background: GROUNDS[(h >> 3) % GROUNDS.length] }}><Motif k={artOf(l)} /></div>
+                <div className="painting" style={{ background: GROUNDS[(h >>> 3) % GROUNDS.length] }}><Motif k={artOf(l)} /></div>
                 {!l.read && <Rosette />}
               </button>
               <div className="plaque" aria-hidden="true">
@@ -653,9 +653,9 @@ function App(){
         <Lily />
         {row.map(l => {
           const h = hashStr(l.id);
-          const [cloth, light] = CLOTHS[h % CLOTHS.length];
-          const height = 150 + ((h >> 4) % 40);
-          const width = 42 + ((h >> 9) % 14);
+          const [cloth, light] = CLOTHS[(l.sessionNo || 0) % CLOTHS.length];
+          const height = 188 + ((h >>> 4) % 36);
+          const width = 42 + ((h >>> 9) % 14);
           return (
             <button key={l.id} className={"item book" + (light ? " light" : "") + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "")}
               style={{ background:cloth, height, width }} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
