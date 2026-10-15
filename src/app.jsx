@@ -9,12 +9,46 @@ const ROOM = {
   dispatch: { subtitle:'Catalogue of Sessions',          label:'Section A',  dock:'New session',    verb:'file' },
 };
 
+/* ---------- sign-in: email + 6-digit code (Supabase Auth); the session is kept on this device ---------- */
+const SESSION_KEY = 'catch:session';
+let session = (() => { try{ return JSON.parse(localStorage.getItem(SESSION_KEY)); }catch(e){ return null; } })();
+function setSession(s){
+  session = s;
+  try{ s ? localStorage.setItem(SESSION_KEY, JSON.stringify(s)) : localStorage.removeItem(SESSION_KEY); }catch(e){}
+}
+async function auth(path, body, token){
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/${path}`, {
+    method:'POST', body: JSON.stringify(body || {}),
+    headers:{ 'apikey':SUPABASE_KEY, 'Content-Type':'application/json', ...(token ? { 'Authorization':`Bearer ${token}` } : {}) },
+  });
+  const data = await res.json().catch(() => ({}));
+  if(!res.ok){ const e = new Error(data.msg || data.error_description || data.message || `Sign-in error ${res.status}`); e.status = res.status; throw e; }
+  return data;
+}
+function keepSession(d){
+  setSession({ access_token:d.access_token, refresh_token:d.refresh_token,
+    expires_at: d.expires_at || Math.floor(Date.now()/1000) + (d.expires_in || 3600), email: (d.user && d.user.email) || (session && session.email) });
+}
+let renewing = null;
+// a working access token, renewed when it's about to run out; offline, this throws and the caller waits
+async function accessToken(){
+  if(!session) return null;
+  if(session.expires_at - 60 > Date.now()/1000) return session.access_token;
+  if(!renewing) renewing = auth('token?grant_type=refresh_token', { refresh_token:session.refresh_token })
+    .then(keepSession)
+    .catch(e => { if(e.status === 400 || e.status === 401){ setSession(null); window.dispatchEvent(new Event('catch:signedout')); } throw e; })
+    .finally(() => { renewing = null; });
+  await renewing;
+  return session && session.access_token;
+}
+
 async function sb(path, options = {}) {
+  const token = await accessToken();
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
     ...options,
     headers: {
       'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Authorization': `Bearer ${token || SUPABASE_KEY}`,
       'Content-Type': 'application/json',
       'Prefer': options.prefer || 'return=representation',
       ...(options.headers || {})
@@ -53,7 +87,7 @@ function writeJSON(key, v){ try{ localStorage.setItem(key, JSON.stringify(v)); }
 
 /* ---------- offline: a copy of the archive kept on this device, plus an outbox of changes waiting to reach the database ---------- */
 const CACHE_KEY = 'catch:cache', OUTBOX_KEY = 'catch:outbox';
-function queue(method, path, body){ const q = readJSON(OUTBOX_KEY, []); q.push({ method, path, body }); writeJSON(OUTBOX_KEY, q); }
+function queue(method, path, body, prefer){ const q = readJSON(OUTBOX_KEY, []); q.push({ method, path, body, prefer }); writeJSON(OUTBOX_KEY, q); }
 function outboxSize(){ return readJSON(OUTBOX_KEY, []).length; }
 // what the person would call a change (the session counter rides along with a new link)
 function pendingChanges(){ return readJSON(OUTBOX_KEY, []).filter(op => !op.path.startsWith('meta')).length; }
@@ -66,7 +100,7 @@ function flushOutbox(){
       const q = readJSON(OUTBOX_KEY, []);
       if(!q.length) break;
       const op = q[0];
-      try{ await sb(op.path, { method:op.method, body: op.body ? JSON.stringify(op.body) : undefined, prefer:'return=minimal' }); }
+      try{ await sb(op.path, { method:op.method, body: op.body ? JSON.stringify(op.body) : undefined, prefer: op.prefer || 'return=minimal' }); }
       catch(e){
         // no connection, or the database is busy: keep it for later. A flat "no" (e.g. already saved) is dropped so it can't block the rest.
         const refused = e.status >= 400 && e.status < 500 && ![401,403,408,429].includes(e.status);
@@ -296,6 +330,55 @@ const Postmark = () => (
   </svg>
 );
 
+function SignIn({ onSignedIn }){
+  const [email, setEmail] = useState('');
+  const [code, setCode] = useState('');
+  const [step, setStep] = useState('email');
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
+  const why = e => navigator.onLine === false ? "You're offline. Connect to the internet to sign in."
+    : e.status === 429 ? 'Too many tries. Wait a minute, then try again.' : e.message;
+  async function sendCode(ev){
+    ev.preventDefault();
+    if(!/^\S+@\S+\.\S+$/.test(email.trim())){ setErr("That doesn't look like an email address."); return; }
+    setBusy(true); setErr('');
+    try{ await auth('otp', { email:email.trim(), create_user:true }); setStep('code'); }
+    catch(e){ console.error(e); setErr(why(e)); }
+    setBusy(false);
+  }
+  async function verify(ev){
+    ev.preventDefault();
+    setBusy(true); setErr('');
+    try{ keepSession(await auth('verify', { type:'email', email:email.trim(), token:code.replace(/\s/g,'') })); onSignedIn(); }
+    catch(e){ console.error(e); setErr(e.status >= 400 && e.status < 500 && e.status !== 429 ? "That code didn't work. Check it, or send a new one." : why(e)); setBusy(false); }
+  }
+  return (
+    <div className="signin-wrap">
+      <form className="sheet modal signin" noValidate onSubmit={step === 'email' ? sendCode : verify} aria-labelledby="signin-title">
+        <h2 id="signin-title">Catch</h2>
+        {step === 'email' ? (
+          <React.Fragment>
+            <p>Your archive is private to you. Enter your email and we'll send you a 6-digit code to sign in.</p>
+            <div className="edit-row"><input type="email" autoComplete="email" aria-label="Email" placeholder="you@example.com" value={email}
+              onChange={e=>{ setEmail(e.target.value); setErr(''); }} autoFocus /></div>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <p>We sent a code to <b>{email.trim()}</b>. Type it here. It can take a minute to arrive.</p>
+            <div className="edit-row"><input inputMode="numeric" autoComplete="one-time-code" aria-label="Code from the email" placeholder="123456" value={code}
+              onChange={e=>{ setCode(e.target.value); setErr(''); }} autoFocus /></div>
+          </React.Fragment>
+        )}
+        {err && <div className="save-error" role="alert">{err}</div>}
+        <div className="actions">
+          {step === 'code' && <button type="button" onClick={()=>{ setStep('email'); setCode(''); setErr(''); }}>Use another email</button>}
+          <button type="submit" className="primary" disabled={busy}>{busy ? '···' : step === 'email' ? 'Send code' : 'Sign in'}</button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
 function PrivacyModal({ onClose }){
   const closeRef = useRef(null);
   useEffect(() => {
@@ -309,13 +392,13 @@ function PrivacyModal({ onClose }){
     <div className="overlay" onClick={onClose}>
       <div className="sheet modal" role="dialog" aria-modal="true" aria-labelledby="privacy-title" onClick={e=>e.stopPropagation()}>
         <h2 id="privacy-title">About your data</h2>
-        <p>Catch stores everything you save — links, names, folders — in a shared cloud database (Supabase). This is what lets the same list show up whether you're in Safari, Brave, or the home-screen icon.</p>
+        <p>Catch stores everything you save — links, names, folders — in a cloud database (Supabase). This is what lets the same archive show up on your phone and your computer. A copy is also kept on each device you sign in on, so it opens quickly and works offline.</p>
         <h3>Who can access it</h3>
-        <p>There's no login and no account system. The app connects to the database using a key that's visible in the app's page source to anyone who looks. In practice, this means the security model is "no one else knows this address exists," not "no one else could get in." This is a deliberate tradeoff for a single-person tool, not an oversight.</p>
+        <p>You sign in with your email. The database checks who you are on every request and only ever shows you your own links; other people with accounts have their own separate archives and can't see yours. The people who run the database (the app's owner and Supabase) can technically see everything stored in it.</p>
+        <h3>Page titles</h3>
+        <p>When you catch a link without naming it, a small helper visits that page once to read its title. Nothing else about you is sent with it.</p>
         <h3>What's not happening</h3>
-        <p>Nothing is encrypted per-user, nothing is sold, and there are no ads or analytics tracking you across other sites. This app talks only to its own database.</p>
-        <h3>If that changes</h3>
-        <p>If this app is ever shared with other people or shipped more broadly, that would require real per-user accounts and access control first — not just this notice.</p>
+        <p>Nothing is sold, and there are no ads or analytics tracking you across other sites. This app talks only to its own database.</p>
         <div className="actions"><button ref={closeRef} className="primary" onClick={onClose}>Close</button></div>
       </div>
     </div>
@@ -323,7 +406,8 @@ function PrivacyModal({ onClose }){
 }
 
 function App(){
-  const cached = useMemo(() => readJSON(CACHE_KEY, null), []);
+  const [signedIn, setSignedIn] = useState(() => !!session);
+  const cached = useMemo(() => session ? readJSON(CACHE_KEY, null) : null, []);
   const [links, setLinks] = useState(() => cached ? cached.links : null);
   const [folders, setFolders] = useState(() => cached ? cached.folders : []);
   const [counter, setCounter] = useState(() => cached ? cached.counter : 0);
@@ -366,6 +450,8 @@ function App(){
 
   useEffect(() => {
     refresh();
+    const onSignedOut = () => forgetDevice();
+    window.addEventListener('catch:signedout', onSignedOut);
     (() => {
       // the add-to-home-screen tip only makes sense on iOS Safari, outside the installed app
       const ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -384,7 +470,8 @@ function App(){
     window.addEventListener('online', onOnline);
     document.addEventListener('visibilitychange', onVisible);
     return () => { mq && mq.removeEventListener && mq.removeEventListener('change', onScheme); window.removeEventListener('resize', onResize);
-      window.removeEventListener('online', onOnline); document.removeEventListener('visibilitychange', onVisible); };
+      window.removeEventListener('online', onOnline); document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('catch:signedout', onSignedOut); };
   }, []);
 
   useEffect(() => {
@@ -408,15 +495,16 @@ function App(){
   useEffect(() => { if(links !== null) writeJSON(CACHE_KEY, { links, folders, counter }); }, [links, folders, counter]);
 
   async function sync(){ const left = await flushOutbox(); setPending(pendingChanges()); return left; }
-  function send(method, path, body){ queue(method, path, body); sync(); }
+  function send(method, path, body, prefer){ queue(method, path, body, prefer); sync(); }
   async function refresh(){
+    if(!session) return;
     if(await sync() > 0){ setSyncError(true); setLinks(prev => prev || []); return; }  // still offline: keep the local copy
     nameUntitled();
     try{
       const [l, f, m] = await Promise.all([
         sb('links?select=*&order=session_no.desc'), sb('folders?select=*&order=created_at.asc'), sb('meta?select=value&key=eq.counter')]);
       if(outboxSize() > 0) return;  // something was caught while loading; the next refresh will include it
-      setLinks((l || []).map(rowToLink)); setFolders((f || []).map(rowToFolder)); setCounter(m && m[0] ? parseInt(m[0].value, 10) : 0);
+      setLinks((l || []).map(rowToLink)); setFolders((f || []).map(rowToFolder)); setCounter(Math.max(0, ...(m || []).map(r => parseInt(r.value, 10) || 0)));
       setSyncError(false);
     }catch(e){ console.error(e); setSyncError(true); setLinks(prev => prev || []); }
   }
@@ -436,6 +524,21 @@ function App(){
         send('PATCH', `links?id=eq.${id}&name=eq.`, { name:title });  // only if it's still unnamed
       }
     }finally{ naming.current = false; }
+  }
+
+  function signedInNow(){ setSignedIn(true); refresh(); }
+  // signing out clears this device's copy, so the next person to sign in here starts from their own archive
+  function forgetDevice(){
+    [CACHE_KEY, OUTBOX_KEY, UNTITLED_KEY].forEach(k => { try{ localStorage.removeItem(k); }catch(e){} });
+    setLinks(null); setFolders([]); setCounter(0); setPending(0); setSyncError(false); setSelectedId(null);
+    setSignedIn(false);
+  }
+  async function signOut(){
+    const left = pendingChanges();
+    if(left && !window.confirm(`${left === 1 ? '1 change hasn\'t' : left + " changes haven't"} reached the database yet and will be lost if you sign out now. Sign out anyway?`)) return;
+    const token = session && session.access_token;
+    setSession(null); setShowMenu(false); forgetDevice();
+    try{ await auth('logout', {}, token); }catch(e){}
   }
 
   function chooseTheme(t){ setTheme(t); writeJSON('catch:room', t); }
@@ -463,7 +566,7 @@ function App(){
     const entry = { id:'l_'+Date.now()+'_'+Math.random().toString(36).slice(2,7), url, sessionNo: nextCounter,
       name: (name||'').trim(), folderId: folderId || null, domain: domainFrom(url), addedAt: Date.now(), read: false };
     queue('POST', 'links', linkToRow(entry));
-    send('PATCH', 'meta?key=eq.counter', { value: String(nextCounter) });
+    send('POST', 'meta?on_conflict=user_id,key', { key:'counter', value: String(nextCounter) }, 'resolution=merge-duplicates,return=minimal');
     setCounter(nextCounter);
     setLinks(prev => [entry, ...(prev || [])]);
     setJustCaught(entry.id); setTimeout(() => setJustCaught(null), 900);
@@ -683,6 +786,8 @@ function App(){
     );
   }
 
+  if(!signedIn) return <SignIn onSignedIn={signedInNow} />;
+
   return (
     <div className="app">
       {theme === 'oxblood' ? (
@@ -774,7 +879,7 @@ function App(){
         <button className="filter-toggle" aria-expanded={showFilters} onClick={()=>setShowFilters(v=>!v)}>
           {filtersActive && <span className="pip"></span>}Filter
         </button>
-        <button className="filter-toggle menu-icon" aria-label="Menu: room, lighting, about" onClick={()=>setShowMenu(true)}>
+        <button className="filter-toggle menu-icon" aria-label="Menu: room, lighting, account" onClick={()=>setShowMenu(true)}>
           <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><path d="M1 2h16M1 7h16M1 12h16"/></svg>
         </button>
       </div>
@@ -895,7 +1000,10 @@ function App(){
             <div className="num">Lighting</div>
             <div className="opts">{[['auto','Auto'],['day','Day'],['night','Night']].map(([k,label]) => (
               <button key={k} aria-pressed={modePref===k} onClick={()=>{ setModePref(k); writeJSON('catch:mode', k); }}>{label}</button>))}</div>
+            <div className="num">Account</div>
+            <p className="who">Signed in as {session && session.email}</p>
             <div className="actions">
+              <button onClick={signOut}>Sign out</button>
               <button onClick={()=>{ setShowMenu(false); setShowPrivacy(true); }}>About your data</button>
               <button className="primary" onClick={()=>setShowMenu(false)}>Done</button>
             </div>
