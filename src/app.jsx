@@ -80,6 +80,15 @@ function flushOutbox(){
   return flushing.finally(() => { flushing = null; });
 }
 
+/* ---------- page titles: links caught without a name get the page's own title from the "title" helper (supabase/functions/title) ---------- */
+const UNTITLED_KEY = 'catch:untitled';
+async function fetchTitle(url){
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/title`, { method:'POST', headers:{ 'Content-Type':'application/json', 'apikey':SUPABASE_KEY }, body: JSON.stringify({ url }) });
+  if(!res.ok) throw new Error(`title helper ${res.status}`);
+  const { title } = await res.json();
+  return (title || '').trim();
+}
+
 const ART = window.CatchArt || null;
 function autoArt(l){ try{ return ART ? ART.pick(l.url, l.name) : 'key'; }catch(e){ return 'key'; } }
 function Motif({ k }){
@@ -402,6 +411,7 @@ function App(){
   function send(method, path, body){ queue(method, path, body); sync(); }
   async function refresh(){
     if(await sync() > 0){ setSyncError(true); setLinks(prev => prev || []); return; }  // still offline: keep the local copy
+    nameUntitled();
     try{
       const [l, f, m] = await Promise.all([
         sb('links?select=*&order=session_no.desc'), sb('folders?select=*&order=created_at.asc'), sb('meta?select=value&key=eq.counter')]);
@@ -409,6 +419,23 @@ function App(){
       setLinks((l || []).map(rowToLink)); setFolders((f || []).map(rowToFolder)); setCounter(m && m[0] ? parseInt(m[0].value, 10) : 0);
       setSyncError(false);
     }catch(e){ console.error(e); setSyncError(true); setLinks(prev => prev || []); }
+  }
+
+  // fills in titles for links caught without a name; anything that can't be reached yet waits for the next sync
+  const naming = useRef(false);
+  async function nameUntitled(){
+    if(naming.current) return;
+    naming.current = true;
+    try{
+      for(const { id, url } of readJSON(UNTITLED_KEY, [])){
+        let title;
+        try{ title = await fetchTitle(url); }catch(e){ console.error(e); break; }
+        writeJSON(UNTITLED_KEY, readJSON(UNTITLED_KEY, []).filter(u => u.id !== id));
+        if(!title) continue;
+        setLinks(prev => (prev || []).map(l => l.id === id && !l.name ? { ...l, name:title } : l));
+        send('PATCH', `links?id=eq.${id}&name=eq.`, { name:title });  // only if it's still unnamed
+      }
+    }finally{ naming.current = false; }
   }
 
   function chooseTheme(t){ setTheme(t); writeJSON('catch:room', t); }
@@ -440,6 +467,7 @@ function App(){
     setCounter(nextCounter);
     setLinks(prev => [entry, ...(prev || [])]);
     setJustCaught(entry.id); setTimeout(() => setJustCaught(null), 900);
+    if(!entry.name){ writeJSON(UNTITLED_KEY, [...readJSON(UNTITLED_KEY, []), { id:entry.id, url }]); nameUntitled(); }
     return true;
   }
 
