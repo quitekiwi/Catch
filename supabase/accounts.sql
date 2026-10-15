@@ -9,6 +9,9 @@ alter table public.links   add column if not exists user_id uuid default auth.ui
 alter table public.folders add column if not exists user_id uuid default auth.uid() references auth.users on delete cascade;
 alter table public.meta    add column if not exists user_id uuid default auth.uid() references auth.users on delete cascade;
 
+-- each link remembers its picture, on every device
+alter table public.links   add column if not exists art text;
+
 -- the session counter becomes one per person
 do $$ declare c text; begin
   select conname into c from pg_constraint where conrelid = 'public.meta'::regclass and contype = 'p';

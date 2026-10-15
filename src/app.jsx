@@ -64,7 +64,7 @@ async function sb(path, options = {}) {
   return text ? JSON.parse(text) : null;
 }
 
-function rowToLink(r){ return { id:r.id, url:r.url, sessionNo:r.session_no, name:r.name||'', folderId:r.folder_id, domain:r.domain, addedAt:r.added_at, read:!!r.read }; }
+function rowToLink(r){ return { id:r.id, url:r.url, sessionNo:r.session_no, name:r.name||'', folderId:r.folder_id, domain:r.domain, addedAt:r.added_at, read:!!r.read, art:r.art||null }; }
 function linkToRow(l){ return { id:l.id, url:l.url, session_no:l.sessionNo, name:l.name||'', folder_id:l.folderId||null, domain:l.domain, added_at:l.addedAt, read:!!l.read }; }
 function rowToFolder(r){ return { id:r.id, name:r.name, colorIdx: r.color_idx || 0 }; }
 
@@ -522,12 +522,18 @@ function App(){
       const [l, f, m] = await Promise.all([
         sb('links?select=*&order=session_no.desc'), sb('folders?select=*&order=created_at.asc'), sb('meta?select=value&key=eq.counter')]);
       if(outboxSize() > 0) return;  // something was caught while loading; the next refresh will include it
-      setLinks((l || []).map(rowToLink)); setFolders((f || []).map(rowToFolder)); setCounter(Math.max(0, ...(m || []).map(r => parseInt(r.value, 10) || 0)));
+      // links from before pictures were kept get today's picture locked in, so later titles can't change it
+      const kept = readJSON('catch:art', {}), waitingIds = new Set(readJSON(UNTITLED_KEY, []).map(u => u.id));
+      const fresh = (l || []).map(rowToLink).map(x => x.art || waitingIds.has(x.id) ? x : { ...x, art: kept[x.id] || autoArt(x), lockNow:true });
+      fresh.filter(x => x.lockNow).forEach(x => { kept[x.id] = x.art; queue('PATCH', `links?id=eq.${x.id}&art=is.null`, { art:x.art }); delete x.lockNow; });
+      writeJSON('catch:art', kept); setArtOverrides(kept);
+      setLinks(fresh); setFolders((f || []).map(rowToFolder)); setCounter(Math.max(0, ...(m || []).map(r => parseInt(r.value, 10) || 0)));
       setSyncError(false);
       // older links that were caught without a name get their page titles too, once
       const tried = new Set(readJSON(TRIED_KEY, [])), waiting = readJSON(UNTITLED_KEY, []), queued = new Set(waiting.map(u => u.id));
       const older = (l || []).filter(r => !r.name && !tried.has(r.id) && !queued.has(r.id)).map(r => ({ id:r.id, url:r.url }));
       if(older.length) writeJSON(UNTITLED_KEY, [...waiting, ...older]);
+      sync();
     }catch(e){ console.error(e); setSyncError(true); setLinks(prev => prev || []); }
     nameUntitled();
   }
@@ -543,6 +549,7 @@ function App(){
         try{ title = await fetchTitle(url); }catch(e){ console.error(e); break; }
         writeJSON(UNTITLED_KEY, readJSON(UNTITLED_KEY, []).filter(u => u.id !== id));
         writeJSON(TRIED_KEY, [...readJSON(TRIED_KEY, []), id]);  // asked once; don't ask again
+        lockArt(id, autoArt({ url, name:title || '' }), true);  // a new catch's picture is chosen now, helped by the title
         if(!title) continue;
         setLinks(prev => (prev || []).map(l => l.id === id && !l.name ? { ...l, name:title } : l));
         send('PATCH', `links?id=eq.${id}&name=eq.`, { name:title });  // only if it's still unnamed
@@ -553,7 +560,7 @@ function App(){
   function signedInNow(){ setSignedIn(true); refresh(); }
   // signing out clears this device's copy, so the next person to sign in here starts from their own archive
   function forgetDevice(){
-    [CACHE_KEY, OUTBOX_KEY, UNTITLED_KEY, TRIED_KEY].forEach(k => { try{ localStorage.removeItem(k); }catch(e){} });
+    [CACHE_KEY, OUTBOX_KEY, UNTITLED_KEY, TRIED_KEY, 'catch:art'].forEach(k => { try{ localStorage.removeItem(k); }catch(e){} });
     setLinks(null); setFolders([]); setCounter(0); setPending(0); setSyncError(false); setSelectedId(null);
     setSignedIn(false);
   }
@@ -590,6 +597,7 @@ function App(){
     const entry = { id:'l_'+Date.now()+'_'+Math.random().toString(36).slice(2,7), url, sessionNo: nextCounter,
       name: (name||'').trim(), folderId: folderId || null, domain: domainFrom(url), addedAt: Date.now(), read: false };
     queue('POST', 'links', linkToRow(entry));
+    if(entry.name){ const k = autoArt(entry); entry.art = k; writeJSON('catch:art', { ...readJSON('catch:art', {}), [entry.id]:k }); queue('PATCH', `links?id=eq.${entry.id}`, { art:k }); }
     send('POST', 'meta?on_conflict=user_id,key', { key:'counter', value: String(nextCounter) }, 'resolution=merge-duplicates,return=minimal');
     setCounter(nextCounter);
     setLinks(prev => [entry, ...(prev || [])]);
@@ -631,13 +639,18 @@ function App(){
     send('PATCH', `links?id=eq.${id}`, { name:newName, folder_id:newFolderId });
     setSavedFlash(true); setTimeout(() => setSavedFlash(false), 1800);
   }
-  // picture choices live on this device for now; a database column can carry them across devices later
-  function setArt(id, key){
-    const next = { ...artOverrides };
-    if(key) next[id] = key; else delete next[id];
-    setArtOverrides(next); writeJSON('catch:art', next);
+  // a link's picture is decided once and then kept: renaming or a fetched title never changes it, only "change picture" does.
+  // it's saved with the link (the art column) and on this device (catch:art), so it holds even before the database knows it
+  function lockArt(id, key, onlyIfUnset){
+    const kept = readJSON('catch:art', {});
+    if(onlyIfUnset && kept[id]) return;
+    const next = { ...kept, [id]:key };
+    writeJSON('catch:art', next); setArtOverrides(next);
+    setLinks(prev => (prev || []).map(l => l.id === id && !(onlyIfUnset && l.art) ? { ...l, art:key } : l));
+    send('PATCH', `links?id=eq.${id}${onlyIfUnset ? '&art=is.null' : ''}`, { art:key });
   }
-  const artOf = l => artOverrides[l.id] || autoArt(l);
+  function setArt(id, key){ const l = links.find(x => x.id === id); if(l) lockArt(id, key || autoArt(l)); }
+  const artOf = l => l.art || artOverrides[l.id] || autoArt(l);
 
   useEffect(() => {
     if(!showMenu) return;
@@ -986,17 +999,17 @@ function App(){
             <div className="pic-row">
               <div className="pic"><Motif k={artOf(selectedLink)} /></div>
               <div>
-                <div>{ART && (ART.subjects[artOf(selectedLink)] || ART.subjects.key).label}{artOverrides[selectedLink.id] ? '' : ' (automatic)'}</div>
+                <div>{ART && (ART.subjects[artOf(selectedLink)] || ART.subjects.key).label}</div>
                 <button className="ghost" onClick={()=>setShowPicker(v=>!v)} aria-expanded={showPicker}>{showPicker ? 'Done' : 'Change picture'}</button>
               </div>
             </div>
             {showPicker && ART && (
               <div className="picker">
-                <button aria-pressed={!artOverrides[selectedLink.id]} onClick={()=>setArt(selectedLink.id, null)}>
-                  <Motif k={autoArt(selectedLink)} />Automatic
+                <button aria-pressed="false" onClick={()=>setArt(selectedLink.id, null)}>
+                  <Motif k={autoArt(selectedLink)} />Suggested
                 </button>
                 {ART.order.map(k => (
-                  <button key={k} aria-pressed={artOverrides[selectedLink.id]===k} onClick={()=>setArt(selectedLink.id, k)}>
+                  <button key={k} aria-pressed={artOf(selectedLink)===k} onClick={()=>setArt(selectedLink.id, k)}>
                     <Motif k={k} />{ART.subjects[k].label}
                   </button>
                 ))}
