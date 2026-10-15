@@ -123,6 +123,10 @@ async function fetchTitle(url){
   return (title || '').trim();
 }
 
+/* ---------- shared shelves: ?shelf=<token> shows one folder from someone's archive, read-only, no sign-in ---------- */
+const SHELF = new URLSearchParams(window.location.search).get('shelf');
+const shelfLink = token => `${window.location.origin}${window.location.pathname}?shelf=${token}`;
+
 const ART = window.CatchArt || null;
 function autoArt(l){ try{ return ART ? ART.pick(l.url, l.name) : 'key'; }catch(e){ return 'key'; } }
 function Motif({ k }){
@@ -401,6 +405,8 @@ function PrivacyModal({ onClose }){
         <p>Catch stores everything you save — links, names, folders — in a cloud database (Supabase). This is what lets the same archive show up on your phone and your computer. A copy is also kept on each device you sign in on, so it opens quickly and works offline.</p>
         <h3>Who can access it</h3>
         <p>You sign in with your email. The database checks who you are on every request and only ever shows you your own links; other people with accounts have their own separate archives and can't see yours. The people who run the database (the app's owner and Supabase) can technically see everything stored in it.</p>
+        <h3>Shared folders</h3>
+        <p>If you share a folder, anyone with its link can see the links in that folder (not whether you've read them, and nothing else in your archive) until you stop sharing it.</p>
         <h3>Page titles</h3>
         <p>When you catch a link without naming it, a small helper visits that page once to read its title. Nothing else about you is sent with it.</p>
         <h3>What's not happening</h3>
@@ -413,7 +419,10 @@ function PrivacyModal({ onClose }){
 
 function App(){
   const [signedIn, setSignedIn] = useState(() => !!session);
-  const cached = useMemo(() => session ? readJSON(CACHE_KEY, null) : null, []);
+  const cached = useMemo(() => session && !SHELF ? readJSON(CACHE_KEY, null) : null, []);
+  const [shelf, setShelf] = useState(null);       // the shared folder being viewed: { folder } or { missing } or { error }
+  const [shares, setShares] = useState(null);     // this person's shared folders: { folderId: token }
+  const [shareNote, setShareNote] = useState('');
   const [links, setLinks] = useState(() => cached ? cached.links : null);
   const [folders, setFolders] = useState(() => cached ? cached.folders : []);
   const [counter, setCounter] = useState(() => cached ? cached.counter : 0);
@@ -457,7 +466,7 @@ function App(){
   const mode = modePref === 'auto' ? (systemDark ? 'night' : 'day') : modePref;
 
   useEffect(() => {
-    refresh();
+    if(SHELF) loadShelf(); else refresh();
     const onSignedOut = () => forgetDevice();
     window.addEventListener('catch:signedout', onSignedOut);
     (() => {
@@ -516,7 +525,7 @@ function App(){
   async function sync(){ const left = await flushOutbox(); setPending(pendingChanges()); return left; }
   function send(method, path, body, prefer){ queue(method, path, body, prefer); sync(); }
   async function refresh(){
-    if(!session) return;
+    if(!session || SHELF) return;
     if(await sync() > 0){ setSyncError(true); setLinks(prev => prev || []); return; }  // still offline: keep the local copy
     try{
       const [l, f, m] = await Promise.all([
@@ -556,6 +565,46 @@ function App(){
       }
     }finally{ naming.current = false; }
   }
+
+  async function loadShelf(){
+    try{
+      const d = await sb('rpc/shared_shelf', { method:'POST', body: JSON.stringify({ share_token:SHELF }) });
+      if(!d){ setShelf({ missing:true }); setLinks([]); return; }
+      setLinks((d.links || []).map(r => rowToLink({ ...r, read:false })));
+      setShelf({ folder:d.folder });
+      if(!urlRoom && THEMES.some(([k]) => k === d.room)) setTheme(d.room);  // show it in the room it was shared from
+    }catch(e){ console.error(e); setShelf({ error:true }); setLinks([]); }
+  }
+  // sharing a folder: a private link that shows only that folder, read-only. Needs a connection (not queued).
+  async function loadShares(){
+    try{ const rows = await sb('shares?select=token,folder_id'); setShares(Object.fromEntries((rows || []).map(r => [r.folder_id, r.token]))); }
+    catch(e){ console.error(e); setShares(null); }
+  }
+  async function hand(link, folderName){
+    try{
+      if(navigator.share && /iPhone|iPad|Android/.test(navigator.userAgent)){ await navigator.share({ title:`${folderName} · Catch`, url:link }); return; }
+      await navigator.clipboard.writeText(link); setShareNote(`Link to “${folderName}” copied.`);
+    }catch(e){ if(e.name !== 'AbortError') setShareNote(link); }
+  }
+  async function shareFolder(f){
+    setShareNote('');
+    try{
+      const rows = await sb('shares?on_conflict=user_id,folder_id', { method:'POST', body: JSON.stringify({ folder_id:f.id, room:theme }),
+        prefer:'resolution=merge-duplicates,return=representation' });
+      const token = rows && rows[0] && rows[0].token;
+      setShares(prev => ({ ...(prev || {}), [f.id]:token }));
+      hand(shelfLink(token), f.name);
+    }catch(e){ console.error(e); setShareNote("Couldn't reach the archive. Try again when you're online."); }
+  }
+  async function stopSharing(f){
+    setShareNote('');
+    try{
+      await sb(`shares?folder_id=eq.${encodeURIComponent(f.id)}`, { method:'DELETE', prefer:'return=minimal' });
+      setShares(prev => { const n = { ...(prev || {}) }; delete n[f.id]; return n; });
+      setShareNote(`“${f.name}” is no longer shared; its link has stopped working.`);
+    }catch(e){ console.error(e); setShareNote("Couldn't reach the archive. Try again when you're online."); }
+  }
+  useEffect(() => { if(showMenu && signedIn && !SHELF){ setShareNote(''); loadShares(); } }, [showMenu]);
 
   function signedInNow(){ setSignedIn(true); refresh(); }
   // signing out clears this device's copy, so the next person to sign in here starts from their own archive
@@ -630,7 +679,7 @@ function App(){
   }
   async function dismissHint(){ setShowHint(false); try{ localStorage.setItem('catch:hint-dismissed','true'); }catch(e){} }
 
-  function openLink(l){ setConfirmDelete(false); setShowPicker(false); setSelectedId(l.id); setEditName(l.name || ''); setEditFolder(l.folderId || ''); }
+  function openLink(l){ if(SHELF){ window.open(l.url, '_blank', 'noopener'); return; } setConfirmDelete(false); setShowPicker(false); setSelectedId(l.id); setEditName(l.name || ''); setEditFolder(l.folderId || ''); }
   function closeSheet(){ setSelectedId(null); setConfirmDelete(false); setShowPicker(false); }
   async function saveEdit(id){
     const newFolderId = editFolder || null;
@@ -687,6 +736,7 @@ function App(){
   }, [links, statusFilter, folderFilter, query, folderById, sortMode]);
 
   const unreadCount = links ? links.filter(l=>!l.read).length : 0;
+  const countText = links ? (SHELF ? `${links.length} ${links.length === 1 ? 'link' : 'links'}` : `${links.length} caught · ${unreadCount} open`) : '';
   const filtersActive = statusFilter !== 'all' || sortMode !== 'newest';
   const selectedLink = selectedId && links ? links.find(l=>l.id===selectedId) : null;
   const nextNo = Math.max(counter, ...((links || []).map(l => l.sessionNo || 0))) + 1;
@@ -699,7 +749,7 @@ function App(){
   function Salon(){
     // like the sketch: on a three-across wall the newest hangs in the centre of the first row
     const list = (!wide && sortMode === 'newest' && visible.length >= 2) ? [visible[1], visible[0], ...visible.slice(2)] : visible;
-    const ghosts = (!query && folderFilter==='all' && statusFilter==='all') ? [0,1] : [];
+    const ghosts = (!SHELF && !query && folderFilter==='all' && statusFilter==='all') ? [0,1] : [];
     return (
       <React.Fragment>
         <svg className="rail" viewBox="0 0 390 20" preserveAspectRatio="none" aria-hidden="true">
@@ -744,14 +794,14 @@ function App(){
             </svg>
           ))}
         </div>
-        <div className="wall-cap">Sessions {pad(Math.min(...visible.map(l=>l.sessionNo)))} — {pad(Math.max(...visible.map(l=>l.sessionNo)))} · room for more</div>
+        <div className="wall-cap">Sessions {pad(Math.min(...visible.map(l=>l.sessionNo)))} — {pad(Math.max(...visible.map(l=>l.sessionNo)))} {SHELF ? '' : ' · room for more'}</div>
       </React.Fragment>
     );
   }
   function Shelves(){
     const perRow = desk ? 16 : wide ? 12 : 6;
     const rows = chunk(visible, perRow);
-    const ghosts = !query && folderFilter==='all' && statusFilter==='all';
+    const ghosts = !SHELF && !query && folderFilter==='all' && statusFilter==='all';
     const shelfCount = rows.length + (ghosts ? 1 : 0);
     const day = mode === 'day';
     const nums = visible.map(l=>l.sessionNo);
@@ -788,7 +838,7 @@ function App(){
     );
   }
   function Stamps(){
-    const showReserved = !query && folderFilter==='all' && statusFilter==='all';
+    const showReserved = !SHELF && !query && folderFilter==='all' && statusFilter==='all';
     return (
       <React.Fragment>
         <div className="dp-grid">
@@ -823,7 +873,7 @@ function App(){
     );
   }
 
-  if(!signedIn) return <SignIn onSignedIn={signedInNow} />;
+  if(!signedIn && !SHELF) return <SignIn onSignedIn={signedInNow} />;
 
   return (
     <div className="app">
@@ -833,7 +883,7 @@ function App(){
           <h1>Catch</h1>
           <div className="sub">{room.subtitle}</div>
           <div className="tag">Paste it, find it later. Nothing else.</div>
-          {links && links.length > 0 && <div className="cnt">{links.length} caught · {unreadCount} open</div>}
+          {links && links.length > 0 && <div className="cnt">{countText}</div>}
         </header></div>
       ) : theme === 'dispatch' ? (
         <header className="dp-mast">
@@ -854,7 +904,7 @@ function App(){
             </svg>
             <div className="sub">Catalogue of the Collection</div>
           </header>
-          <div className="gh-tag"><i>Paste it, find it later. Nothing else.</i>{links && links.length > 0 && <b>{links.length} CAUGHT · {unreadCount} OPEN</b>}</div>
+          <div className="gh-tag"><i>Paste it, find it later. Nothing else.</i>{links && links.length > 0 && <b>{countText.toUpperCase()}</b>}</div>
         </React.Fragment>
       ) : (
         <header className="mast">
@@ -862,7 +912,7 @@ function App(){
           <h1>Catch</h1>
           <div className="subtitle">{room.subtitle}</div>
           <div className="tagline">Paste it, find it later. Nothing else.</div>
-          {links && links.length > 0 && <div className="count">{links.length} caught · {unreadCount} open</div>}
+          {links && links.length > 0 && <div className="count">{countText}</div>}
         </header>
       )}
 
@@ -872,6 +922,14 @@ function App(){
             ? `Offline — ${pending === 1 ? '1 change is' : pending + ' changes are'} kept on this device and will sync when you're back online.`
             : "Can't reach the archive right now — showing the copy kept on this device."}</span>
           <button onClick={refresh}>Try again</button>
+        </div>
+      )}
+      {SHELF && (
+        <div className="banner" role="status">
+          <span>{shelf && shelf.folder ? <React.Fragment>A shelf shared from someone's Catch archive: <b>{shelf.folder}</b>. You can look and open links; nothing here can be changed.</React.Fragment>
+            : shelf && shelf.missing ? "This shared shelf isn't available any more. Its owner may have stopped sharing it."
+            : shelf && shelf.error ? "Couldn't open this shelf right now. Check your connection and try again."
+            : 'Opening the shared shelf…'}</span>
         </div>
       )}
       {fromButton && (
@@ -890,7 +948,7 @@ function App(){
 
       <div className="desk">
       <div className="desk-side">
-      <div className={"save-block" + (inputVal.trim() || nameVal ? " has-text" : "")}>
+      {!SHELF && <div className={"save-block" + (inputVal.trim() || nameVal ? " has-text" : "")}>
         <svg className="iron" viewBox="0 0 390 30" preserveAspectRatio="none" aria-hidden="true">
           <defs><pattern id="iron" width="40" height="30" patternUnits="userSpaceOnUse"><path fill="none" stroke="#AC9B86" strokeWidth=".8" opacity=".85" d="M0 13C10 3 20 3 20 13S30 23 40 13M20 13c-4 0-5-4-2-5 2 0 3 2 1 3M0 13c4 0 5 4 2 5-2 0-3-2-1-3M40 13c-4 0-5 4-2 5 2 0 3-2 1-3"/></pattern></defs>
           <path d="M0 13H390" stroke="#40101D" strokeWidth="12"/><rect x="0" y="0" width="390" height="30" fill="url(#iron)"/>
@@ -918,7 +976,7 @@ function App(){
             <option value="__new__">+ New folder…</option>
           </select>
         </div>
-      </div>
+      </div>}
 
       <div className="search-row">
         <input type="text" aria-label="Search the archive" placeholder="search the archive…" value={query} onChange={e=>setQuery(e.target.value)} />
@@ -933,7 +991,7 @@ function App(){
         <div className="filter-summary">Showing {statusFilter === 'all' ? 'all' : statusFilter === 'unread' ? 'unread' : 'read'}, {sortMode === 'alphabetical' ? 'A–Z' : sortMode + ' first'}</div>
       )}
       {showFilters && <React.Fragment>
-        <div className="row-label">Status</div>
+        {!SHELF && <React.Fragment><div className="row-label">Status</div>
         <div className="chips">
           {[['all','all'],['unread','unread'],['read','read']].map(([f,label]) => (
             <button key={f} className="chip" aria-pressed={statusFilter===f} onClick={()=>setStatusFilter(f)}>
@@ -941,13 +999,14 @@ function App(){
             </button>
           ))}
         </div>
+        </React.Fragment>}
         <div className="row-label">Sort</div>
         <div className="chips">
           {[['newest','newest'],['oldest','oldest'],['alphabetical','A–Z']].map(([v,label]) => (
             <button key={v} className="chip" aria-pressed={sortMode===v} onClick={()=>setSortMode(v)}>{label}</button>
           ))}
         </div>
-  <div className="row-label">Folders</div>
+  {!SHELF && <React.Fragment><div className="row-label">Folders</div>
         <div className="catalog">
           <button className="card" aria-pressed={folderFilter==='all'} onClick={()=>setFolderFilter('all')}>
             <div className="fname">All</div><div className="fcount">{links ? links.length : 0}</div>
@@ -958,13 +1017,13 @@ function App(){
             </button>
           ))}
           <button className="card" aria-label="New folder" onClick={createFolder}><div className="fname">+ new</div></button>
-        </div>
+        </div></React.Fragment>}
       </React.Fragment>}
 
       </div>
       <div className="desk-main">
       {theme === 'dispatch' && links && links.length > 0 && (
-        <div className="dp-meta"><span>Section A · {pad(Math.min(...links.map(l=>l.sessionNo)))}–{pad(nextNo + 2)}</span><i></i><b style={{ fontWeight:400 }}>{links.length} caught · {unreadCount} open</b></div>
+        <div className="dp-meta"><span>Section A · {pad(Math.min(...links.map(l=>l.sessionNo)))}–{pad(nextNo + 2)}</span><i></i><b style={{ fontWeight:400 }}>{countText}</b></div>
       )}
       <main className="room">
         {links === null && <div className="empty">opening the archive…</div>}
@@ -985,7 +1044,7 @@ function App(){
       </main>
 
       {links !== null && links.length > 0 && (
-        <div className="count-footer">{links.length} caught · {unreadCount} open</div>
+        <div className="count-footer">{countText}</div>
       )}
       </div>
       </div>
@@ -1050,16 +1109,31 @@ function App(){
             <div className="num">Lighting</div>
             <div className="opts">{[['auto','Auto'],['day','Day'],['night','Night']].map(([k,label]) => (
               <button key={k} aria-pressed={modePref===k} onClick={()=>{ setModePref(k); writeJSON('catch:mode', k); }}>{label}</button>))}</div>
-            {desk && <React.Fragment>
+            {!SHELF && folders.length > 0 && <React.Fragment>
+              <div className="num">Shared folders</div>
+              <p className="who">Share a folder to give someone a link to just that folder. They can look and open links, but not change anything or see the rest of your archive.</p>
+              <div className="share-list">
+                {folders.map(f => (
+                  <div key={f.id} className="share-row">
+                    <span>{f.name}{shares && shares[f.id] ? <em> · shared</em> : ''}</span>
+                    {shares === null ? null : shares[f.id]
+                      ? <React.Fragment><button onClick={()=>hand(shelfLink(shares[f.id]), f.name)}>Copy link</button><button onClick={()=>stopSharing(f)}>Stop sharing</button></React.Fragment>
+                      : <button onClick={()=>shareFolder(f)}>Share</button>}
+                  </div>
+                ))}
+              </div>
+              {shareNote && <p className="who" role="status">{shareNote}</p>}
+            </React.Fragment>}
+            {!SHELF && desk && <React.Fragment>
               <div className="num">Catch button for your browser</div>
               <p className="who">Drag this button up to your bookmarks bar. Then, on any web page, click it to catch that page.</p>
               <div className="opts"><a className="bookmarklet" ref={el => el && el.setAttribute('href', bookmarklet())} onClick={e => { e.preventDefault(); }}
                 title="Drag me to your bookmarks bar">+ Catch</a></div>
             </React.Fragment>}
-            <div className="num">Account</div>
-            <p className="who">Signed in as {session && session.email}</p>
+            {!SHELF && <React.Fragment><div className="num">Account</div>
+            <p className="who">Signed in as {session && session.email}</p></React.Fragment>}
             <div className="actions">
-              <button onClick={signOut}>Sign out</button>
+              {!SHELF && <button onClick={signOut}>Sign out</button>}
               <button onClick={()=>{ setShowMenu(false); setShowPrivacy(true); }}>About your data</button>
               <button className="primary" onClick={()=>setShowMenu(false)}>Done</button>
             </div>
