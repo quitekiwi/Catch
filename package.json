@@ -2,7 +2,7 @@
   "name": "catch",
   "private": true,
   "scripts": {
-    "build": "esbuild src/app.jsx --bundle=false --loader:.jsx=jsx --jsx=transform --target=es2018,safari13 --minify --outfile=app.js"
+    "build": "node build.mjs"
   },
   "devDependencies": {
     "esbuild": "0.24.0"

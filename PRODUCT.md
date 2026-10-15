@@ -22,7 +22,7 @@ Saved links are shown as numbered "sessions" — book spines on library shelves,
 
 - Saving often happens quickly on a phone, sometimes through a share link (`?url=…&title=…`).
 - Browsing happens later: search, filter by read/unread, sort, and filter by folder.
-- Links sync across browsers and devices through a Supabase database.
+- Links sync across browsers and devices through a Supabase database. Works offline: each device keeps a copy of the archive (localStorage `catch:cache`) and an outbox of unsent changes (`catch:outbox`) that is sent when back online; `sw.js` keeps the app files so it opens without a connection.
 
 ## Capabilities and Constraints
 

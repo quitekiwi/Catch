@@ -22,7 +22,9 @@ async function sb(path, options = {}) {
   });
   if (!res.ok) {
     const errText = await res.text().catch(() => '');
-    throw new Error(`Supabase ${res.status}: ${errText}`);
+    const err = new Error(`Supabase ${res.status}: ${errText}`);
+    err.status = res.status;
+    throw err;
   }
   const text = await res.text();
   return text ? JSON.parse(text) : null;
@@ -48,6 +50,35 @@ function hashStr(s){ let h=0; for(let i=0;i<s.length;i++){ h = (h*31 + s.charCod
 function chunk(arr, size){ const out=[]; for(let i=0;i<arr.length;i+=size) out.push(arr.slice(i,i+size)); return out; }
 function readJSON(key, fallback){ try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }catch(e){ return fallback; } }
 function writeJSON(key, v){ try{ localStorage.setItem(key, JSON.stringify(v)); }catch(e){} }
+
+/* ---------- offline: a copy of the archive kept on this device, plus an outbox of changes waiting to reach the database ---------- */
+const CACHE_KEY = 'catch:cache', OUTBOX_KEY = 'catch:outbox';
+function queue(method, path, body){ const q = readJSON(OUTBOX_KEY, []); q.push({ method, path, body }); writeJSON(OUTBOX_KEY, q); }
+function outboxSize(){ return readJSON(OUTBOX_KEY, []).length; }
+// what the person would call a change (the session counter rides along with a new link)
+function pendingChanges(){ return readJSON(OUTBOX_KEY, []).filter(op => !op.path.startsWith('meta')).length; }
+let flushing = null;
+// sends waiting changes oldest-first; stops at the first one that can't get through and returns how many are left
+function flushOutbox(){
+  if(flushing) return flushing;
+  flushing = (async () => {
+    while(true){
+      const q = readJSON(OUTBOX_KEY, []);
+      if(!q.length) break;
+      const op = q[0];
+      try{ await sb(op.path, { method:op.method, body: op.body ? JSON.stringify(op.body) : undefined, prefer:'return=minimal' }); }
+      catch(e){
+        // no connection, or the database is busy: keep it for later. A flat "no" (e.g. already saved) is dropped so it can't block the rest.
+        const refused = e.status >= 400 && e.status < 500 && ![401,403,408,429].includes(e.status);
+        if(!refused) break;
+        console.error('Dropped a change the database refused', op, e);
+      }
+      const now = readJSON(OUTBOX_KEY, []); now.shift(); writeJSON(OUTBOX_KEY, now);
+    }
+    return outboxSize();
+  })();
+  return flushing.finally(() => { flushing = null; });
+}
 
 const ART = window.CatchArt || null;
 function autoArt(l){ try{ return ART ? ART.pick(l.url, l.name) : 'key'; }catch(e){ return 'key'; } }
@@ -283,9 +314,11 @@ function PrivacyModal({ onClose }){
 }
 
 function App(){
-  const [links, setLinks] = useState(null);
-  const [folders, setFolders] = useState([]);
-  const [counter, setCounter] = useState(0);
+  const cached = useMemo(() => readJSON(CACHE_KEY, null), []);
+  const [links, setLinks] = useState(() => cached ? cached.links : null);
+  const [folders, setFolders] = useState(() => cached ? cached.folders : []);
+  const [counter, setCounter] = useState(() => cached ? cached.counter : 0);
+  const [pending, setPending] = useState(pendingChanges);
   const [inputVal, setInputVal] = useState('');
   const [nameVal, setNameVal] = useState('');
   const [selectedFolder, setSelectedFolder] = useState('');
@@ -323,13 +356,8 @@ function App(){
   const mode = modePref === 'auto' ? (systemDark ? 'night' : 'day') : modePref;
 
   useEffect(() => {
-    (async () => {
-      try{ const rows = await sb('links?select=*&order=session_no.desc'); setLinks((rows || []).map(rowToLink)); }
-      catch(e){ console.error(e); setLinks([]); setSyncError(true); }
-      try{ const rows = await sb('folders?select=*&order=created_at.asc'); setFolders((rows || []).map(rowToFolder)); }
-      catch(e){ console.error(e); setFolders([]); setSyncError(true); }
-      try{ const rows = await sb('meta?select=value&key=eq.counter'); setCounter(rows && rows[0] ? parseInt(rows[0].value, 10) : 0); }
-      catch(e){ console.error(e); setCounter(0); }
+    refresh();
+    (() => {
       // the add-to-home-screen tip only makes sense on iOS Safari, outside the installed app
       const ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
       const installed = window.navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
@@ -341,7 +369,13 @@ function App(){
     mq && mq.addEventListener && mq.addEventListener('change', onScheme);
     const onResize = () => setWide(window.innerWidth >= 640);
     window.addEventListener('resize', onResize);
-    return () => { mq && mq.removeEventListener && mq.removeEventListener('change', onScheme); window.removeEventListener('resize', onResize); };
+    // back online, or back to the app after a while: send what's waiting and pick up changes from other devices
+    const onOnline = () => refresh();
+    const onVisible = () => { if(document.visibilityState === 'visible') refresh(); };
+    window.addEventListener('online', onOnline);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => { mq && mq.removeEventListener && mq.removeEventListener('change', onScheme); window.removeEventListener('resize', onResize);
+      window.removeEventListener('online', onOnline); document.removeEventListener('visibilitychange', onVisible); };
   }, []);
 
   useEffect(() => {
@@ -361,6 +395,22 @@ function App(){
     if(tc) tc.setAttribute('content', theme === 'hall' ? '#2A403A' : theme === 'dispatch' ? '#393D3C' : '#40101D');
   }, [theme, mode]);
 
+  // keep this device's copy of the archive current, so it opens instantly and works offline
+  useEffect(() => { if(links !== null) writeJSON(CACHE_KEY, { links, folders, counter }); }, [links, folders, counter]);
+
+  async function sync(){ const left = await flushOutbox(); setPending(pendingChanges()); return left; }
+  function send(method, path, body){ queue(method, path, body); sync(); }
+  async function refresh(){
+    if(await sync() > 0){ setSyncError(true); setLinks(prev => prev || []); return; }  // still offline: keep the local copy
+    try{
+      const [l, f, m] = await Promise.all([
+        sb('links?select=*&order=session_no.desc'), sb('folders?select=*&order=created_at.asc'), sb('meta?select=value&key=eq.counter')]);
+      if(outboxSize() > 0) return;  // something was caught while loading; the next refresh will include it
+      setLinks((l || []).map(rowToLink)); setFolders((f || []).map(rowToFolder)); setCounter(m && m[0] ? parseInt(m[0].value, 10) : 0);
+      setSyncError(false);
+    }catch(e){ console.error(e); setSyncError(true); setLinks(prev => prev || []); }
+  }
+
   function chooseTheme(t){ setTheme(t); writeJSON('catch:room', t); }
   function cycleMode(){ const next = modePref === 'auto' ? 'day' : modePref === 'day' ? 'night' : 'auto'; setModePref(next); writeJSON('catch:mode', next); }
 
@@ -369,12 +419,9 @@ function App(){
     if(!name || !name.trim()) return null;
     const colorIdx = folders.length % 4;
     const folder = { id:'f_'+Date.now()+'_'+Math.random().toString(36).slice(2,5), name:name.trim(), colorIdx };
-    try{
-      await sb('folders', { method:'POST', body: JSON.stringify({ id:folder.id, name:folder.name, color_idx:colorIdx }) });
-      setFolders(prev => [...prev, folder]);
-      setSyncError(false);
-      return folder.id;
-    }catch(e){ console.error(e); setSyncError(true); return null; }
+    send('POST', 'folders', { id:folder.id, name:folder.name, color_idx:colorIdx });
+    setFolders(prev => [...prev, folder]);
+    return folder.id;
   }
   async function handleFolderSelectChange(e, setter){
     if(e.target.value === '__new__'){ const id = await createFolder(); setter(id || ''); }
@@ -388,15 +435,12 @@ function App(){
     const nextCounter = Math.max(counter, ...(links || []).map(l => l.sessionNo || 0)) + 1;
     const entry = { id:'l_'+Date.now()+'_'+Math.random().toString(36).slice(2,7), url, sessionNo: nextCounter,
       name: (name||'').trim(), folderId: folderId || null, domain: domainFrom(url), addedAt: Date.now(), read: false };
-    try{
-      await sb('links', { method:'POST', body: JSON.stringify(linkToRow(entry)) });
-      await sb('meta?key=eq.counter', { method:'PATCH', body: JSON.stringify({ value: String(nextCounter) }), prefer:'return=minimal' });
-      setCounter(nextCounter);
-      setLinks(prev => [entry, ...(prev || [])]);
-      setJustCaught(entry.id); setTimeout(() => setJustCaught(null), 900);
-      setSyncError(false);
-      return true;
-    }catch(e){ console.error(e); setSyncError(true); return false; }
+    queue('POST', 'links', linkToRow(entry));
+    send('PATCH', 'meta?key=eq.counter', { value: String(nextCounter) });
+    setCounter(nextCounter);
+    setLinks(prev => [entry, ...(prev || [])]);
+    setJustCaught(entry.id); setTimeout(() => setJustCaught(null), 900);
+    return true;
   }
 
   async function handleSaveClick(){
@@ -414,15 +458,12 @@ function App(){
     if(!target) return;
     const nextRead = !target.read;
     setLinks(links.map(l => l.id===id ? {...l, read: nextRead} : l));
-    try{ await sb(`links?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ read: nextRead }), prefer:'return=minimal' }); setSyncError(false); }
-    catch(e){ console.error(e); setSyncError(true); }
+    send('PATCH', `links?id=eq.${id}`, { read: nextRead });
   }
   async function removeLink(id){
-    const prev = links;
     setLinks(links.filter(l => l.id!==id));
     if(selectedId === id) setSelectedId(null);
-    try{ await sb(`links?id=eq.${id}`, { method:'DELETE', prefer:'return=minimal' }); setSyncError(false); }
-    catch(e){ console.error(e); setSyncError(true); setLinks(prev); }
+    send('DELETE', `links?id=eq.${id}`);
   }
   async function dismissHint(){ setShowHint(false); try{ localStorage.setItem('catch:hint-dismissed','true'); }catch(e){} }
 
@@ -432,11 +473,8 @@ function App(){
     const newFolderId = editFolder || null;
     const newName = editName.trim();
     setLinks(links.map(l => l.id===id ? {...l, name:newName, folderId:newFolderId} : l));
-    try{
-      await sb(`links?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ name:newName, folder_id:newFolderId }), prefer:'return=minimal' });
-      setSyncError(false); setSavedFlash(true); setTimeout(() => setSavedFlash(false), 1800);
-    }
-    catch(e){ console.error(e); setSyncError(true); }
+    send('PATCH', `links?id=eq.${id}`, { name:newName, folder_id:newFolderId });
+    setSavedFlash(true); setTimeout(() => setSavedFlash(false), 1800);
   }
   // picture choices live on this device for now; a database column can carry them across devices later
   function setArt(id, key){
@@ -658,10 +696,12 @@ function App(){
         </header>
       )}
 
-      {syncError && (
+      {(syncError || pending > 0) && (
         <div className="banner" role="status">
-          <span>Having trouble syncing right now — check your connection. Anything you save may not appear on your other devices until this clears up.</span>
-          <button onClick={()=>window.location.reload()}>Try again</button>
+          <span>{pending > 0
+            ? `Offline — ${pending === 1 ? '1 change is' : pending + ' changes are'} kept on this device and will sync when you're back online.`
+            : "Can't reach the archive right now — showing the copy kept on this device."}</span>
+          <button onClick={refresh}>Try again</button>
         </div>
       )}
       {showHint && (
@@ -839,3 +879,5 @@ function App(){
   );
 }
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+// lets the app open without a connection (see sw.js)
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(e => console.error(e));
