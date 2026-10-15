@@ -115,7 +115,7 @@ function flushOutbox(){
 }
 
 /* ---------- page titles: links caught without a name get the page's own title from the "title" helper (supabase/functions/title) ---------- */
-const UNTITLED_KEY = 'catch:untitled';
+const UNTITLED_KEY = 'catch:untitled', TRIED_KEY = 'catch:title-tried';
 async function fetchTitle(url){
   const res = await fetch(`${SUPABASE_URL}/functions/v1/title`, { method:'POST', headers:{ 'Content-Type':'application/json', 'apikey':SUPABASE_KEY }, body: JSON.stringify({ url }) });
   if(!res.ok) throw new Error(`title helper ${res.status}`);
@@ -330,6 +330,12 @@ const Postmark = () => (
   </svg>
 );
 
+// the bookmarks-bar button: opens a small Catch window with the current page's address and title
+function bookmarklet(){
+  const app = window.location.origin + window.location.pathname;
+  return `javascript:(()=>{window.open('${app}?from=button&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title),'catch','width=440,height=640')})()`;
+}
+
 function SignIn({ onSignedIn }){
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
@@ -443,7 +449,9 @@ function App(){
   const [showPicker, setShowPicker] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [justCaught, setJustCaught] = useState(null);
+  const [fromButton, setFromButton] = useState(false);
   const [wide, setWide] = useState(() => window.innerWidth >= 640);
+  const [desk, setDesk] = useState(() => window.innerWidth >= 1100);  // computer screens: form in a side column, room fills the rest
   const inputRef = useRef(null);
 
   const mode = modePref === 'auto' ? (systemDark ? 'night' : 'day') : modePref;
@@ -462,7 +470,7 @@ function App(){
     const mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
     const onScheme = e => setSystemDark(e.matches);
     mq && mq.addEventListener && mq.addEventListener('change', onScheme);
-    const onResize = () => setWide(window.innerWidth >= 640);
+    const onResize = () => { setWide(window.innerWidth >= 640); setDesk(window.innerWidth >= 1100); };
     window.addEventListener('resize', onResize);
     // back online, or back to the app after a while: send what's waiting and pick up changes from other devices
     const onOnline = () => refresh();
@@ -479,7 +487,18 @@ function App(){
     try{
       const params = new URLSearchParams(window.location.search);
       const incoming = params.get('url');
-      if(incoming){ addLink(incoming, params.get('title') || '', ''); window.history.replaceState({}, '', window.location.pathname); }
+      if(incoming){
+        addLink(incoming, params.get('title') || '', '');
+        window.history.replaceState({}, '', window.location.pathname);
+        // opened by the browser's Catch button: say so, then close the little window
+        if(params.get('from') === 'button'){
+          setFromButton('sending');
+          flushOutbox().then(left => {
+            if(left){ setFromButton('waiting'); return; }
+            setFromButton('done'); setTimeout(() => window.close(), 1500);
+          });
+        }
+      }
     }catch(e){}
     // eslint-disable-next-line
   }, [links === null]);
@@ -499,14 +518,18 @@ function App(){
   async function refresh(){
     if(!session) return;
     if(await sync() > 0){ setSyncError(true); setLinks(prev => prev || []); return; }  // still offline: keep the local copy
-    nameUntitled();
     try{
       const [l, f, m] = await Promise.all([
         sb('links?select=*&order=session_no.desc'), sb('folders?select=*&order=created_at.asc'), sb('meta?select=value&key=eq.counter')]);
       if(outboxSize() > 0) return;  // something was caught while loading; the next refresh will include it
       setLinks((l || []).map(rowToLink)); setFolders((f || []).map(rowToFolder)); setCounter(Math.max(0, ...(m || []).map(r => parseInt(r.value, 10) || 0)));
       setSyncError(false);
+      // older links that were caught without a name get their page titles too, once
+      const tried = new Set(readJSON(TRIED_KEY, [])), waiting = readJSON(UNTITLED_KEY, []), queued = new Set(waiting.map(u => u.id));
+      const older = (l || []).filter(r => !r.name && !tried.has(r.id) && !queued.has(r.id)).map(r => ({ id:r.id, url:r.url }));
+      if(older.length) writeJSON(UNTITLED_KEY, [...waiting, ...older]);
     }catch(e){ console.error(e); setSyncError(true); setLinks(prev => prev || []); }
+    nameUntitled();
   }
 
   // fills in titles for links caught without a name; anything that can't be reached yet waits for the next sync
@@ -519,6 +542,7 @@ function App(){
         let title;
         try{ title = await fetchTitle(url); }catch(e){ console.error(e); break; }
         writeJSON(UNTITLED_KEY, readJSON(UNTITLED_KEY, []).filter(u => u.id !== id));
+        writeJSON(TRIED_KEY, [...readJSON(TRIED_KEY, []), id]);  // asked once; don't ask again
         if(!title) continue;
         setLinks(prev => (prev || []).map(l => l.id === id && !l.name ? { ...l, name:title } : l));
         send('PATCH', `links?id=eq.${id}&name=eq.`, { name:title });  // only if it's still unnamed
@@ -529,7 +553,7 @@ function App(){
   function signedInNow(){ setSignedIn(true); refresh(); }
   // signing out clears this device's copy, so the next person to sign in here starts from their own archive
   function forgetDevice(){
-    [CACHE_KEY, OUTBOX_KEY, UNTITLED_KEY].forEach(k => { try{ localStorage.removeItem(k); }catch(e){} });
+    [CACHE_KEY, OUTBOX_KEY, UNTITLED_KEY, TRIED_KEY].forEach(k => { try{ localStorage.removeItem(k); }catch(e){} });
     setLinks(null); setFolders([]); setCounter(0); setPending(0); setSyncError(false); setSelectedId(null);
     setSignedIn(false);
   }
@@ -712,7 +736,7 @@ function App(){
     );
   }
   function Shelves(){
-    const perRow = wide ? 12 : 6;
+    const perRow = desk ? 16 : wide ? 12 : 6;
     const rows = chunk(visible, perRow);
     const ghosts = !query && folderFilter==='all' && statusFilter==='all';
     const shelfCount = rows.length + (ghosts ? 1 : 0);
@@ -837,6 +861,13 @@ function App(){
           <button onClick={refresh}>Try again</button>
         </div>
       )}
+      {fromButton && (
+        <div className="banner" role="status">
+          <span>{fromButton === 'sending' ? 'Catching…' : fromButton === 'done' ? 'Caught. This window will close in a moment.'
+            : "Caught, and kept on this device. It will reach your archive next time you're online with Catch open."}</span>
+          <button onClick={()=>window.close()}>Close</button>
+        </div>
+      )}
       {showHint && (
         <div className="banner">
           <span>On iPhone: Share → Add to Home Screen, so this opens full-screen like an app.</span>
@@ -844,6 +875,8 @@ function App(){
         </div>
       )}
 
+      <div className="desk">
+      <div className="desk-side">
       <div className={"save-block" + (inputVal.trim() || nameVal ? " has-text" : "")}>
         <svg className="iron" viewBox="0 0 390 30" preserveAspectRatio="none" aria-hidden="true">
           <defs><pattern id="iron" width="40" height="30" patternUnits="userSpaceOnUse"><path fill="none" stroke="#AC9B86" strokeWidth=".8" opacity=".85" d="M0 13C10 3 20 3 20 13S30 23 40 13M20 13c-4 0-5-4-2-5 2 0 3 2 1 3M0 13c4 0 5 4 2 5-2 0-3-2-1-3M40 13c-4 0-5 4-2 5 2 0 3-2 1-3"/></pattern></defs>
@@ -915,6 +948,8 @@ function App(){
         </div>
       </React.Fragment>}
 
+      </div>
+      <div className="desk-main">
       {theme === 'dispatch' && links && links.length > 0 && (
         <div className="dp-meta"><span>Section A · {pad(Math.min(...links.map(l=>l.sessionNo)))}–{pad(nextNo + 2)}</span><i></i><b style={{ fontWeight:400 }}>{links.length} caught · {unreadCount} open</b></div>
       )}
@@ -939,6 +974,8 @@ function App(){
       {links !== null && links.length > 0 && (
         <div className="count-footer">{links.length} caught · {unreadCount} open</div>
       )}
+      </div>
+      </div>
 
       {selectedLink && (
         <div className="overlay" onClick={closeSheet}>
@@ -1000,6 +1037,12 @@ function App(){
             <div className="num">Lighting</div>
             <div className="opts">{[['auto','Auto'],['day','Day'],['night','Night']].map(([k,label]) => (
               <button key={k} aria-pressed={modePref===k} onClick={()=>{ setModePref(k); writeJSON('catch:mode', k); }}>{label}</button>))}</div>
+            {desk && <React.Fragment>
+              <div className="num">Catch button for your browser</div>
+              <p className="who">Drag this button up to your bookmarks bar. Then, on any web page, click it to catch that page.</p>
+              <div className="opts"><a className="bookmarklet" ref={el => el && el.setAttribute('href', bookmarklet())} onClick={e => { e.preventDefault(); }}
+                title="Drag me to your bookmarks bar">+ Catch</a></div>
+            </React.Fragment>}
             <div className="num">Account</div>
             <p className="who">Signed in as {session && session.email}</p>
             <div className="actions">
