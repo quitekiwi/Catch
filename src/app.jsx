@@ -747,8 +747,8 @@ function App(){
 
   /* ---------- the three rooms ---------- */
   function Salon(){
-    // like the sketch: on a three-across wall the newest hangs in the centre of the first row
-    const list = (!wide && sortMode === 'newest' && visible.length >= 2) ? [visible[1], visible[0], ...visible.slice(2)] : visible;
+    // frames hang in number order, newest first (the newest keeps its arched frame)
+    const list = visible;
     const ghosts = (!SHELF && !query && folderFilter==='all' && statusFilter==='all') ? [0,1] : [];
     return (
       <React.Fragment>
