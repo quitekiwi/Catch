@@ -127,6 +127,12 @@ async function fetchTitle(url){
 const SHELF = new URLSearchParams(window.location.search).get('shelf');
 const shelfLink = token => `${window.location.origin}${window.location.pathname}?shelf=${token}`;
 
+/* ---------- iPhone Shortcut: a private key that lets the "save" helper (supabase/functions/save) file links into this archive ---------- */
+async function sha256hex(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 const ART = window.CatchArt || null;
 function autoArt(l){ try{ return ART ? ART.pick(l.url, l.name) : 'key'; }catch(e){ return 'key'; } }
 function Motif({ k }){
@@ -423,6 +429,8 @@ function App(){
   const [shelf, setShelf] = useState(null);       // the shared folder being viewed: { folder } or { missing } or { error }
   const [shares, setShares] = useState(null);     // this person's shared folders: { folderId: token }
   const [shareNote, setShareNote] = useState('');
+  const [shortcutKey, setShortcutKey] = useState('');  // shown once, right after it's made
+  const [shortcutNote, setShortcutNote] = useState('');
   const [links, setLinks] = useState(() => cached ? cached.links : null);
   const [folders, setFolders] = useState(() => cached ? cached.folders : []);
   const [counter, setCounter] = useState(() => cached ? cached.counter : 0);
@@ -605,6 +613,21 @@ function App(){
     }catch(e){ console.error(e); setShareNote("Couldn't reach the archive. Try again when you're online."); }
   }
   useEffect(() => { if(showMenu && signedIn && !SHELF){ setShareNote(''); loadShares(); } }, [showMenu]);
+  // only the key's fingerprint is stored, so it can be shown just this once; a new key switches the old one off
+  async function makeShortcutKey(){
+    setShortcutNote('');
+    const bytes = crypto.getRandomValues(new Uint8Array(24));
+    const key = btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    try{
+      await sb('shortcut_keys?on_conflict=user_id', { method:'POST', body: JSON.stringify({ key_hash: await sha256hex(key) }),
+        prefer:'resolution=merge-duplicates,return=minimal' });
+      setShortcutKey(key);
+    }catch(e){ console.error(e); setShortcutNote("Couldn't reach the archive. Try again when you're online."); }
+  }
+  async function copyShortcutKey(){
+    try{ await navigator.clipboard.writeText(shortcutKey); setShortcutNote('Key copied. Paste it into your Shortcut.'); }
+    catch(e){ setShortcutNote('Select the key above and copy it.'); }
+  }
 
   function signedInNow(){ setSignedIn(true); refresh(); }
   // signing out clears this device's copy, so the next person to sign in here starts from their own archive
@@ -1123,6 +1146,16 @@ function App(){
                 ))}
               </div>
               {shareNote && <p className="who" role="status">{shareNote}</p>}
+            </React.Fragment>}
+            {!SHELF && <React.Fragment>
+              <div className="num">iPhone Shortcut</div>
+              <p className="who">Your Shortcut needs a private key to save into your archive without opening a browser.</p>
+              {shortcutKey ? <React.Fragment>
+                <div className="key-box" aria-label="Your Shortcut key">{shortcutKey}</div>
+                <p className="who">This is shown only once, so copy it now and keep it private. Making a new key switches this one off.</p>
+                <div className="opts"><button onClick={copyShortcutKey}>Copy key</button></div>
+              </React.Fragment> : <div className="opts"><button onClick={makeShortcutKey}>Make a Shortcut key</button></div>}
+              {shortcutNote && <p className="who" role="status">{shortcutNote}</p>}
             </React.Fragment>}
             {!SHELF && desk && <React.Fragment>
               <div className="num">Catch button for your browser</div>
