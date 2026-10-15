@@ -26,7 +26,7 @@ Saved links are shown as numbered "sessions" — book spines on library shelves,
 
 ## Capabilities and Constraints
 
-- Single static `index.html` (React + in-browser Babel from a CDN). No build step.
+- Static site: `index.html` + app code in `src/app.jsx`, pre-built into `app.js` with `npm run build` (commit app.js; GitHub Pages serves it as-is). React is kept locally in `vendor/`.
 - Features: save link with optional name and folder, folders, search, status filter (all/unread/read), sort (newest/oldest/A–Z), mark closed/reopen, rename/refile, delete, two themes (Leather, Sage), privacy note.
 - No login or per-user accounts. The database key in the page is public by design, so anyone with it could read or change the data. **Open decision:** going public would first require real accounts and access control (the in-app privacy note says the same).
 
