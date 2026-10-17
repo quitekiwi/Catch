@@ -128,6 +128,8 @@ const SHELF = new URLSearchParams(window.location.search).get('shelf');
 const shelfLink = token => `${window.location.origin}${window.location.pathname}?shelf=${token}`;
 
 /* ---------- iPhone Shortcut: a private key that lets the "save" helper (supabase/functions/save) file links into this archive ---------- */
+// the Shortcut's iCloud install link; it asks for the key while being added (set in the Shortcut's setup question)
+const SHORTCUT_LINK = '';
 async function sha256hex(str){
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
@@ -431,6 +433,7 @@ function App(){
   const [shareNote, setShareNote] = useState('');
   const [shortcutKey, setShortcutKey] = useState('');  // shown once, right after it's made
   const [shortcutNote, setShortcutNote] = useState('');
+  const [shortcutReady, setShortcutReady] = useState(false);  // key made and copied; next tap installs the Shortcut
   const [links, setLinks] = useState(() => cached ? cached.links : null);
   const [folders, setFolders] = useState(() => cached ? cached.folders : []);
   const [counter, setCounter] = useState(() => cached ? cached.counter : 0);
@@ -614,15 +617,30 @@ function App(){
   }
   useEffect(() => { if(showMenu && signedIn && !SHELF){ setShareNote(''); loadShares(); } }, [showMenu]);
   // only the key's fingerprint is stored, so it can be shown just this once; a new key switches the old one off
+  function newKey(){
+    const bytes = crypto.getRandomValues(new Uint8Array(24));
+    return btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  async function saveKey(key){
+    await sb('shortcut_keys?on_conflict=user_id', { method:'POST', body: JSON.stringify({ key_hash: await sha256hex(key) }),
+      prefer:'resolution=merge-duplicates,return=minimal' });
+  }
   async function makeShortcutKey(){
     setShortcutNote('');
-    const bytes = crypto.getRandomValues(new Uint8Array(24));
-    const key = btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    try{
-      await sb('shortcut_keys?on_conflict=user_id', { method:'POST', body: JSON.stringify({ key_hash: await sha256hex(key) }),
-        prefer:'resolution=merge-duplicates,return=minimal' });
-      setShortcutKey(key);
-    }catch(e){ console.error(e); setShortcutNote("Couldn't reach the archive. Try again when you're online."); }
+    const key = newKey();
+    try{ await saveKey(key); setShortcutKey(key); }
+    catch(e){ console.error(e); setShortcutNote("Couldn't reach the archive. Try again when you're online."); }
+  }
+  // one-tap setup: copy a fresh key first (phones only allow copying straight after a tap), then register it;
+  // the install link opens on the next tap, and the Shortcut asks for the key, which is already on the clipboard
+  async function addToIphone(){
+    setShortcutNote(''); setShortcutReady(false); setShortcutKey('');
+    const key = newKey();
+    let copied = true;
+    try{ await navigator.clipboard.writeText(key); }catch(e){ copied = false; }
+    try{ await saveKey(key); }
+    catch(e){ console.error(e); setShortcutNote("Couldn't reach the archive. Try again when you're online."); return; }
+    if(copied) setShortcutReady(true); else setShortcutKey(key);  // couldn't copy: show it so it can be copied by hand
   }
   async function copyShortcutKey(){
     try{ await navigator.clipboard.writeText(shortcutKey); setShortcutNote('Key copied. Paste it into your Shortcut.'); }
@@ -1149,12 +1167,19 @@ function App(){
             </React.Fragment>}
             {!SHELF && <React.Fragment>
               <div className="num">iPhone Shortcut</div>
-              <p className="who">Your Shortcut needs a private key to save into your archive without opening a browser.</p>
+              {SHORTCUT_LINK ? <React.Fragment>
+                <p className="who">Catch links from any app's Share button, without opening a browser.</p>
+                {shortcutReady ? <React.Fragment>
+                  <p className="who">Your private key is copied. Tap below, and when the Shortcuts app asks for your Catch key, tap the box, then Paste, then Add Shortcut.</p>
+                  <div className="opts"><a className="bookmarklet" href={SHORTCUT_LINK} target="_blank" rel="noopener">Install the Shortcut</a></div>
+                </React.Fragment> : !shortcutKey && <div className="opts"><button onClick={addToIphone}>Add to iPhone</button></div>}
+                <p className="who small">Setting it up again gives you a new key and switches the old one off, so set up every device at the same time.</p>
+              </React.Fragment> : <p className="who">Your Shortcut needs a private key to save into your archive without opening a browser.</p>}
               {shortcutKey ? <React.Fragment>
                 <div className="key-box" aria-label="Your Shortcut key">{shortcutKey}</div>
                 <p className="who">This is shown only once, so copy it now and keep it private. Making a new key switches this one off.</p>
                 <div className="opts"><button onClick={copyShortcutKey}>Copy key</button></div>
-              </React.Fragment> : <div className="opts"><button onClick={makeShortcutKey}>Make a Shortcut key</button></div>}
+              </React.Fragment> : !SHORTCUT_LINK && <div className="opts"><button onClick={makeShortcutKey}>Make a Shortcut key</button></div>}
               {shortcutNote && <p className="who" role="status">{shortcutNote}</p>}
             </React.Fragment>}
             {!SHELF && desk && <React.Fragment>
