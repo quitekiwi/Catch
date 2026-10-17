@@ -1,0 +1,37 @@
+{
+ "name": "Catch",
+ "short_name": "Catch",
+ "description": "Paste it, find it later. Nothing else.",
+ "start_url": "../",
+ "scope": "../",
+ "display": "standalone",
+ "background_color": "#BFB493",
+ "theme_color": "#393D3C",
+ "icons": [
+  {
+   "src": "dispatch-day-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "dispatch-day-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "dispatch-day-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "share_target": {
+  "action": "../",
+  "method": "GET",
+  "params": {
+   "title": "title",
+   "text": "text",
+   "url": "url"
+  }
+ }
+}
