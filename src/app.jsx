@@ -300,6 +300,7 @@ function SignIn({ onSignedIn }){
           {step === 'code' && <button type="button" onClick={()=>{ setStep('email'); setCode(''); setErr(''); }}>Use another email</button>}
           <button type="submit" className="primary" disabled={busy}>{busy ? '···' : step === 'email' ? 'Send code' : 'Sign in'}</button>
         </div>
+        {step === 'email' && <p className="new-here">New here? <a href="get/">See how to set up Catch</a></p>}
       </form>
     </div>
   );
