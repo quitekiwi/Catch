@@ -78,6 +78,21 @@ function normalizeUrl(raw){
   try{ const u = new URL(v); return (u.hostname.includes('.') || u.hostname === 'localhost') ? v : null; }catch(e){ return null; }
 }
 function pad(n){ return String(n).padStart(3,'0'); }
+/* ---------- rediscovering: links caught a while ago and never opened ---------- */
+const DAY = 86400000;
+// how dusty an unopened link has become: a little after two weeks, more after a month, cobwebs after three
+function dustOf(l){
+  if(l.read || !l.addedAt) return 0;
+  const days = (Date.now() - l.addedAt) / DAY;
+  return days >= 90 ? 3 : days >= 30 ? 2 : days >= 14 ? 1 : 0;
+}
+function ageText(ms){
+  const days = Math.floor((Date.now() - ms) / DAY);
+  if(days < 14) return `${days} days ago`;
+  if(days < 60) return `${Math.round(days / 7)} weeks ago`;
+  if(days < 365) return `${Math.round(days / 30)} months ago`;
+  const y = Math.round(days / 365); return y === 1 ? 'a year ago' : `${y} years ago`;
+}
 // the same page caught twice: ignore http/https, www, a trailing slash and #fragments
 function linkKey(url){ return String(url).trim().toLowerCase().replace(/#.*$/, '').replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/+$/, ''); }
 function displayTitle(l){ return l.name ? l.name : l.url.replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/\/$/,''); }
@@ -384,6 +399,7 @@ function App(){
   const [fromButton, setFromButton] = useState(false);
   const [alreadyNote, setAlreadyNote] = useState('');
   const [undoLink, setUndoLink] = useState(null);
+  const [archiveHidden, setArchiveHidden] = useState(() => readJSON('catch:archive-hidden', 0) === Math.floor(Date.now() / DAY));
   const [wide, setWide] = useState(() => window.innerWidth >= 640);
   const [desk, setDesk] = useState(() => window.innerWidth >= 1100);  // computer screens: form in a side column, room fills the rest
   const inputRef = useRef(null);
@@ -611,6 +627,20 @@ function App(){
     setSession(null); setShowMenu(false); forgetDevice(); try{ localStorage.removeItem('catch:art'); }catch(e){}
   }
 
+  // one forgotten link a day: unopened, caught over two weeks ago, not recently set aside
+  const forgotten = useMemo(() => {
+    if(!links || SHELF || archiveHidden) return null;
+    const rested = readJSON('catch:rested', {}), now = Date.now();
+    const pool = links.filter(l => !l.read && l.addedAt && now - l.addedAt > 14 * DAY && !(rested[l.id] > now))
+      .sort((a, b) => a.sessionNo - b.sessionNo);
+    return pool.length ? pool[hashStr('day' + Math.floor(now / DAY)) % pool.length] : null;
+  }, [links, archiveHidden]);
+  function notNow(l){
+    writeJSON('catch:rested', { ...readJSON('catch:rested', {}), [l.id]: Date.now() + 30 * DAY });
+    writeJSON('catch:archive-hidden', Math.floor(Date.now() / DAY));
+    setArchiveHidden(true);
+  }
+
   function signedInNow(){ setSignedIn(true); refresh(); }
   // signing out clears this device's copy, so the next person to sign in here starts from their own archive
   function forgetDevice(){
@@ -777,7 +807,7 @@ function App(){
   const newestId = links && links.length ? [...links].sort((a,b)=>b.addedAt-a.addedAt)[0].id : null;
   const room = ROOM[theme];
 
-  function itemLabel(l){ return `Session ${pad(l.sessionNo)}, ${displayTitle(l)}, ${l.domain}, ${l.read ? 'read' : 'unread'}`; }
+  function itemLabel(l){ return `Session ${pad(l.sessionNo)}, ${displayTitle(l)}, ${l.domain}, ${l.read ? 'read' : 'unread'}${dustOf(l) ? `, caught ${ageText(l.addedAt)}` : ''}`; }
 
   /* ---------- the three rooms ---------- */
   function Salon(){
@@ -800,13 +830,15 @@ function App(){
             const title = t.length > 14 ? t.slice(0,13) + '…' : t;
             const cid = 'clip-' + l.id;
             return (
-              <button key={l.id} className={"hang2" + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "")} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
+              <button key={l.id} className={"hang2" + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "") + (dustOf(l) ? " dust-" + dustOf(l) : "")} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
                 <svg width="120" height="214" viewBox="0 0 120 214" aria-hidden="true">
                   <defs><clipPath id={cid}>{parts.clip}</clipPath></defs>
                   <path className="cord" d={f.cords}/>
                   <use href="#nail" x="60" y="6"/>
                   {parts.frame}
                   <g className="paint" clipPath={`url(#${cid})`}><OxPainting k={artOf(l)} box={f.box} /></g>
+                  {dustOf(l) === 3 && <path className="web" transform={`translate(${f.box[0] - 1} ${f.box[1] - 1})`}
+                    d="M0 0H17M0 0V17M0 0L13 13M0 5.5Q3.2 3.2 5.5 0M0 10.5Q6.4 6.4 10.5 0M0 15Q9.4 9.4 15 0"/>}
                   {!l.read && <use href="#ros" x={f.ros[0]} y={f.ros[1]} width="22" height="28"/>}
                   {newest
                     ? <React.Fragment><path className="pl" d="M22 160h76a6 6 0 0 0 6 6v30a6 6 0 0 0-6 6H22a6 6 0 0 0-6-6v-30a6 6 0 0 0 6-6z"/>
@@ -839,7 +871,7 @@ function App(){
         <div className="dp-grid">
           {visible.map(l => (
             <div key={l.id} className={"dp-c" + (l.read ? " closed" : "")}>
-              <button className={"dp-st" + (justCaught===l.id ? " just" : "")} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
+              <button className={"dp-st" + (justCaught===l.id ? " just" : "") + (dustOf(l) ? " dust-" + dustOf(l) : "")} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
                 <span className="face"><DpDrawing k={artOf(l)} /><em>{l.sessionNo}</em></span>
                 {l.read ? <DpPostmark /> : (
                   <svg className="dp-ring" viewBox="0 0 100 112" preserveAspectRatio="none" aria-hidden="true">
@@ -1009,6 +1041,21 @@ function App(){
 
       </div>
       <div className="desk-main">
+      {forgotten && !query && folderFilter === 'all' && statusFilter === 'all' && (
+        <aside className="archive-card" aria-label="From the archive">
+          <div className="ac-pic"><Motif k={artOf(forgotten)} /></div>
+          <div className="ac-body">
+            <div className="ac-label">From the archive · Nº {pad(forgotten.sessionNo)}</div>
+            <div className="ac-title">{displayTitle(forgotten)}</div>
+            <div className="ac-note">Caught {ageText(forgotten.addedAt)}, still unopened.</div>
+          </div>
+          <div className="ac-btns">
+            <a href={forgotten.url} target="_blank" rel="noopener noreferrer" onClick={()=>markRead(forgotten.id)}>Open it</a>
+            <button onClick={()=>notNow(forgotten)}>Not now</button>
+            <button onClick={()=>markRead(forgotten.id)}>Mark read</button>
+          </div>
+        </aside>
+      )}
       {theme === 'dispatch' && links && links.length > 0 && (
         <div className="dp-meta"><span>Section A · {pad(Math.min(...links.map(l=>l.sessionNo)))}–{pad(nextNo + 2)}</span><i></i><b style={{ fontWeight:400 }}>{countText}</b></div>
       )}
