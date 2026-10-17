@@ -2,10 +2,9 @@ const { useState, useEffect, useRef, useMemo } = React;
 
 const SUPABASE_URL = 'https://xgeqkpitsoziywgzautn.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_xMKJ_dj27JkM6XGFJH_8bA_7hM4vyJj';
-const THEMES = [['oxblood','Oxblood'],['hall','Hall'],['dispatch','Dispatch']];
+const THEMES = [['oxblood','Oxblood'],['dispatch','Dispatch']];
 const ROOM = {
   oxblood:  { subtitle:'The Salon of Sessions',          label:'The wall', dock:'Hang a new frame', verb:'hang' },
-  hall:     { subtitle:'The Library of the Collection', label:'The library', dock:'To shelve as',   verb:'shelve' },
   dispatch: { subtitle:'Catalogue of Sessions',          label:'Section A',  dock:'New session',    verb:'file' },
 };
 
@@ -243,97 +242,6 @@ const DpPostmark = ({ small }) => (
   </svg>
 );
 
-/* ---------- Green Hall pieces ---------- */
-// cloths from the hall's palette plus one quiet mist blue; [cloth, title ink, groove]
-const GH_INK = '#142420';
-const GH_CLOTHS = [
-  ['#1B2B26'], ['#423C2D'], ['#4E6352'], ['#7E6E4B'], ['#56706F'],
-];
-const GH_GOLD = '#9A8760', GH_PAPER = '#A9B29A';
-/* a storybook tome: flat painted cloth, one hard-edged cel shadow, ink outline, carved grooves and a stone-tablet label */
-function GhBook({ id, w, h, cloth, no, title, art, unread }){
-  const [c] = cloth;
-  const mid = w/2, medR = Math.min(w/2 - 6, 13), medY = h - 30, gTop = 58, gBot = medY - medR - 12, gH = gBot - gTop;
-  const maxChars = Math.max(4, Math.floor((gH - 10) / 6.4));
-  const t = title.length > maxChars ? title.slice(0, maxChars - 1) + '…' : title;
-  const S = ART && (ART.subjects[art] || ART.subjects.key);
-  const cid = 'ghb-' + id;
-  const EM = window.GHEmblem && window.GHEmblem[art];
-  return (
-    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} aria-hidden="true">
-      <defs><clipPath id={cid}><rect x=".7" y=".7" width={w-1.4} height={h-1.4} rx="3"/></clipPath></defs>
-      <g clipPath={`url(#${cid})`}>
-        <rect width={w} height={h} fill={c}/>
-        <rect x={w*0.68} width={w} height={h} fill={shade(c,-.16)}/>
-        <rect width={w} height={h} filter="url(#gh-age)"/>
-        <rect width={w} height="10.5" fill={shade(c,-.25)}/><rect y={h-10.5} width={w} height="10.5" fill={shade(c,-.25)}/>
-        <g fill="#C9C2A8" opacity=".16"><circle cx="0" cy="0" r="7"/><circle cx={w} cy="0" r="6"/><circle cx="0" cy={h} r="7"/><circle cx={w} cy={h} r="8"/></g>
-      </g>
-      <path d={`M4 14.5H${w-4}M4 ${h-14.5}H${w-4}`} stroke={GH_GOLD} strokeWidth="1" opacity=".85"/>
-      <rect x="4.5" y="19" width={w-14} height="24" rx="5" fill={GH_PAPER} stroke="#142420" strokeOpacity=".8"/>
-      <text x={mid-2.5} y="28.5" textAnchor="middle" fontFamily="Cinzel" fontSize="6.5" fill="#22302B">Nº</text>
-      <text x={mid-2.5} y="38.5" textAnchor="middle" fontFamily="Cinzel" fontWeight="600" fontSize="10" fill="#22302B">{no}</text>
-      <g fill={GH_GOLD} opacity=".9"><circle cx={mid-5} cy="50" r="1.2"/><circle cx={mid} cy="50" r="1.2"/><circle cx={mid+5} cy="50" r="1.2"/></g>
-      <rect x="7" y={gTop} width={w-14} height={gH} rx={(w-14)/2} fill={GH_PAPER} stroke={GH_GOLD} strokeWidth="1.1"/>
-      <rect x="9" y={gTop+2} width={w-18} height={gH-4} rx={(w-18)/2} fill="none" stroke="#142420" strokeOpacity=".25" strokeWidth=".6"/>
-      <text transform={`translate(${mid+4.6} ${gTop + gH/2}) rotate(-90)`} textAnchor="middle" fontFamily="EB Garamond" fontWeight="600" fontSize="13.5" letterSpacing=".02em" fill="#1E2B26">{t}</text>
-      <path d={`M${mid-8} ${gBot+6}q2-3 4 0t4 0 4 0 4 0`} fill="none" stroke={GH_GOLD} strokeWidth="1" strokeLinecap="round"/>
-      <circle cx={mid} cy={medY} r={medR+3} fill="none" stroke={GH_GOLD} strokeWidth=".9"/>
-      <circle cx={mid} cy={medY} r={medR} fill={GH_PAPER} stroke="#142420" strokeOpacity=".85" strokeWidth="1.1"/>
-      {(EM || S) && <svg x={mid-medR*0.82} y={medY-medR*0.7} width={medR*1.64} height={medR*1.4} viewBox="0 0 64 52" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ color:'#423C2D' }} dangerouslySetInnerHTML={{__html: EM || S.svg}} />}
-      <rect x=".7" y=".7" width={w-1.4} height={h-1.4} rx="3" fill="none" stroke="#142420" strokeOpacity=".9" strokeWidth="1.2"/>
-      {unread && <React.Fragment>
-        <path d={`M${w-7.5} -6q2-3 4 0v62l-2-3-2 3z`} fill="#7E1E1E" stroke="#142420" strokeWidth=".6"/>
-        <g transform={`translate(${w-4.5} 60) rotate(-8)`}><path d="M-5 0h10v12l-5 3.6-5-3.6z" fill={GH_PAPER} stroke="#142420" strokeWidth=".7"/>
-          <circle cy="3.8" r="1.2" fill="none" stroke="#423C2D" strokeWidth=".6"/><path d="M-2.3 8.4h4.6" stroke="#8C2020" strokeWidth=".8"/></g>
-      </React.Fragment>}
-    </svg>
-  );
-}
-const GhBookend = ({ right, day }) => (
-  <svg className={"gh-end" + (right ? " r" : "")} viewBox="-4 232 34 180" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M-3 410V250A16 16 0 0 1 29 250V410Z" fill="#B09C70"/>
-    <path d="M1 410V250A12 12 0 0 1 25 250V410Z" fill={day ? '#2A403A' : '#B1BFA3'} stroke={day ? '#2A403A' : '#59523E'} strokeWidth="1"/>
-    <g fill="none" stroke={day ? '#B09C70' : '#59523E'} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M13 402C13 380 11 340 13 300M13 384C5 376 4 362 8 352C10 362 12 372 13 384M13 360C21 352 22 338 18 328C16 338 14 348 13 360M13 300C7 292 5 280 8 268M13 300C19 292 21 280 18 268M13 300V272M8 268C9 275 17 275 18 268M8 268c-2-3-4-2-3 0M18 268c2-3 4-2 3 0M11 272l-1.5-7M15 272l1.5-7M7 252c3-6 9-6 12 0M5 404c3-3 13-3 16 0"/>
-    </g>
-    <g fill={day ? '#B09C70' : '#59523E'}><circle cx="9.5" cy="264.5" r="1.1"/><circle cx="16.5" cy="264.5" r="1.1"/><circle cx="13" cy="243" r="1.3"/></g>
-  </svg>
-);
-const GhBracket = ({ right }) => (
-  <svg className={"gh-brk" + (right ? " r" : " l")} viewBox="10 418 50 50" aria-hidden="true">
-    <path fill="none" stroke="#B09C70" strokeWidth="1.4" strokeLinecap="round" d="M14 422C14 446 22 462 40 464C52 465 56 454 48 450C42 447 38 454 43 456M14 422C30 426 44 432 54 423M14 422c-6 6-6 14 0 16c3 1 4-2 2-3"/>
-  </svg>
-);
-const GhCeiling = () => (
-  <svg className="gh-ceil" viewBox="0 0 390 52" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <defs>
-      <pattern id="gh-cof" width="39" height="31" patternUnits="userSpaceOnUse"><rect width="39" height="31" fill="#2A403A"/><rect x="2.5" y="2.5" width="34" height="26" fill="#59523E" stroke="#B09C70" strokeWidth=".6"/><rect x="7.5" y="6.5" width="24" height="18" fill="#2A403A" stroke="#B09C70" strokeWidth=".4" opacity=".9"/><path d="M19.5 11.6v7.8M15.6 15.5h7.8" stroke="#B09C70" strokeWidth=".5"/><circle cx="19.5" cy="15.5" r="2" fill="#B09C70"/><circle cx="19.5" cy="15.5" r="3.6" fill="none" stroke="#B09C70" strokeWidth=".4"/></pattern>
-      <linearGradient id="gh-shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#59523E" stopOpacity=".75"/><stop offset="1" stopColor="#59523E" stopOpacity="0"/></linearGradient>
-    </defs>
-    <rect x="-4" width="400" height="31" fill="url(#gh-cof)"/><rect width="390" height="31" fill="url(#gh-shade)"/>
-    <path d="M0 33.5h390" stroke="#B09C70"/><path d="M0 38.5h390" stroke="#B09C70" strokeWidth="4" strokeDasharray="2.4 3.1" opacity=".8"/>
-    <path d="M0 42.5h390" stroke="#B09C70" strokeWidth=".6"/><path d="M0 45.5h390" stroke="#59523E" strokeWidth="2.5"/><path d="M0 48h390" stroke="#B09C70" strokeWidth=".4" opacity=".55"/>
-  </svg>
-);
-const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
-
-const Rosette = () => (
-  <svg className="rosette" viewBox="0 0 24 30" aria-hidden="true">
-    <path d="M8 16l-3 13 5-3 2 4 1-14zM16 16l3 13-5-3-2 4-1-14z" fill="#73303C"/>
-    <circle cx="12" cy="11" r="9" fill="#D9B88F"/>
-    <g fill="#73303C">{[0,45,90,135,180,225,270,315].map(a => <ellipse key={a} cx="12" cy="5.4" rx="2.2" ry="3.4" transform={`rotate(${a} 12 11)`}/>)}</g>
-    <circle cx="12" cy="11" r="3" fill="#D9B88F" stroke="#73303C"/>
-  </svg>
-);
-const Lily = ({ right }) => (
-  <svg className={"bookend" + (right ? " right" : "")} viewBox="0 0 30 150" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M2 150V22A13 13 0 0 1 28 22V150Z" fill="var(--bookend)" stroke="var(--bookend-line)"/>
-    <g fill="none" stroke="var(--bookend-line)" strokeWidth="1.1" strokeLinecap="round">
-      <path d="M15 142C15 110 13 80 15 50M15 120c-7-6-8-16-4-24M15 100c7-6 8-16 4-24M10 50c1 6 9 6 10 0M15 50c-2-5-1-9 0-12 1 3 2 7 0 12z"/>
-    </g>
-  </svg>
-);
 const Postmark = () => (
   <svg className="postmark" viewBox="0 0 94 110" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.3">
     <circle cx="38" cy="50" r="17"/><circle cx="38" cy="50" r="13" strokeWidth=".7"/>
@@ -448,7 +356,7 @@ function App(){
   const [showHint, setShowHint] = useState(true);
   const [saving, setSaving] = useState(false);
   const [syncError, setSyncError] = useState(false);
-  // ?room=hall&mode=night opens a specific room without changing the saved choice
+  // ?room=dispatch&mode=night opens a specific room without changing the saved choice
   const urlRoom = new URLSearchParams(window.location.search).get('room');
   const urlMode = new URLSearchParams(window.location.search).get('mode');
   const [theme, setTheme] = useState(() => {
@@ -527,7 +435,7 @@ function App(){
     document.documentElement.setAttribute('data-theme', theme);
     document.documentElement.setAttribute('data-mode', mode);
     const tc = document.querySelector('meta[name="theme-color"]');
-    if(tc) tc.setAttribute('content', theme === 'hall' ? '#2A403A' : theme === 'dispatch' ? '#393D3C' : '#40101D');
+    if(tc) tc.setAttribute('content', theme === 'dispatch' ? '#393D3C' : '#40101D');
   }, [theme, mode]);
 
   // keep this device's copy of the archive current, so it opens instantly and works offline
@@ -839,45 +747,6 @@ function App(){
       </React.Fragment>
     );
   }
-  function Shelves(){
-    const perRow = desk ? 16 : wide ? 12 : 6;
-    const rows = chunk(visible, perRow);
-    const ghosts = !SHELF && !query && folderFilter==='all' && statusFilter==='all';
-    const shelfCount = rows.length + (ghosts ? 1 : 0);
-    const day = mode === 'day';
-    const nums = visible.map(l=>l.sessionNo);
-    return (
-      <React.Fragment>
-        <div className="gh-sec"><span>The Library · Shelves I – {ROMAN[Math.min(shelfCount, 12) - 1]}</span></div>
-        {rows.map((row, ri) => (
-          <div className="gh-shelf" key={ri}>
-            <GhBookend day={day} />
-            {row.map(l => {
-              const h = hashStr(l.id);
-              return (
-                <button key={l.id} className={"gh-book" + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "")} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
-                  <GhBook id={l.id} w={40 + ((h >>> 5) % 9)} h={216 + ((h >>> 9) % 30)} cloth={GH_CLOTHS[(l.sessionNo || 0) % GH_CLOTHS.length]}
-                    no={pad(l.sessionNo)} title={displayTitle(l)} art={artOf(l)} unread={!l.read} />
-                </button>
-              );
-            })}
-            <GhBookend right day={day} />
-            <div className="gh-plank"></div><GhBracket /><GhBracket right />
-          </div>
-        ))}
-        {ghosts && (
-          <div className="gh-shelf" style={{ minHeight:170 }}>
-            {[0,1,2,3].map(i => (
-              <div key={i} className="gh-ghost" aria-hidden="true" style={{ width:36, height:[128,140,120,134][i] }}>{pad(nextNo + i)}</div>
-            ))}
-            <div className="gh-more">room for more</div>
-            <div className="gh-plank"></div><GhBracket /><GhBracket right />
-          </div>
-        )}
-        <div className="gh-plaque"><span>Sessions {pad(Math.min(...nums))} – {pad(Math.max(...nums))}</span></div>
-      </React.Fragment>
-    );
-  }
   function Stamps(){
     const showReserved = !SHELF && !query && folderFilter==='all' && statusFilter==='all';
     return (
@@ -933,20 +802,6 @@ function App(){
           <div className="sub">Catalogue of Sessions</div>
           <div className="tag">Paste it, find it later. Nothing else.</div>
         </header>
-      ) : theme === 'hall' ? (
-        <React.Fragment>
-          <div className="gh-top" aria-hidden="true"></div>
-          <GhCeiling />
-          <header className="gh-mast">
-            <h1>CATCH</h1>
-            <svg className="orn3" viewBox="0 0 300 14" fill="none" stroke="#B09C70" strokeLinecap="round" aria-hidden="true">
-              <path d="M12 7h112M176 7h112" strokeWidth=".7"/><path d="M124 7c6 0 9-5 15-5 4 0 4 4 1.5 4.6M176 7c-6 0-9 5-15 5-4 0-4-4-1.5-4.6" strokeWidth=".8"/>
-              <path d="M150 2.2l4.8 4.8-4.8 4.8-4.8-4.8z" fill="#B09C70" stroke="none"/><path d="M12 7c-4 0-6-3-4-4.4 1.6-1 3 .6 2 1.6M288 7c4 0 6 3 4 4.4-1.6 1-3-.6-2-1.6" strokeWidth=".7"/>
-            </svg>
-            <div className="sub">Catalogue of the Collection</div>
-          </header>
-          <div className="gh-tag"><i>Paste it, find it later. Nothing else.</i>{links && links.length > 0 && <b>{countText.toUpperCase()}</b>}</div>
-        </React.Fragment>
       ) : (
         <header className="mast">
           <div className="orn" aria-hidden="true"><i></i><b></b><i></i></div>
@@ -997,8 +852,7 @@ function App(){
           <path fill="none" stroke="#AC9B86" d="M195 19c-3-3-3-8 0-11 3 3 3 8 0 11zM195 19c-5 0-8-3-9-7 4 0 7 3 9 7zM195 19c5 0 8-3 9-7-4 0-7 3-9 7z"/>
         </svg>
         <div className="dock-label">
-          {theme === 'hall' ? <React.Fragment><span>New acquisition</span><span>To shelve as Nº {pad(nextNo)}</span></React.Fragment>
-            : theme === 'dispatch' ? <React.Fragment><span>New session Nº {pad(nextNo)}</span><span>one link · nothing else</span></React.Fragment>
+          {theme === 'dispatch' ? <React.Fragment><span>New session Nº {pad(nextNo)}</span><span>one link · nothing else</span></React.Fragment>
             : <span>{room.dock} · Nº {pad(nextNo)}</span>}
         </div>
         <div className="save-row">
@@ -1079,7 +933,6 @@ function App(){
         {links !== null && visible.length > 0 && <React.Fragment>
           <div className="room-label">{room.label}</div>
           {theme === 'oxblood' && Salon()}
-          {theme === 'hall' && Shelves()}
           {theme === 'dispatch' && Stamps()}
         </React.Fragment>}
       </main>

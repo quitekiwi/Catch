@@ -15,11 +15,11 @@ h1{font-weight:400;font-size:22px;margin:0 0 4px} p{margin:0 0 18px;color:#bdb4a
 .gh svg{width:40px;height:33px}
 .miss{font-size:11px;color:#c98}
 </style></head><body>
-<h1>Catch picture library</h1><p>Each subject in all three rooms: Oxblood painting · Dispatch stamp · Green Hall emblem. Missing ones are still being drawn.</p>
+<h1>Catch picture library</h1><p>Each subject in all three rooms: Oxblood painting · Dispatch stamp. Missing ones are still being drawn.</p>
 <div class="grid" id="g"></div>
 <script src="../motifs.js?v=2"></script><script src="../oxblood-art.js?v=2"></script>
 <script src="ox-1.js"></script><script src="ox-2.js"></script><script src="ox-3.js"></script><script src="ox-4.js"></script>
-<script src="dp-1.js"></script><script src="dp-2.js"></script><script src="gh-1.js"></script><script src="gh-2.js"></script>
+<script src="dp-1.js"></script><script src="dp-2.js"></script>
 <script>
 const DPX={synth:1,map:1,mystic:1,beats:1};
 const A=window.CatchArt, P=(window.OxbloodArt||{}).paintings||{}, D=window.DPDraw||{}, G=window.GHEmblem||{};
@@ -28,7 +28,6 @@ document.getElementById('g').innerHTML = A.order.map(k=>{
   const p=P[k]; const ox = p ? `<svg width="72" height="96" viewBox="${p.box.join(' ')}" preserveAspectRatio="xMidYMid slice">${p.svg}</svg>` : '<span class="miss">painting pending</span>';
   const d = D[k] || (DPX[k] ? null : null);
   const dp = d ? `<svg viewBox="0 0 62 52" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">${d}</svg>` : (DPX[k] ? '<span class="miss">in app</span>' : '<span class="miss">pending</span>');
-  const g = G[k] ? `<svg viewBox="0 0 64 52" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${G[k]}</svg>` : '<span class="miss">pending</span>';
-  return `<div class="card"><h2>${A.subjects[k].label} <small>${k}</small></h2><div class="row"><div class="ox">${ox}</div><div class="dp"><i>${dp}</i></div><div class="gh">${g}</div></div></div>`;
+  return `<div class="card"><h2>${A.subjects[k].label} <small>${k}</small></h2><div class="row"><div class="ox">${ox}</div><div class="dp"><i>${dp}</i></div></div></div>`;
 }).join('');
 </script></body></html>
