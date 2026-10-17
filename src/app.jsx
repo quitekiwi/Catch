@@ -129,7 +129,7 @@ const shelfLink = token => `${window.location.origin}${window.location.pathname}
 
 /* ---------- iPhone Shortcut: a private key that lets the "save" helper (supabase/functions/save) file links into this archive ---------- */
 // the Shortcut's iCloud install link; it asks for the key while being added (set in the Shortcut's setup question)
-const SHORTCUT_LINK = '';
+const SHORTCUT_LINK = 'https://www.icloud.com/shortcuts/d717e12344cd429aadb765d373616a96';
 async function sha256hex(str){
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
