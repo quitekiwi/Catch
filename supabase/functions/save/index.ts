@@ -59,6 +59,12 @@ Deno.serve(async (req) => {
   try { url = new URL(/^https?:\/\//i.test(raw) ? raw : 'https://' + raw); if (!url.hostname.includes('.')) throw 0; }
   catch { return text("That doesn't look like a link.", 400); }
 
+  // the same page caught twice (ignoring http/https, www, a trailing slash and #fragments): say so instead
+  const keyOf = (u: string) => u.trim().toLowerCase().replace(/#.*$/, '').replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/+$/, '');
+  const mine = await db(`links?select=session_no,url&user_id=eq.${userId}`);
+  const dupe = (mine || []).find((l: { url: string }) => keyOf(l.url) === keyOf(url.href));
+  if (dupe) return text(`Already caught as Nº ${String(dupe.session_no).padStart(3, '0')}`);
+
   const given = String(body.title || '').trim();
   const name = (given && !/^https?:\/\//i.test(given) ? given : await pageTitle(url)).slice(0, 140);
 
