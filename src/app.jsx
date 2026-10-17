@@ -481,7 +481,7 @@ function App(){
   useEffect(() => { if(links !== null) writeJSON(CACHE_KEY, { links, folders, counter }); }, [links, folders, counter]);
 
   async function sync(){ const left = await flushOutbox(); setPending(pendingChanges()); return left; }
-  function send(method, path, body, prefer){ queue(method, path, body, prefer); sync(); }
+  function send(method, path, body, prefer){ queue(method, path, body, prefer); return sync(); }
   async function refresh(){
     if(!session || SHELF) return;
     if(await sync() > 0){ setSyncError(true); setLinks(prev => prev || []); return; }  // still offline: keep the local copy
@@ -714,7 +714,8 @@ function App(){
       name: (name||'').trim(), folderId: folderId || null, domain: domainFrom(url), addedAt: Date.now(), read: false };
     queue('POST', 'links', linkToRow(entry));
     if(entry.name){ const k = autoArt(entry); entry.art = k; writeJSON('catch:art', { ...readJSON('catch:art', {}), [entry.id]:k }); queue('PATCH', `links?id=eq.${entry.id}`, { art:k }); }
-    send('POST', 'meta?on_conflict=user_id,key', { key:'counter', value: String(nextCounter) }, 'resolution=merge-duplicates,return=minimal');
+    // the number shown here is a best guess: the database gives out the real one (supabase/numbers.sql), so pick it up once it's saved
+    sync().then(left => { if(!left) refresh(); });
     setCounter(nextCounter);
     setLinks(prev => [entry, ...(prev || [])]);
     setJustCaught(entry.id); setTimeout(() => setJustCaught(null), 900);
