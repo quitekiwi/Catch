@@ -3,6 +3,7 @@
 // Runs as a Supabase Edge Function named "save" with JWT verification off.
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+declare const EdgeRuntime: { waitUntil(p: Promise<unknown>): void };
 const text = (body: string, status = 200) => new Response(body, { status, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 
 async function db(path: string, init: RequestInit = {}) {
@@ -59,25 +60,34 @@ Deno.serve(async (req) => {
   try { url = new URL(/^https?:\/\//i.test(raw) ? raw : 'https://' + raw); if (!url.hostname.includes('.')) throw 0; }
   catch { return text("That doesn't look like a link.", 400); }
 
-  // the same page caught twice (ignoring http/https, www, a trailing slash and #fragments): say so instead
+  // what's already there (to spot duplicates and pick the next number) and the counter, fetched together
   const keyOf = (u: string) => u.trim().toLowerCase().replace(/#.*$/, '').replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/+$/, '');
-  const mine = await db(`links?select=session_no,url&user_id=eq.${userId}`);
+  const [mine, counters] = await Promise.all([
+    db(`links?select=session_no,url&user_id=eq.${userId}`),
+    db(`meta?select=value&user_id=eq.${userId}&key=eq.counter`),
+  ]);
   const dupe = (mine || []).find((l: { url: string }) => keyOf(l.url) === keyOf(url.href));
   if (dupe) return text(`Already caught as Nº ${String(dupe.session_no).padStart(3, '0')}`);
 
-  const given = String(body.title || '').trim();
-  const name = (given && !/^https?:\/\//i.test(given) ? given : await pageTitle(url)).slice(0, 140);
-
   // the next session number, never reusing one
-  const [last] = await db(`links?select=session_no&user_id=eq.${userId}&order=session_no.desc&limit=1`);
-  const [counter] = await db(`meta?select=value&user_id=eq.${userId}&key=eq.counter`);
-  const no = Math.max(last?.session_no || 0, parseInt(counter?.value || '0', 10) || 0) + 1;
-  const now = Date.now();
-  await db('links', { method: 'POST', body: JSON.stringify({
-    id: `l_${now}_${Math.random().toString(36).slice(2, 7)}`, user_id: userId, url: url.href, session_no: no,
-    name, folder_id: null, domain: url.hostname.replace(/^www\./, ''), added_at: now, read: false }) });
-  await db('meta?on_conflict=user_id,key', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
-    body: JSON.stringify({ user_id: userId, key: 'counter', value: String(no) }) });
+  const no = Math.max(0, ...(mine || []).map((l: { session_no: number }) => l.session_no || 0), parseInt(counters?.[0]?.value || '0', 10) || 0) + 1;
+  const given = String(body.title || '').trim();
+  const name = given && !/^https?:\/\//i.test(given) ? given.slice(0, 140) : '';
+  const id = `l_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+  const domain = url.hostname.replace(/^www\./, '');
+  await Promise.all([
+    db('links', { method: 'POST', body: JSON.stringify({
+      id, user_id: userId, url: url.href, session_no: no, name, folder_id: null, domain, added_at: Date.now(), read: false }) }),
+    db('meta?on_conflict=user_id,key', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify({ user_id: userId, key: 'counter', value: String(no) }) }),
+  ]);
 
-  return text(`Caught as Nº ${String(no).padStart(3, '0')}${name ? ` · ${name}` : ''}`);
+  // reply straight away; the page's title is fetched afterwards and filled in if the link is still unnamed
+  if (!name) {
+    const later = pageTitle(url).then(title => title
+      ? db(`links?id=eq.${id}&name=eq.`, { method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ name: title }) })
+      : null).catch(() => {});
+    if (typeof EdgeRuntime !== 'undefined') EdgeRuntime.waitUntil(later); else await later;
+  }
+  return text(`Caught as Nº ${String(no).padStart(3, '0')} · ${name || domain}`);
 });
