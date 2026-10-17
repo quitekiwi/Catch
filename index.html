@@ -461,6 +461,23 @@
   .dp-st.dust-1 .face{ filter:sepia(.25) brightness(.95); }
   .dp-st.dust-2 .face{ filter:sepia(.5) brightness(.9); opacity:.85; }
   .dp-st.dust-3 .face{ filter:sepia(.8) brightness(.85) contrast(.85); opacity:.72; }
+  /* choosing several links */
+  .hang2.picked > svg, .dp-st.picked{ outline:3px solid var(--spot); outline-offset:2px; border-radius:6px; }
+  [data-theme="oxblood"] .hang2.picked > svg{ outline-color:#D9B88F; }
+  [data-theme="oxblood"][data-mode="day"] .hang2.picked > svg{ outline-color:#40101D; }
+  [data-theme="dispatch"] .dp-st.picked{ outline-color:#8C2020; }
+  .pick-bar{ position:fixed; left:0; right:0; bottom:0; z-index:16; padding:10px 16px calc(12px + env(safe-area-inset-bottom));
+    background:var(--chrome); color:var(--chrome-ink); box-shadow:0 -10px 24px -8px rgba(0,0,0,.45); }
+  .pick-bar .pb-count{ font:13px var(--font-label); letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px; }
+  .pick-bar .pb-btns{ display:flex; gap:6px; flex-wrap:wrap; }
+  .pick-bar button, .pick-bar select{ font:13px var(--font-label); letter-spacing:.06em; text-transform:uppercase; min-height:42px; padding:0 12px;
+    border:1px solid currentColor; border-radius:2px; background:transparent; color:inherit; cursor:pointer; }
+  .pick-bar select option{ color:#000; text-transform:none; }
+  .pick-bar .done{ background:var(--chrome-ink); color:var(--chrome); margin-left:auto; }
+  .pick-bar :disabled{ opacity:.45; cursor:default; }
+  @media (min-width:1100px){ .desk-side .pick-bar{ position:static; border-radius:3px; margin-bottom:12px; } }
+  .share-row .ask{ flex-basis:100%; align-items:center; font-style:italic; padding:6px 0 4px; }
+  .chips.pick-entry{ margin-top:12px; }
   .sheet .who.small{ font-size:14px; opacity:.85; }
   .sheet .who{ font-style:italic; margin:4px 0 12px; overflow-wrap:anywhere; }
 
@@ -517,6 +534,6 @@
 <script src="art/dp-2.js?v=2"></script>
 <script src="vendor/react.production.min.js"></script>
 <script src="vendor/react-dom.production.min.js"></script>
-<script src="app.js?v=59a96655"></script>
+<script src="app.js?v=19279eb5"></script>
 </body>
 </html>

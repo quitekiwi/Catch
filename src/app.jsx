@@ -399,6 +399,9 @@ function App(){
   const [fromButton, setFromButton] = useState(false);
   const [alreadyNote, setAlreadyNote] = useState('');
   const [undoLink, setUndoLink] = useState(null);
+  const [folderAsk, setFolderAsk] = useState(null);     // folder whose delete choice is showing
+  const [picking, setPicking] = useState(false);         // choosing several links at once
+  const [picked, setPicked] = useState([]);
   const [archiveHidden, setArchiveHidden] = useState(() => readJSON('catch:archive-hidden', 0) === Math.floor(Date.now() / DAY));
   const [wide, setWide] = useState(() => window.innerWidth >= 640);
   const [desk, setDesk] = useState(() => window.innerWidth >= 1100);  // computer screens: form in a side column, room fills the rest
@@ -487,8 +490,8 @@ function App(){
       const fresh = (l || []).map(rowToLink).map(x => x.art || waitingIds.has(x.id) ? x : { ...x, art: kept[x.id] || autoArt(x), lockNow:true });
       fresh.filter(x => x.lockNow).forEach(x => { kept[x.id] = x.art; queue('PATCH', `links?id=eq.${x.id}&art=is.null`, { art:x.art }); delete x.lockNow; });
       writeJSON('catch:art', kept); setArtOverrides(kept);
-      const deleting = pendingDelete.current && pendingDelete.current.link.id;
-      setLinks(fresh.filter(x => x.id !== deleting)); setFolders((f || []).map(rowToFolder)); setCounter(Math.max(0, ...(m || []).map(r => parseInt(r.value, 10) || 0)));
+      const deleting = pendingDelete.current ? pendingDelete.current.links.map(l => l.id) : [];
+      setLinks(fresh.filter(x => !deleting.includes(x.id))); setFolders((f || []).map(rowToFolder)); setCounter(Math.max(0, ...(m || []).map(r => parseInt(r.value, 10) || 0)));
       setSyncError(false);
       // older links that were caught without a name get their page titles too, once
       const tried = new Set(readJSON(TRIED_KEY, [])), waiting = readJSON(UNTITLED_KEY, []), queued = new Set(waiting.map(u => u.id));
@@ -594,9 +597,10 @@ function App(){
     setFolders(prev => prev.map(x => x.id === f.id ? { ...x, name:name.trim() } : x));
     send('PATCH', `folders?id=eq.${encodeURIComponent(f.id)}`, { name:name.trim() });
   }
-  async function deleteFolder(f){
-    const n = (links || []).filter(l => l.folderId === f.id).length;
-    if(!window.confirm(`Delete the folder “${f.name}”? ${n ? `Its ${n === 1 ? 'link stays' : n + ' links stay'} in your archive, just without a folder.` : 'It has no links in it.'}`)) return;
+  // withLinks: the folder's links go too (undoable for a few seconds); otherwise they stay, without a folder
+  async function deleteFolder(f, withLinks){
+    setFolderAsk(null);
+    if(withLinks) removeLinks((links || []).filter(l => l.folderId === f.id).map(l => l.id));
     setFolders(prev => prev.filter(x => x.id !== f.id));
     setLinks(prev => prev.map(l => l.folderId === f.id ? { ...l, folderId:null } : l));
     if(folderFilter === f.id) setFolderFilter('all');
@@ -640,6 +644,28 @@ function App(){
     writeJSON('catch:archive-hidden', Math.floor(Date.now() / DAY));
     setArchiveHidden(true);
   }
+
+  function onItem(l){
+    if(!picking){ openLink(l); return; }
+    setPicked(prev => prev.includes(l.id) ? prev.filter(x => x !== l.id) : [...prev, l.id]);
+  }
+  function startPicking(firstId){ closeSheet(); setShowFilters(false); setPicking(true); setPicked(firstId ? [firstId] : []); }
+  function stopPicking(){ setPicking(false); setPicked([]); }
+  const inList = ids => ids.length === 1 ? `id=eq.${ids[0]}` : `id=in.(${ids.join(',')})`;
+  function readPicked(){
+    const ids = picked.filter(id => links.some(l => l.id === id && !l.read));
+    if(ids.length){ setLinks(prev => prev.map(l => ids.includes(l.id) ? { ...l, read:true } : l)); send('PATCH', `links?${inList(ids)}`, { read:true }); }
+    stopPicking();
+  }
+  async function movePicked(value){
+    let folderId = value === '__none__' ? null : value;
+    if(value === '__new__'){ folderId = await createFolder(); if(!folderId) return; }
+    folderId = folderId || null;
+    setLinks(prev => prev.map(l => picked.includes(l.id) ? { ...l, folderId } : l));
+    send('PATCH', `links?${inList(picked)}`, { folder_id:folderId });
+    stopPicking();
+  }
+  function deletePicked(){ removeLinks(picked); stopPicking(); }
 
   function signedInNow(){ setSignedIn(true); refresh(); }
   // signing out clears this device's copy, so the next person to sign in here starts from their own archive
@@ -723,23 +749,26 @@ function App(){
     const p = pendingDelete.current;
     if(!p) return;
     clearTimeout(p.timer); pendingDelete.current = null; setUndoLink(null);
-    send('DELETE', `links?id=eq.${p.link.id}`);
+    send('DELETE', p.links.length === 1 ? `links?id=eq.${p.links[0].id}` : `links?id=in.(${p.links.map(l => l.id).join(',')})`);
   }
   commitDeleteRef.current = commitDelete;
-  function removeLink(id){
+  function removeLinks(ids){
     commitDelete();
-    const link = links.find(l => l.id === id);
-    if(!link) return;
-    setLinks(prev => prev.filter(l => l.id !== id));
-    if(selectedId === id) setSelectedId(null);
-    pendingDelete.current = { link, timer: setTimeout(() => commitDeleteRef.current(), 7000) };
-    setUndoLink(link);
+    const gone = links.filter(l => ids.includes(l.id));
+    if(!gone.length) return;
+    setLinks(prev => prev.filter(l => !ids.includes(l.id)));
+    if(ids.includes(selectedId)) setSelectedId(null);
+    pendingDelete.current = { links:gone, timer: setTimeout(() => commitDeleteRef.current(), 7000) };
+    setUndoLink(gone.length === 1 ? `Deleted Nº ${pad(gone[0].sessionNo)}` : `Deleted ${gone.length} links`);
   }
+  function removeLink(id){ removeLinks([id]); }
   function undoDelete(){
     const p = pendingDelete.current;
     if(!p) return;
     clearTimeout(p.timer); pendingDelete.current = null; setUndoLink(null);
-    setLinks(prev => [...prev, p.link].sort((a, b) => b.sessionNo - a.sessionNo));
+    // a folder deleted meanwhile no longer exists, so the links come back without it
+    setLinks(prev => [...prev, ...p.links.map(l => folders.some(f => f.id === l.folderId) ? l : { ...l, folderId:null })]
+      .sort((a, b) => b.sessionNo - a.sessionNo));
   }
   async function dismissHint(){ setShowHint(false); try{ localStorage.setItem('catch:hint-dismissed','true'); }catch(e){} }
 
@@ -830,7 +859,7 @@ function App(){
             const title = t.length > 14 ? t.slice(0,13) + '…' : t;
             const cid = 'clip-' + l.id;
             return (
-              <button key={l.id} className={"hang2" + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "") + (dustOf(l) ? " dust-" + dustOf(l) : "")} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
+              <button key={l.id} className={"hang2" + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "") + (dustOf(l) ? " dust-" + dustOf(l) : "") + (picked.includes(l.id) ? " picked" : "")} aria-pressed={picking ? picked.includes(l.id) : undefined} aria-label={itemLabel(l)} onClick={()=>onItem(l)}>
                 <svg width="120" height="214" viewBox="0 0 120 214" aria-hidden="true">
                   <defs><clipPath id={cid}>{parts.clip}</clipPath></defs>
                   <path className="cord" d={f.cords}/>
@@ -871,7 +900,7 @@ function App(){
         <div className="dp-grid">
           {visible.map(l => (
             <div key={l.id} className={"dp-c" + (l.read ? " closed" : "")}>
-              <button className={"dp-st" + (justCaught===l.id ? " just" : "") + (dustOf(l) ? " dust-" + dustOf(l) : "")} aria-label={itemLabel(l)} onClick={()=>openLink(l)}>
+              <button className={"dp-st" + (justCaught===l.id ? " just" : "") + (dustOf(l) ? " dust-" + dustOf(l) : "") + (picked.includes(l.id) ? " picked" : "")} aria-pressed={picking ? picked.includes(l.id) : undefined} aria-label={itemLabel(l)} onClick={()=>onItem(l)}>
                 <span className="face"><DpDrawing k={artOf(l)} /><em>{l.sessionNo}</em></span>
                 {l.read ? <DpPostmark /> : (
                   <svg className="dp-ring" viewBox="0 0 100 112" preserveAspectRatio="none" aria-hidden="true">
@@ -968,7 +997,23 @@ function App(){
 
       <div className="desk">
       <div className="desk-side">
-      {!SHELF && <div className={"save-block" + (inputVal.trim() || nameVal ? " has-text" : "")}>
+      {picking && (
+        <div className="pick-bar" role="toolbar" aria-label="Selected links">
+          <div className="pb-count">{picked.length ? `${picked.length} selected` : 'Tap links to select them'}</div>
+          <div className="pb-btns">
+            <select aria-label="Move to folder" value="" disabled={!picked.length} onChange={e=>movePicked(e.target.value)}>
+              <option value="" disabled>Move to…</option>
+              <option value="__none__">No folder</option>
+              {folders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+              <option value="__new__">+ New folder…</option>
+            </select>
+            <button disabled={!picked.length} onClick={readPicked}>Mark read</button>
+            <button disabled={!picked.length} onClick={deletePicked}>Delete</button>
+            <button className="done" onClick={stopPicking}>Done</button>
+          </div>
+        </div>
+      )}
+      {!SHELF && !picking && <div className={"save-block" + (inputVal.trim() || nameVal ? " has-text" : "")}>
         <svg className="iron" viewBox="0 0 390 30" preserveAspectRatio="none" aria-hidden="true">
           <defs><pattern id="iron" width="40" height="30" patternUnits="userSpaceOnUse"><path fill="none" stroke="#AC9B86" strokeWidth=".8" opacity=".85" d="M0 13C10 3 20 3 20 13S30 23 40 13M20 13c-4 0-5-4-2-5 2 0 3 2 1 3M0 13c4 0 5 4 2 5-2 0-3-2-1-3M40 13c-4 0-5 4-2 5 2 0 3-2 1-3"/></pattern></defs>
           <path d="M0 13H390" stroke="#40101D" strokeWidth="12"/><rect x="0" y="0" width="390" height="30" fill="url(#iron)"/>
@@ -1010,6 +1055,7 @@ function App(){
         <div className="filter-summary">Showing {statusFilter === 'all' ? 'all' : statusFilter === 'unread' ? 'unread' : 'read'}, {sortMode === 'alphabetical' ? 'A–Z' : sortMode + ' first'}</div>
       )}
       {showFilters && <React.Fragment>
+        {!SHELF && <div className="chips pick-entry"><button className="chip" onClick={()=>startPicking()}>Select several links…</button></div>}
         {!SHELF && <React.Fragment><div className="row-label">Status</div>
         <div className="chips">
           {[['all','all'],['unread','unread'],['read','read']].map(([f,label]) => (
@@ -1120,6 +1166,7 @@ function App(){
               <button className="primary" onClick={()=>saveEdit(selectedLink.id)}>Save changes</button>
               {savedFlash && <span className="saved" role="status">Saved.</span>}
               <button onClick={()=>toggleRead(selectedLink.id)}>{selectedLink.read ? 'Mark unread' : 'Mark read'}</button>
+              <button onClick={()=>startPicking(selectedLink.id)}>Select more</button>
               <button onClick={closeSheet}>Close</button>
               {confirmDelete ? (
                 <div className="confirm">
@@ -1137,7 +1184,7 @@ function App(){
 
       {undoLink && (
         <div className="toast" role="status">
-          <span>Deleted Nº {pad(undoLink.sessionNo)}</span>
+          <span>{undoLink}</span>
           <button onClick={undoDelete}>Undo</button>
         </div>
       )}
@@ -1162,8 +1209,15 @@ function App(){
                       {shares === null ? null : shares[f.id]
                         ? <React.Fragment><button onClick={()=>hand(shelfLink(shares[f.id]), f.name)}>Copy link</button><button onClick={()=>stopSharing(f)}>Stop sharing</button></React.Fragment>
                         : <button onClick={()=>shareFolder(f)}>Share</button>}
-                      <button onClick={()=>deleteFolder(f)}>Delete</button>
+                      <button onClick={()=>setFolderAsk(folderAsk === f.id ? null : f.id)} aria-expanded={folderAsk === f.id}>Delete</button>
                     </div>
+                    {folderAsk === f.id && (() => { const n = (links || []).filter(l => l.folderId === f.id).length; return (
+                      <div className="row-btns ask">
+                        <span>Delete “{f.name}”:</span>
+                        <button onClick={()=>deleteFolder(f, false)}>{n ? 'Folder only, keep its links' : 'Delete folder'}</button>
+                        {n > 0 && <button onClick={()=>deleteFolder(f, true)}>Folder and its {n === 1 ? 'link' : n + ' links'}</button>}
+                        <button onClick={()=>setFolderAsk(null)}>Cancel</button>
+                      </div>); })()}
                   </div>
                 ))}
               </div>
