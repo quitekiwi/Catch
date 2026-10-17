@@ -78,6 +78,8 @@ function normalizeUrl(raw){
   try{ const u = new URL(v); return (u.hostname.includes('.') || u.hostname === 'localhost') ? v : null; }catch(e){ return null; }
 }
 function pad(n){ return String(n).padStart(3,'0'); }
+// the same page caught twice: ignore http/https, www, a trailing slash and #fragments
+function linkKey(url){ return String(url).trim().toLowerCase().replace(/#.*$/, '').replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/+$/, ''); }
 function displayTitle(l){ return l.name ? l.name : l.url.replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/\/$/,''); }
 function hashStr(s){ let h=0; for(let i=0;i<s.length;i++){ h = (h*31 + s.charCodeAt(i)) >>> 0; } return h; }
 function chunk(arr, size){ const out=[]; for(let i=0;i<arr.length;i+=size) out.push(arr.slice(i,i+size)); return out; }
@@ -93,7 +95,8 @@ function pendingChanges(){ return readJSON(OUTBOX_KEY, []).filter(op => !op.path
 let flushing = null;
 // sends waiting changes oldest-first; stops at the first one that can't get through and returns how many are left
 function flushOutbox(){
-  if(flushing) return flushing;
+  // a change queued while a send is finishing would otherwise wait for the next sync: run again straight after
+  if(flushing) return flushing.then(() => flushOutbox());
   flushing = (async () => {
     while(true){
       const q = readJSON(OUTBOX_KEY, []);
@@ -109,8 +112,8 @@ function flushOutbox(){
       const now = readJSON(OUTBOX_KEY, []); now.shift(); writeJSON(OUTBOX_KEY, now);
     }
     return outboxSize();
-  })();
-  return flushing.finally(() => { flushing = null; });
+  })().finally(() => { flushing = null; });
+  return flushing;
 }
 
 /* ---------- page titles: links caught without a name get the page's own title from the "title" helper (supabase/functions/title) ---------- */
@@ -379,6 +382,8 @@ function App(){
   const [showMenu, setShowMenu] = useState(false);
   const [justCaught, setJustCaught] = useState(null);
   const [fromButton, setFromButton] = useState(false);
+  const [alreadyNote, setAlreadyNote] = useState('');
+  const [undoLink, setUndoLink] = useState(null);
   const [wide, setWide] = useState(() => window.innerWidth >= 640);
   const [desk, setDesk] = useState(() => window.innerWidth >= 1100);  // computer screens: form in a side column, room fills the rest
   const inputRef = useRef(null);
@@ -403,12 +408,14 @@ function App(){
     window.addEventListener('resize', onResize);
     // back online, or back to the app after a while: send what's waiting and pick up changes from other devices
     const onOnline = () => refresh();
-    const onVisible = () => { if(document.visibilityState === 'visible') refresh(); };
+    const onVisible = () => { if(document.visibilityState === 'visible') refresh(); else commitDeleteRef.current(); };
+    const onPageHide = () => commitDeleteRef.current();
+    window.addEventListener('pagehide', onPageHide);
     window.addEventListener('online', onOnline);
     document.addEventListener('visibilitychange', onVisible);
     return () => { mq && mq.removeEventListener && mq.removeEventListener('change', onScheme); window.removeEventListener('resize', onResize);
       window.removeEventListener('online', onOnline); document.removeEventListener('visibilitychange', onVisible);
-      window.removeEventListener('catch:signedout', onSignedOut); };
+      window.removeEventListener('catch:signedout', onSignedOut); window.removeEventListener('pagehide', onPageHide); };
   }, []);
 
   useEffect(() => {
@@ -416,17 +423,25 @@ function App(){
     try{
       const params = new URLSearchParams(window.location.search);
       const incoming = params.get('url');
-      if(incoming){
-        addLink(incoming, params.get('title') || '', '');
-        window.history.replaceState({}, '', window.location.pathname);
+      // Android's share menu often sends the link inside "text" rather than "url"
+      const shared = incoming || ((params.get('text') || '').match(/https?:\/\/\S+/) || [])[0];
+      if(shared){
         // opened by the browser's Catch button: say so, then close the little window
-        if(params.get('from') === 'button'){
+        const fromBtn = params.get('from') === 'button';
+        window.history.replaceState({}, '', window.location.pathname);
+        addLink(shared, params.get('title') || '', '').then(r => {
+          if(r && r.already){
+            if(fromBtn){ setFromButton('already'); setTimeout(() => window.close(), 1800); }
+            else setAlreadyNote(`Already in your archive as Nº ${pad(r.already.sessionNo)}.`);
+            return;
+          }
+          if(!fromBtn) return;
           setFromButton('sending');
           flushOutbox().then(left => {
             if(left){ setFromButton('waiting'); return; }
             setFromButton('done'); setTimeout(() => window.close(), 1500);
           });
-        }
+        });
       }
     }catch(e){}
     // eslint-disable-next-line
@@ -456,7 +471,8 @@ function App(){
       const fresh = (l || []).map(rowToLink).map(x => x.art || waitingIds.has(x.id) ? x : { ...x, art: kept[x.id] || autoArt(x), lockNow:true });
       fresh.filter(x => x.lockNow).forEach(x => { kept[x.id] = x.art; queue('PATCH', `links?id=eq.${x.id}&art=is.null`, { art:x.art }); delete x.lockNow; });
       writeJSON('catch:art', kept); setArtOverrides(kept);
-      setLinks(fresh); setFolders((f || []).map(rowToFolder)); setCounter(Math.max(0, ...(m || []).map(r => parseInt(r.value, 10) || 0)));
+      const deleting = pendingDelete.current && pendingDelete.current.link.id;
+      setLinks(fresh.filter(x => x.id !== deleting)); setFolders((f || []).map(rowToFolder)); setCounter(Math.max(0, ...(m || []).map(r => parseInt(r.value, 10) || 0)));
       setSyncError(false);
       // older links that were caught without a name get their page titles too, once
       const tried = new Set(readJSON(TRIED_KEY, [])), waiting = readJSON(UNTITLED_KEY, []), queued = new Set(waiting.map(u => u.id));
@@ -556,6 +572,45 @@ function App(){
     catch(e){ setShortcutNote('Select the key above and copy it.'); }
   }
 
+  async function renameFolder(f){
+    const name = window.prompt('Rename this folder:', f.name);
+    if(!name || !name.trim() || name.trim() === f.name) return;
+    setFolders(prev => prev.map(x => x.id === f.id ? { ...x, name:name.trim() } : x));
+    send('PATCH', `folders?id=eq.${encodeURIComponent(f.id)}`, { name:name.trim() });
+  }
+  async function deleteFolder(f){
+    const n = (links || []).filter(l => l.folderId === f.id).length;
+    if(!window.confirm(`Delete the folder “${f.name}”? ${n ? `Its ${n === 1 ? 'link stays' : n + ' links stay'} in your archive, just without a folder.` : 'It has no links in it.'}`)) return;
+    setFolders(prev => prev.filter(x => x.id !== f.id));
+    setLinks(prev => prev.map(l => l.folderId === f.id ? { ...l, folderId:null } : l));
+    if(folderFilter === f.id) setFolderFilter('all');
+    if(shares && shares[f.id]) send('DELETE', `shares?folder_id=eq.${encodeURIComponent(f.id)}`);
+    queue('PATCH', `links?folder_id=eq.${encodeURIComponent(f.id)}`, { folder_id:null });
+    send('DELETE', `folders?id=eq.${encodeURIComponent(f.id)}`);
+  }
+  // a bookmarks file: opens in any browser, and browsers can import it
+  function exportLinks(){
+    const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const item = l => `    <DT><A HREF="${esc(l.url)}" ADD_DATE="${Math.floor((l.addedAt || 0) / 1000)}">${esc(displayTitle(l))}</A>\n`
+      + `    <DD>Nº ${pad(l.sessionNo)}${l.read ? ' · read' : ''}\n`;
+    const sorted = [...(links || [])].sort((a, b) => a.sessionNo - b.sessionNo);
+    let html = '<!DOCTYPE NETSCAPE-Bookmark-file-1>\n<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">\n<TITLE>Catch</TITLE>\n<H1>Catch</H1>\n<DL><p>\n';
+    folders.forEach(f => { html += `  <DT><H3>${esc(f.name)}</H3>\n  <DL><p>\n` + sorted.filter(l => l.folderId === f.id).map(item).join('') + '  </DL><p>\n'; });
+    html += sorted.filter(l => !l.folderId || !folders.some(f => f.id === l.folderId)).map(item).join('') + '</DL><p>\n';
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([html], { type:'text/html' }));
+    a.download = `catch-links-${new Date().toISOString().slice(0, 10)}.html`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }
+  async function deleteAccount(){
+    const typed = window.prompt('This deletes your account and every link, folder and shared folder in it, for good. It cannot be undone.\n\nTo confirm, type DELETE:');
+    if(!typed || typed.trim().toUpperCase() !== 'DELETE') return;
+    try{ await sb('rpc/delete_my_account', { method:'POST', body:'{}' }); }
+    catch(e){ console.error(e); window.alert("Couldn't delete your account right now. Check your connection and try again."); return; }
+    setSession(null); setShowMenu(false); forgetDevice(); try{ localStorage.removeItem('catch:art'); }catch(e){}
+  }
+
   function signedInNow(){ setSignedIn(true); refresh(); }
   // signing out clears this device's copy, so the next person to sign in here starts from their own archive
   function forgetDevice(){
@@ -591,6 +646,8 @@ function App(){
   async function addLink(raw, name, folderId){
     const url = normalizeUrl(raw);
     if(!url) return false;
+    const already = (links || []).find(l => linkKey(l.url) === linkKey(url));
+    if(already) return { already };
     // the share link can save before the meta counter has loaded, so never trust it alone
     const nextCounter = Math.max(counter, ...(links || []).map(l => l.sessionNo || 0)) + 1;
     const entry = { id:'l_'+Date.now()+'_'+Math.random().toString(36).slice(2,7), url, sessionNo: nextCounter,
@@ -612,6 +669,7 @@ function App(){
     setSaving(true);
     const ok = await addLink(inputVal, nameVal, selectedFolder);
     setSaving(false);
+    if(ok && ok.already){ setSaveError(`Already caught as Nº ${pad(ok.already.sessionNo)}.`); return; }
     if(ok){ setInputVal(''); setNameVal(''); setSelectedFolder(''); inputRef.current && inputRef.current.blur(); }
   }
 
@@ -622,10 +680,36 @@ function App(){
     setLinks(links.map(l => l.id===id ? {...l, read: nextRead} : l));
     send('PATCH', `links?id=eq.${id}`, { read: nextRead });
   }
-  async function removeLink(id){
-    setLinks(links.filter(l => l.id!==id));
+  function markRead(id){
+    const target = (links || []).find(l => l.id === id);
+    if(!target || target.read) return;
+    setLinks(prev => prev.map(l => l.id === id ? { ...l, read:true } : l));
+    send('PATCH', `links?id=eq.${id}`, { read:true });
+  }
+  // deleting waits a few seconds so it can be undone; leaving the page sends it straight away
+  const pendingDelete = useRef(null);
+  const commitDeleteRef = useRef(() => {});
+  function commitDelete(){
+    const p = pendingDelete.current;
+    if(!p) return;
+    clearTimeout(p.timer); pendingDelete.current = null; setUndoLink(null);
+    send('DELETE', `links?id=eq.${p.link.id}`);
+  }
+  commitDeleteRef.current = commitDelete;
+  function removeLink(id){
+    commitDelete();
+    const link = links.find(l => l.id === id);
+    if(!link) return;
+    setLinks(prev => prev.filter(l => l.id !== id));
     if(selectedId === id) setSelectedId(null);
-    send('DELETE', `links?id=eq.${id}`);
+    pendingDelete.current = { link, timer: setTimeout(() => commitDeleteRef.current(), 7000) };
+    setUndoLink(link);
+  }
+  function undoDelete(){
+    const p = pendingDelete.current;
+    if(!p) return;
+    clearTimeout(p.timer); pendingDelete.current = null; setUndoLink(null);
+    setLinks(prev => [...prev, p.link].sort((a, b) => b.sessionNo - a.sessionNo));
   }
   async function dismissHint(){ setShowHint(false); try{ localStorage.setItem('catch:hint-dismissed','true'); }catch(e){} }
 
@@ -829,9 +913,16 @@ function App(){
             : 'Opening the shared shelf…'}</span>
         </div>
       )}
+      {alreadyNote && (
+        <div className="banner" role="status">
+          <span>{alreadyNote}</span>
+          <button className="x" aria-label="Dismiss" onClick={()=>setAlreadyNote('')}><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 2l8 8M10 2l-8 8"/></svg></button>
+        </div>
+      )}
       {fromButton && (
         <div className="banner" role="status">
           <span>{fromButton === 'sending' ? 'Catching…' : fromButton === 'done' ? 'Caught. This window will close in a moment.'
+            : fromButton === 'already' ? 'Already in your archive. This window will close in a moment.'
             : "Caught, and kept on this device. It will reach your archive next time you're online with Catch open."}</span>
           <button onClick={()=>window.close()}>Close</button>
         </div>
@@ -948,7 +1039,7 @@ function App(){
         <div className="overlay" onClick={closeSheet}>
           <div className="sheet" role="dialog" aria-modal="true" aria-label={displayTitle(selectedLink)} onClick={e=>e.stopPropagation()}>
             <div className="num">Session {pad(selectedLink.sessionNo)} · {selectedLink.read ? 'Read' : 'Unread'}</div>
-            <h2><a href={selectedLink.url} target="_blank" rel="noopener noreferrer">{displayTitle(selectedLink)}</a></h2>
+            <h2><a href={selectedLink.url} target="_blank" rel="noopener noreferrer" onClick={()=>markRead(selectedLink.id)}>{displayTitle(selectedLink)}</a></h2>
             <div className="url">{selectedLink.url.replace(/^https?:\/\//,'')}</div>
             <div className="pic-row">
               <div className="pic"><Motif k={artOf(selectedLink)} /></div>
@@ -978,6 +1069,7 @@ function App(){
               </select>
             </div>
             <div className="actions">
+              <a className="open-link" href={selectedLink.url} target="_blank" rel="noopener noreferrer" onClick={()=>markRead(selectedLink.id)}>Open link</a>
               <button className="primary" onClick={()=>saveEdit(selectedLink.id)}>Save changes</button>
               {savedFlash && <span className="saved" role="status">Saved.</span>}
               <button onClick={()=>toggleRead(selectedLink.id)}>{selectedLink.read ? 'Mark unread' : 'Mark read'}</button>
@@ -996,6 +1088,13 @@ function App(){
         </div>
       )}
 
+      {undoLink && (
+        <div className="toast" role="status">
+          <span>Deleted Nº {pad(undoLink.sessionNo)}</span>
+          <button onClick={undoDelete}>Undo</button>
+        </div>
+      )}
+
       {showMenu && (
         <div className="overlay" onClick={()=>setShowMenu(false)}>
           <div className="sheet" role="dialog" aria-modal="true" aria-label="Menu" onClick={e=>e.stopPropagation()}>
@@ -1005,15 +1104,19 @@ function App(){
             <div className="opts">{[['auto','Auto'],['day','Day'],['night','Night']].map(([k,label]) => (
               <button key={k} aria-pressed={modePref===k} onClick={()=>{ setModePref(k); writeJSON('catch:mode', k); }}>{label}</button>))}</div>
             {!SHELF && folders.length > 0 && <React.Fragment>
-              <div className="num">Shared folders</div>
-              <p className="who">Share a folder to give someone a link to just that folder. They can look and open links, but not change anything or see the rest of your archive.</p>
+              <div className="num">Folders</div>
+              <p className="who">Sharing a folder gives someone a link to just that folder. They can look and open links, but not change anything or see the rest of your archive.</p>
               <div className="share-list">
                 {folders.map(f => (
                   <div key={f.id} className="share-row">
                     <span>{f.name}{shares && shares[f.id] ? <em> · shared</em> : ''}</span>
-                    {shares === null ? null : shares[f.id]
-                      ? <React.Fragment><button onClick={()=>hand(shelfLink(shares[f.id]), f.name)}>Copy link</button><button onClick={()=>stopSharing(f)}>Stop sharing</button></React.Fragment>
-                      : <button onClick={()=>shareFolder(f)}>Share</button>}
+                    <div className="row-btns">
+                      <button onClick={()=>renameFolder(f)}>Rename</button>
+                      {shares === null ? null : shares[f.id]
+                        ? <React.Fragment><button onClick={()=>hand(shelfLink(shares[f.id]), f.name)}>Copy link</button><button onClick={()=>stopSharing(f)}>Stop sharing</button></React.Fragment>
+                        : <button onClick={()=>shareFolder(f)}>Share</button>}
+                      <button onClick={()=>deleteFolder(f)}>Delete</button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1043,7 +1146,9 @@ function App(){
                 title="Drag me to your bookmarks bar">+ Catch</a></div>
             </React.Fragment>}
             {!SHELF && <React.Fragment><div className="num">Account</div>
-            <p className="who">Signed in as {session && session.email}</p></React.Fragment>}
+            <p className="who">Signed in as {session && session.email}</p>
+            <div className="opts"><button onClick={exportLinks}>Download my links</button><button onClick={deleteAccount}>Delete my account</button></div>
+            </React.Fragment>}
             <div className="actions">
               {!SHELF && <button onClick={signOut}>Sign out</button>}
               <button onClick={()=>{ setShowMenu(false); setShowPrivacy(true); }}>About your data</button>
