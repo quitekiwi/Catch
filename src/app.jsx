@@ -429,6 +429,13 @@ function App(){
   const [archiveHidden, setArchiveHidden] = useState(() => readJSON('catch:archive-hidden', 0) === Math.floor(Date.now() / DAY));
   const [wide, setWide] = useState(() => window.innerWidth >= 640);
   const [desk, setDesk] = useState(() => window.innerWidth >= 1100);  // computer screens: form in a side column, room fills the rest
+  // Oxblood Day's frame line starts at the lotus rail above the paintings: remember where that line sits on the page
+  useEffect(() => {
+    const set = () => { const app = document.querySelector('.app'), rail = document.querySelector('.rail');
+      if(app && rail) app.style.setProperty('--rail-y', Math.round(rail.getBoundingClientRect().top - app.getBoundingClientRect().top + rail.getBoundingClientRect().height * .6) + 'px'); };
+    set(); requestAnimationFrame(set); const ro = new ResizeObserver(set); ro.observe(document.body); const app = document.querySelector('.app'); if(app) ro.observe(app); window.addEventListener('resize', set);
+    return () => { ro.disconnect(); window.removeEventListener('resize', set); };
+  }, [theme, modePref, desk, links]);
   const inputRef = useRef(null);
 
   const mode = modePref === 'auto' ? (systemDark ? 'night' : 'day') : modePref;
