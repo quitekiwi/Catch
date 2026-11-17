@@ -200,6 +200,18 @@ const OX_FRAMES = {
   cusped: { fr:'M32 56h56a10 10 0 0 0 10 10v74H22v-74a10 10 0 0 0 10-10z', mat:'M36 64h48a6 6 0 0 0 6 6v62H30v-62a6 6 0 0 0 6-6z',
             clip:'M38 68h44a4 4 0 0 0 4 4v56H34v-56a4 4 0 0 0 4-4z', box:[34,68,52,60], ros:[90,44], cords:'M60 6L36 58M60 6L84 58' },
 };
+// on desktop the Oxblood plaques are a little taller and a long name gets two lines instead of being cut short
+function twoLines(t, max){
+  if(t.length <= max) return [t];
+  const words = t.split(' '); let a = '';
+  while(words.length && (a ? a + ' ' + words[0] : words[0]).length <= max) a = a ? a + ' ' + words.shift() : words.shift();
+  if(!a){ a = t.slice(0, max); words.splice(0, words.length, t.slice(max)); }
+  let b = words.join(' ');
+  if(b.length > max) b = b.slice(0, max - 1).trimEnd() + '…';
+  return [a, b];
+}
+// the link window's top trim on desktop Oxblood Night: a leafy vine either side of the lotus (the lotus is the same as the iron trim's)
+const LEAFY_TRIM = `<path d="M2 13.0L4 14.0L6 14.9L8 15.7L10 16.3L12 16.7L14 17.0L16 17.0L18 16.7L20 16.3L22 15.7L24 14.9L26 14.0L28 13.0L30 12.0L32 11.1L34 10.3L36 9.7L38 9.3L40 9.0L42 9.0L44 9.3L46 9.7L48 10.3L50 11.1L52 12.0L54 13.0L56 14.0L58 14.9L60 15.7L62 16.3L64 16.7L66 17.0L68 17.0L70 16.7L72 16.3L74 15.7L76 14.9L78 14.0L80 13.0L82 12.0L84 11.1L86 10.3L88 9.7L90 9.3L92 9.0L94 9.0L96 9.3L98 9.7L100 10.3L102 11.1L104 12.0L106 13.0L108 14.0L110 14.9L112 15.7L114 16.3L116 16.7L118 17.0L120 17.0L122 16.7L124 16.3L126 15.7L128 14.9L130 14.0L132 13.0L134 12.0L136 11.1L138 10.3L140 9.7L142 9.3L144 9.0L146 9.0L148 9.3L150 9.7L152 10.3L154 11.1L156 12.0" fill="none" stroke="#AC9B86" stroke-width=".85"/><path transform="translate(14.0 17.0) rotate(-60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(27.0 13.5) rotate(60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(40.0 9.0) rotate(-60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(53.0 12.5) rotate(60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(66.0 17.0) rotate(-60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(79.0 13.5) rotate(60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(92.0 9.0) rotate(-60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(105.0 12.5) rotate(60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(118.0 17.0) rotate(-60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(131.0 13.5) rotate(60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(144.0 9.0) rotate(-60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path d="M2 13c-1-4 2-7 5-6" fill="none" stroke="#AC9B86" stroke-width=".8"/><g transform="translate(360 0) scale(-1 1)"><path d="M2 13.0L4 14.0L6 14.9L8 15.7L10 16.3L12 16.7L14 17.0L16 17.0L18 16.7L20 16.3L22 15.7L24 14.9L26 14.0L28 13.0L30 12.0L32 11.1L34 10.3L36 9.7L38 9.3L40 9.0L42 9.0L44 9.3L46 9.7L48 10.3L50 11.1L52 12.0L54 13.0L56 14.0L58 14.9L60 15.7L62 16.3L64 16.7L66 17.0L68 17.0L70 16.7L72 16.3L74 15.7L76 14.9L78 14.0L80 13.0L82 12.0L84 11.1L86 10.3L88 9.7L90 9.3L92 9.0L94 9.0L96 9.3L98 9.7L100 10.3L102 11.1L104 12.0L106 13.0L108 14.0L110 14.9L112 15.7L114 16.3L116 16.7L118 17.0L120 17.0L122 16.7L124 16.3L126 15.7L128 14.9L130 14.0L132 13.0L134 12.0L136 11.1L138 10.3L140 9.7L142 9.3L144 9.0L146 9.0L148 9.3L150 9.7L152 10.3L154 11.1L156 12.0" fill="none" stroke="#AC9B86" stroke-width=".85"/><path transform="translate(14.0 17.0) rotate(-60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(27.0 13.5) rotate(60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(40.0 9.0) rotate(-60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(53.0 12.5) rotate(60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(66.0 17.0) rotate(-60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(79.0 13.5) rotate(60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(92.0 9.0) rotate(-60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(105.0 12.5) rotate(60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(118.0 17.0) rotate(-60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(131.0 13.5) rotate(60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path transform="translate(144.0 9.0) rotate(-60) scale(0.9)" d="M0 0c2.5-3.5 7.5-4.5 11-3-2.5 3.5-7.5 4.5-11 3z" fill="#AC9B86" fill-opacity="0.22" stroke="#AC9B86" stroke-width=".7"/><path d="M2 13c-1-4 2-7 5-6" fill="none" stroke="#AC9B86" stroke-width=".8"/></g><path fill="#40101D" stroke="#AC9B86" d="M180 2c9 0 17 5 20 11-3 6-11 11-20 11s-17-5-20-11c3-6 11-11 20-11z"/><path fill="none" stroke="#AC9B86" d="M180 19c-3-3-3-8 0-11 3 3 3 8 0 11zM180 19c-5 0-8-3-9-7 4 0 7 3 9 7zM180 19c5 0 8-3 9-7-4 0-7 3-9 7z"/>`;
 const OX_SHAPES = ['oval','cusped','rect'];  // by session number: …003 oval, 001 cusped, 002 rect, as in the sketch
 function frameParts(f){
   if(f.el) return { frame:<React.Fragment><ellipse className="fr" cx={f.el[0]} cy={f.el[1]} rx={f.el[2]} ry={f.el[3]}/>
@@ -872,6 +884,8 @@ function App(){
             const parts = frameParts(f);
             const t = displayTitle(l);
             const title = t.length > 14 ? t.slice(0,13) + '…' : t;
+            const lines = desk ? twoLines(t, 14) : null;
+            const top = desk ? 154 : 160, tall = desk ? 56 : 42;
             const cid = 'clip-' + l.id;
             return (
               <button key={l.id} className={"hang2" + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "") + (dustOf(l) ? " dust-" + dustOf(l) : "") + (picked.includes(l.id) ? " picked" : "")} aria-pressed={picking ? picked.includes(l.id) : undefined} aria-label={itemLabel(l)} onClick={()=>onItem(l)}>
@@ -885,12 +899,14 @@ function App(){
                     d="M0 0H17M0 0V17M0 0L13 13M0 5.5Q3.2 3.2 5.5 0M0 10.5Q6.4 6.4 10.5 0M0 15Q9.4 9.4 15 0"/>}
                   {!l.read && <use href="#ros" x={f.ros[0]} y={f.ros[1]} width="22" height="28"/>}
                   {newest
-                    ? <React.Fragment><path className="pl" d="M22 160h76a6 6 0 0 0 6 6v30a6 6 0 0 0-6 6H22a6 6 0 0 0-6-6v-30a6 6 0 0 0 6-6z"/>
-                        <path className="pli" d="M22 163h76a3 3 0 0 0 3 3v30a3 3 0 0 0-3 3H22a3 3 0 0 0-3-3v-30a3 3 0 0 0 3-3z"/></React.Fragment>
-                    : <React.Fragment><rect className="pl" x="16" y="160" width="88" height="42" rx="3"/><rect className="pli" x="19" y="163" width="82" height="36" rx="2"/></React.Fragment>}
-                  <text x="60" y="173" textAnchor="middle" className="n" style={newest ? { fontSize:'8px', letterSpacing:'.06em' } : null}>Nº {pad(l.sessionNo)}{newest ? ' · Newest' : ''}</text>
-                  <text x="60" y="188" textAnchor="middle" className="ti" style={title.length > 11 ? { fontSize:'12.5px' } : null}>{title}</text>
-                  <text x="60" y="198" textAnchor="middle" className="dm">{l.domain.length > 18 ? l.domain.slice(0,17) + '…' : l.domain}</text>
+                    ? <React.Fragment><path className="pl" d={`M22 ${top}h76a6 6 0 0 0 6 6v${tall - 12}a6 6 0 0 0-6 6H22a6 6 0 0 0-6-6v-${tall - 12}a6 6 0 0 0 6-6z`}/>
+                        <path className="pli" d={`M22 ${top + 3}h76a3 3 0 0 0 3 3v${tall - 12}a3 3 0 0 0-3 3H22a3 3 0 0 0-3-3v-${tall - 12}a3 3 0 0 0 3-3z`}/></React.Fragment>
+                    : <React.Fragment><rect className="pl" x="16" y={top} width="88" height={tall} rx="3"/><rect className="pli" x="19" y={top + 3} width="82" height={tall - 6} rx="2"/></React.Fragment>}
+                  <text x="60" y={top + 13} textAnchor="middle" className="n" style={newest ? { fontSize:'8px', letterSpacing:'.06em' } : null}>Nº {pad(l.sessionNo)}{newest ? ' · Newest' : ''}</text>
+                  {lines
+                    ? lines.map((ln, i) => <text key={i} x="60" y={lines.length === 2 ? 181 + i * 12 : 188} textAnchor="middle" className="ti" style={{ fontSize:'12px' }}>{ln}</text>)
+                    : <text x="60" y="188" textAnchor="middle" className="ti" style={title.length > 11 ? { fontSize:'12.5px' } : null}>{title}</text>}
+                  <text x="60" y={desk ? 204 : 198} textAnchor="middle" className="dm">{l.domain.length > 18 ? l.domain.slice(0,17) + '…' : l.domain}</text>
                 </svg>
               </button>
             );
@@ -899,7 +915,7 @@ function App(){
             <svg key={'g'+i} className="ghost2" viewBox="0 0 120 214" aria-hidden="true">
               <use href="#nail" x="60" y="6"/>
               {i === 0 ? <rect className="gh" x="24" y="52" width="72" height="84" rx="2"/> : <ellipse className="gh" cx="60" cy="96" rx="34" ry="42"/>}
-              <rect className="gh" x="16" y="160" width="88" height="42" rx="3" style={{ opacity:.3 }}/>
+              <rect className="gh" x="16" y={desk ? 154 : 160} width="88" height={desk ? 56 : 42} rx="3" style={{ opacity:.3 }}/>
               <text x="60" y="100" textAnchor="middle" className="cap">{pad(nextNo + i)}</text>
             </svg>
           ))}
@@ -1029,12 +1045,14 @@ function App(){
         </div>
       )}
       {!SHELF && !picking && <div className={"save-block" + (inputVal.trim() || nameVal ? " has-text" : "")}>
-        <svg className="iron" viewBox="0 0 390 30" preserveAspectRatio="none" aria-hidden="true">
+        {theme === 'oxblood' && desk && mode === 'night'
+          ? <svg className="iron" viewBox="0 0 360 30" preserveAspectRatio="none" aria-hidden="true" dangerouslySetInnerHTML={{__html: LEAFY_TRIM}} />
+          : <svg className="iron" viewBox="0 0 390 30" preserveAspectRatio="none" aria-hidden="true">
           <defs><pattern id="iron" width="40" height="30" patternUnits="userSpaceOnUse"><path fill="none" stroke="#AC9B86" strokeWidth=".8" opacity=".85" d="M0 13C10 3 20 3 20 13S30 23 40 13M20 13c-4 0-5-4-2-5 2 0 3 2 1 3M0 13c4 0 5 4 2 5-2 0-3-2-1-3M40 13c-4 0-5 4-2 5 2 0 3-2 1-3"/></pattern></defs>
           <path d="M0 13H390" stroke="#40101D" strokeWidth="12"/><rect x="0" y="0" width="390" height="30" fill="url(#iron)"/>
           <path fill="#40101D" stroke="#AC9B86" d="M195 2c9 0 17 5 20 11-3 6-11 11-20 11s-17-5-20-11c3-6 11-11 20-11z"/>
           <path fill="none" stroke="#AC9B86" d="M195 19c-3-3-3-8 0-11 3 3 3 8 0 11zM195 19c-5 0-8-3-9-7 4 0 7 3 9 7zM195 19c5 0 8-3 9-7-4 0-7 3-9 7z"/>
-        </svg>
+        </svg>}
         <div className="dock-label">
           {theme === 'dispatch' ? <React.Fragment><span>New session Nº {pad(nextNo)}</span><span>one link · nothing else</span></React.Fragment>
             : <span>{room.dock} · Nº {pad(nextNo)}</span>}
