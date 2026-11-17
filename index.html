@@ -593,6 +593,11 @@
   }
   [data-theme="oxblood"][data-mode="day"] .archive-card{ background:#E6D0B0; border:1px solid rgba(64,16,29,.45); }
   [data-theme="oxblood"][data-mode="day"] .archive-card .ac-btns button{ background:#D9B88F; }
+  /* Dispatch on phones: the section line keeps each half whole, with the rule underneath */
+  @media (max-width:640px){
+    [data-theme="dispatch"] .dp-meta{ flex-wrap:wrap; justify-content:space-between; row-gap:2px; letter-spacing:.1em; white-space:nowrap; }
+    [data-theme="dispatch"] .dp-meta i{ order:3; flex-basis:100%; margin-top:6px; }
+  }
 </style>
 </head>
 <body>
