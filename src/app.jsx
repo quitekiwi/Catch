@@ -200,7 +200,7 @@ const OX_FRAMES = {
   cusped: { fr:'M32 56h56a10 10 0 0 0 10 10v74H22v-74a10 10 0 0 0 10-10z', mat:'M36 64h48a6 6 0 0 0 6 6v62H30v-62a6 6 0 0 0 6-6z',
             clip:'M38 68h44a4 4 0 0 0 4 4v56H34v-56a4 4 0 0 0 4-4z', box:[34,68,52,60], ros:[90,44], cords:'M60 6L36 58M60 6L84 58' },
 };
-// on desktop the Oxblood plaques are a little taller and a long name gets two lines instead of being cut short
+// the Oxblood plaques are a little taller and a long name gets two lines instead of being cut short
 function twoLines(t, max){
   if(t.length <= max) return [t];
   const words = t.split(' '); let a = '';
@@ -898,8 +898,8 @@ function App(){
             const parts = frameParts(f);
             const t = displayTitle(l);
             const title = t.length > 14 ? t.slice(0,13) + '…' : t;
-            const lines = desk ? twoLines(t, 14) : null;
-            const top = desk ? 154 : 160, tall = desk ? 56 : 42;
+            const lines = twoLines(t, 14);
+            const top = 154, tall = 56;
             const cid = 'clip-' + l.id;
             return (
               <button key={l.id} className={"hang2" + (l.read ? " closed" : "") + (justCaught===l.id ? " just" : "") + (dustOf(l) ? " dust-" + dustOf(l) : "") + (picked.includes(l.id) ? " picked" : "")} aria-pressed={picking ? picked.includes(l.id) : undefined} aria-label={itemLabel(l)} onClick={()=>onItem(l)}>
@@ -920,7 +920,7 @@ function App(){
                   {lines
                     ? lines.map((ln, i) => <text key={i} x="60" y={lines.length === 2 ? 181 + i * 12 : 188} textAnchor="middle" className="ti" style={{ fontSize:'12px' }}>{ln}</text>)
                     : <text x="60" y="188" textAnchor="middle" className="ti" style={title.length > 11 ? { fontSize:'12.5px' } : null}>{title}</text>}
-                  <text x="60" y={desk ? 204 : 198} textAnchor="middle" className="dm">{l.domain.length > 18 ? l.domain.slice(0,17) + '…' : l.domain}</text>
+                  <text x="60" y={204} textAnchor="middle" className="dm">{l.domain.length > 18 ? l.domain.slice(0,17) + '…' : l.domain}</text>
                 </svg>
               </button>
             );
@@ -929,7 +929,7 @@ function App(){
             <svg key={'g'+i} className="ghost2" viewBox="0 0 120 214" aria-hidden="true">
               <use href="#nail" x="60" y="6"/>
               {i === 0 ? <rect className="gh" x="24" y="52" width="72" height="84" rx="2"/> : <ellipse className="gh" cx="60" cy="96" rx="34" ry="42"/>}
-              <rect className="gh" x="16" y={desk ? 154 : 160} width="88" height={desk ? 56 : 42} rx="3" style={{ opacity:.3 }}/>
+              <rect className="gh" x="16" y={154} width="88" height={56} rx="3" style={{ opacity:.3 }}/>
               <text x="60" y="100" textAnchor="middle" className="cap">{pad(nextNo + i)}</text>
             </svg>
           ))}
