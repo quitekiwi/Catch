@@ -876,9 +876,8 @@ function App(){
       <React.Fragment>
         <svg className="rail" viewBox="0 0 390 20" preserveAspectRatio="none" aria-hidden="true">
           <path className="ln" strokeWidth="1.1" d="M0 12H390"/><path className="ln" strokeWidth=".5" opacity=".6" d="M0 16H390"/>
-          {!desk && <path className="ln" strokeWidth=".8" d="M180 12c4-6 11-6 15 0 4-6 11-6 15 0M195 12v-5"/>}
         </svg>
-        {desk && <svg className="rail-spray" width="360" height="30" viewBox="0 0 360 30" aria-hidden="true" dangerouslySetInnerHTML={{__html: RAIL_SPRAY}} />}
+        {<svg className="rail-spray" width="360" height="30" viewBox="0 0 360 30" aria-hidden="true" dangerouslySetInnerHTML={{__html: RAIL_SPRAY}} />}
         <div className="salon2">
           {list.map(l => {
             const h = hashStr(l.id);
@@ -1048,7 +1047,7 @@ function App(){
         </div>
       )}
       {!SHELF && !picking && <div className={"save-block" + (inputVal.trim() || nameVal ? " has-text" : "")}>
-        {theme === 'oxblood' && desk
+        {theme === 'oxblood'
           ? <svg className="iron" viewBox="0 0 360 30" preserveAspectRatio="none" aria-hidden="true"
               dangerouslySetInnerHTML={{__html: mode === 'day' ? '<path d="M0 13H360" stroke="#40101D" stroke-width="12"/>' + LEAFY_TRIM.split('#AC9B86').join('#D9B88F') : LEAFY_TRIM}} />
           : <svg className="iron" viewBox="0 0 390 30" preserveAspectRatio="none" aria-hidden="true">
