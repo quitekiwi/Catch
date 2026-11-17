@@ -582,6 +582,8 @@
     [data-theme="oxblood"] .ox-mast .cnt{ display:none; }
     [data-theme="oxblood"] .ox-mast .tag{ top:126px; }
   }
+  /* middle widths (tablets, a narrow window): the paste panel sits under the title, so give its vine trim room */
+  @media (min-width:641px) and (max-width:1099px){ [data-theme="oxblood"] .save-block{ margin-top:22px; } }
   @media (max-width:640px){
     [data-theme="oxblood"] .save-block .iron{ width:calc(100% + 32px); margin:-23px -16px 4px; }
     [data-theme="oxblood"][data-mode="night"] .save-block{ border-top:1px solid rgba(217,184,143,.55); }
@@ -612,6 +614,6 @@
 <script src="art/dp-2.js?v=2"></script>
 <script src="vendor/react.production.min.js"></script>
 <script src="vendor/react-dom.production.min.js"></script>
-<script src="app.js?v=89ea210f"></script>
+<script src="app.js?v=7c4dfdd2"></script>
 </body>
 </html>

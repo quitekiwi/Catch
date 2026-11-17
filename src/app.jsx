@@ -431,6 +431,7 @@ function App(){
   const [desk, setDesk] = useState(() => window.innerWidth >= 1100);  // computer screens: form in a side column, room fills the rest
   // Oxblood Day's frame line starts at the lotus rail above the paintings: remember where that line sits on the page
   useEffect(() => {
+    if(theme !== 'oxblood') return;
     const set = () => { const app = document.querySelector('.app'), rail = document.querySelector('.rail');
       if(app && rail) app.style.setProperty('--rail-y', Math.round(rail.getBoundingClientRect().top - app.getBoundingClientRect().top + rail.getBoundingClientRect().height * .6) + 'px'); };
     set(); requestAnimationFrame(set); if(document.fonts) document.fonts.ready.then(set);
