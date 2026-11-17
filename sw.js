@@ -1,7 +1,7 @@
 /* Catch's offline helper: keeps the app's own files on the device so it opens without a connection.
    The page itself is fetched fresh when online (so updates arrive); everything it uses is versioned (?v=…)
    and kept once fetched. Database requests pass straight through — the app keeps its own copy of the archive. */
-const CACHE = 'catch-v1';
+const CACHE = 'catch-v2';
 
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
@@ -32,12 +32,15 @@ self.addEventListener('fetch', event => {
   if(req.method !== 'GET') return;
   const url = new URL(req.url);
 
-  // the page: fresh when possible, the kept copy when offline (share links like ?url=… open it too)
-  if(req.mode === 'navigate'){
+  // the page: fresh when possible, the kept copy when offline (share links like ?url=… open it too).
+  // This also covers the app's own "is there a newer version?" check, which asks for the page directly.
+  const scope = new URL('./', self.location).pathname;
+  const isPage = req.mode === 'navigate' || url.pathname === scope || url.pathname === scope + 'index.html';
+  if(isPage){
     event.respondWith((async () => {
       const cache = await caches.open(CACHE);
       try{
-        const res = await withTimeout(fetch(req), 4000);
+        const res = await withTimeout(fetch(req, { cache:'no-cache' }), 4000);
         if(res.ok) cache.put('./', res.clone());
         return res;
       }catch(e){
