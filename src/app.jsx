@@ -1280,3 +1280,25 @@ function App(){
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 // lets the app open without a connection (see sw.js)
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(e => console.error(e));
+
+// keeps the phone up to date: coming back to Catch after a while, it checks for a newer version and quietly reloads.
+// Never while someone is typing; links waiting to sync live in the outbox on the device, so nothing is lost.
+(function(){
+  const mine = (document.querySelector('script[src*="app.js?v="]')?.getAttribute('src') || '').split('v=')[1];
+  if(!mine) return;
+  const AWAY = 2 * 60 * 1000;
+  let hiddenAt = 0;
+  document.addEventListener('visibilitychange', async () => {
+    if(document.visibilityState === 'hidden'){ hiddenAt = Date.now(); return; }
+    if(!hiddenAt || Date.now() - hiddenAt < AWAY || !navigator.onLine) return;
+    try{
+      const html = await (await fetch('./', { cache:'reload' })).text();
+      const latest = (html.match(/app\.js\?v=(\w+)/) || [])[1];
+      if(!latest || latest === mine) return;
+      const busy = [...document.querySelectorAll('input, textarea')].some(el => (el.value || '').trim());
+      if(busy || sessionStorage.getItem('catch:updated-to') === latest) return;
+      sessionStorage.setItem('catch:updated-to', latest);
+      location.reload();
+    }catch(e){}
+  });
+})();
