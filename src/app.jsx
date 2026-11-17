@@ -728,7 +728,7 @@ function App(){
     sync().then(left => { if(!left) refresh(); });
     setCounter(nextCounter);
     setLinks(prev => [entry, ...(prev || [])]);
-    setJustCaught(entry.id); setTimeout(() => setJustCaught(null), 900);
+    setJustCaught(entry.id); setTimeout(() => setJustCaught(null), 1500);
     if(!entry.name){ writeJSON(UNTITLED_KEY, [...readJSON(UNTITLED_KEY, []), { id:entry.id, url }]); nameUntitled(); }
     return true;
   }
