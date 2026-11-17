@@ -433,8 +433,12 @@ function App(){
   useEffect(() => {
     const set = () => { const app = document.querySelector('.app'), rail = document.querySelector('.rail');
       if(app && rail) app.style.setProperty('--rail-y', Math.round(rail.getBoundingClientRect().top - app.getBoundingClientRect().top + rail.getBoundingClientRect().height * .6) + 'px'); };
-    set(); requestAnimationFrame(set); const ro = new ResizeObserver(set); ro.observe(document.body); const app = document.querySelector('.app'); if(app) ro.observe(app); window.addEventListener('resize', set);
-    return () => { ro.disconnect(); window.removeEventListener('resize', set); };
+    set(); requestAnimationFrame(set); if(document.fonts) document.fonts.ready.then(set);
+    const ro = new ResizeObserver(set); ro.observe(document.body); const app = document.querySelector('.app'); if(app) ro.observe(app);
+    // notices and banners above the wall move it without resizing anything, so watch for changes too
+    const mo = new MutationObserver(() => requestAnimationFrame(set)); mo.observe(document.documentElement, { childList:true, subtree:true, attributes:true, attributeFilter:['class'] });
+    window.addEventListener('resize', set);
+    return () => { ro.disconnect(); mo.disconnect(); window.removeEventListener('resize', set); };
   }, [theme, modePref, desk, links]);
   const inputRef = useRef(null);
 
