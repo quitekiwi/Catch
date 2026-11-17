@@ -2,7 +2,7 @@
  "name": "Catch",
  "short_name": "Catch",
  "description": "Paste it, find it later. Nothing else.",
- "start_url": "../",
+ "start_url": "../?firstroom=oxblood&firstmode=day",
  "scope": "../",
  "display": "standalone",
  "background_color": "#E6CFAF",

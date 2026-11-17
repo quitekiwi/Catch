@@ -378,11 +378,21 @@ function App(){
   // ?room=dispatch&mode=night opens a specific room without changing the saved choice
   const urlRoom = new URLSearchParams(window.location.search).get('room');
   const urlMode = new URLSearchParams(window.location.search).get('mode');
+  // ?firstroom=…&firstmode=… (from the get page, or a home-screen icon) sets the room only for someone who hasn't chosen one yet
+  const firstRoom = new URLSearchParams(window.location.search).get('firstroom');
+  const firstMode = new URLSearchParams(window.location.search).get('firstmode');
   const [theme, setTheme] = useState(() => {
-    const t = urlRoom || readJSON('catch:room', null);
+    let t = urlRoom || readJSON('catch:room', null);
+    if(!t && THEMES.some(([k]) => k === firstRoom)){ t = firstRoom; writeJSON('catch:room', t); }
     return THEMES.some(([k]) => k === t) ? t : 'oxblood';
   });
-  const [modePref, setModePref] = useState(() => ['day','night','auto'].includes(urlMode) ? urlMode : readJSON('catch:mode', 'auto'));
+  const [modePref, setModePref] = useState(() => {
+    if(['day','night','auto'].includes(urlMode)) return urlMode;
+    const saved = readJSON('catch:mode', null);
+    if(saved) return saved;
+    if(['day','night'].includes(firstMode)){ writeJSON('catch:mode', firstMode); return firstMode; }
+    return 'auto';
+  });
   const [systemDark, setSystemDark] = useState(() => !window.matchMedia || window.matchMedia('(prefers-color-scheme: dark)').matches);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
