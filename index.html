@@ -601,6 +601,24 @@
   /* Dispatch Night: the reminder card matches the charcoal paste panel instead of glaring khaki */
   [data-theme="dispatch"][data-mode="night"] .archive-card{ background:#393D3C; color:#BFB493; border:1px solid #BFB493; box-shadow:none; }
   [data-theme="dispatch"][data-mode="night"] .archive-card .ac-btns a{ background:#BFB493; color:#393D3C; border-color:#BFB493; }
+  /* ---------- the sign-in door: the room's own title above, the paste-panel look below ---------- */
+  .signin-page .signin-wrap{ min-height:0; flex:1; padding:40px 16px 60px; align-items:flex-start; }
+  .signin{ overflow:visible; }
+  .signin h2{ font:15px var(--font-label); letter-spacing:.26em; text-transform:uppercase; margin:0 0 12px; }
+  .signin .new-here a{ color:inherit; }
+  [data-theme="oxblood"] .signin{ background:#40101D; color:#D9B88F; border-radius:3px; padding-top:28px; }
+  [data-theme="oxblood"][data-mode="night"] .signin{ border:1px solid rgba(217,184,143,.55); }
+  [data-theme="oxblood"] .signin .iron{ width:calc(100% + 40px); margin:-41px -20px 10px; }
+  [data-theme="oxblood"] .signin .edit-row input{ background:rgba(26,21,25,.45); border-color:#AC9B86; color:#D9B88F; border-radius:16px 3px 16px 3px; }
+  [data-theme="oxblood"] .signin .edit-row input::placeholder{ color:#D9B88F; opacity:.6; }
+  [data-theme="oxblood"] .signin .actions button{ border-color:#D9B88F; color:#D9B88F; background:transparent; border-radius:3px 16px 3px 16px; }
+  [data-theme="oxblood"] .signin .actions button.primary{ background:#D9B88F; color:#40101D; }
+  [data-theme="dispatch"] .signin{ background:#393D3C; color:#BFB493; border-radius:0; box-shadow:0 8px 24px rgba(0,0,0,.35); }
+  [data-theme="dispatch"][data-mode="night"] .signin{ border:1px solid #BFB493; }
+  [data-theme="dispatch"] .signin .edit-row input{ border-color:rgba(191,180,147,.6); color:#BFB493; }
+  [data-theme="dispatch"] .signin .edit-row input::placeholder{ color:#BFB493; opacity:.6; }
+  [data-theme="dispatch"] .signin .actions button{ border-color:#BFB493; color:#BFB493; background:transparent; border-radius:0; }
+  [data-theme="dispatch"] .signin .actions button.primary{ background:#BFB493; color:#393D3C; }
 </style>
 </head>
 <body>
@@ -626,6 +644,6 @@
 <script src="art/dp-2.js?v=2"></script>
 <script src="vendor/react.production.min.js"></script>
 <script src="vendor/react-dom.production.min.js"></script>
-<script src="app.js?v=165fb7ce"></script>
+<script src="app.js?v=55c42b65"></script>
 </body>
 </html>

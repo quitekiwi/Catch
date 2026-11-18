@@ -288,7 +288,7 @@ function bookmarklet(){
   return `javascript:(()=>{window.open('${app}?from=button&url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title),'catch','width=440,height=640')})()`;
 }
 
-function SignIn({ onSignedIn }){
+function SignIn({ onSignedIn, theme, mode }){
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [step, setStep] = useState('email');
@@ -311,9 +311,28 @@ function SignIn({ onSignedIn }){
     catch(e){ console.error(e); setErr(e.status >= 400 && e.status < 500 && e.status !== 429 ? "That code didn't work. Check it, or send a new one." : why(e)); setBusy(false); }
   }
   return (
-    <div className="signin-wrap">
+    <div className="app signin-page">
+      {/* the room's own title at the top, as on the wall itself */}
+      {theme === 'oxblood' ? (
+        <div className="ox-top"><header className="ox-mast">
+          <svg width="390" height="166" viewBox="0 0 390 166" aria-hidden="true" dangerouslySetInnerHTML={{__html: OX_MAST[mode]}} />
+          <h1>Catch</h1>
+          <div className="sub">{ROOM.oxblood.subtitle}</div>
+          <div className="tag">Paste it, find it later. Nothing else.</div>
+        </header></div>
+      ) : (
+        <header className="dp-mast">
+          <div className="orn2" aria-hidden="true"><i></i><svg width="10" height="10" viewBox="0 0 10 10"><path d="M5 .5L9.5 5 5 9.5.5 5z" fill="none" stroke="currentColor" strokeWidth=".8"/><circle cx="5" cy="5" r="1.2" fill="currentColor"/></svg><i></i></div>
+          <h1>CATCH</h1>
+          <div className="sub">Catalogue of Sessions</div>
+          <div className="tag">Paste it, find it later. Nothing else.</div>
+        </header>
+      )}
+      <div className="signin-wrap">
       <form className="sheet modal signin" noValidate onSubmit={step === 'email' ? sendCode : verify} aria-labelledby="signin-title">
-        <h2 id="signin-title">Catch</h2>
+        {theme === 'oxblood' && <svg className="iron" viewBox="0 0 360 30" preserveAspectRatio="none" aria-hidden="true"
+          dangerouslySetInnerHTML={{__html: mode === 'day' ? '<path d="M0 13H360" stroke="#40101D" stroke-width="12"/>' + LEAFY_TRIM.split('#AC9B86').join('#D9B88F') : LEAFY_TRIM}} />}
+        <h2 id="signin-title">Sign in</h2>
         {step === 'email' ? (
           <React.Fragment>
             <p>Your archive is private to you. Enter your email and we'll send you a 6-digit code to sign in.</p>
@@ -332,8 +351,9 @@ function SignIn({ onSignedIn }){
           {step === 'code' && <button type="button" onClick={()=>{ setStep('email'); setCode(''); setErr(''); }}>Use another email</button>}
           <button type="submit" className="primary" disabled={busy}>{busy ? '···' : step === 'email' ? 'Send code' : 'Sign in'}</button>
         </div>
-        {step === 'email' && <p className="new-here">New here? <a href="get/">See how to set up Catch</a></p>}
+        {step === 'email' && <p className="new-here">No room of your own yet? <a href="get/">Step this way</a>.</p>}
       </form>
+      </div>
     </div>
   );
 }
@@ -974,7 +994,7 @@ function App(){
     );
   }
 
-  if(!signedIn && !SHELF) return <SignIn onSignedIn={signedInNow} />;
+  if(!signedIn && !SHELF) return <SignIn onSignedIn={signedInNow} theme={theme} mode={mode} />;
 
   return (
     <div className="app">
