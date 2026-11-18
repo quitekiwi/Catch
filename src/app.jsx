@@ -524,14 +524,15 @@ function App(){
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    document.documentElement.setAttribute('data-mode', mode);
+    // the sign-in door is always shown in the room's Day lighting
+    document.documentElement.setAttribute('data-mode', !signedIn && !SHELF ? 'day' : mode);
     const tc = document.querySelector('meta[name="theme-color"]');
     if(tc) tc.setAttribute('content', theme === 'dispatch' ? '#393D3C' : '#40101D');
     // the home-screen icon matches the room and lighting at the moment it's added
     const touch = document.querySelector('link[rel="apple-touch-icon"]'), mf = document.querySelector('link[rel="manifest"]');
     if(touch) touch.setAttribute('href', `icons/${theme}-${mode}-180.png`);
     if(mf) mf.setAttribute('href', `icons/${theme}-${mode}.webmanifest`);
-  }, [theme, mode]);
+  }, [theme, mode, signedIn]);
 
   // keep this device's copy of the archive current, so it opens instantly and works offline
   useEffect(() => { if(links !== null) writeJSON(CACHE_KEY, { links, folders, counter }); }, [links, folders, counter]);
@@ -994,7 +995,7 @@ function App(){
     );
   }
 
-  if(!signedIn && !SHELF) return <SignIn onSignedIn={signedInNow} theme={theme} mode={mode} />;
+  if(!signedIn && !SHELF) return <SignIn onSignedIn={signedInNow} theme={theme} mode="day" />;
 
   return (
     <div className="app">

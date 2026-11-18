@@ -18,10 +18,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Cinzel+Decorative:wght@700&family=Marcellus+SC&family=Bodoni+Moda:opsz,wght@6..96,500&family=Old+Standard+TT:ital@0;1&display=swap" rel="stylesheet">
 <script>
 /* Catch has two rooms, so this page takes turns: Oxblood on the first visit, Dispatch on the next, and so on.
-   The turn is kept on this device only. Coming back within half an hour counts as the same visit,
+   The turn is kept on this device only. Coming back within 7 minutes counts as the same visit,
    so reloading or tapping back never flips it. ?world=oxblood|dispatch shows one look without moving the turn. */
 (function(){
-  var KEY = 'catch:get-world', SAME_VISIT = 30 * 60 * 1000, now = Date.now(), w = 'oxblood';
+  var KEY = 'catch:get-world', SAME_VISIT = 7 * 60 * 1000, now = Date.now(), w = 'oxblood';
   try{
     var asked = new URLSearchParams(location.search).get('world');
     var last = JSON.parse(localStorage.getItem(KEY) || 'null');
@@ -152,6 +152,10 @@
     [data-world="dispatch"] ol.steps > li{ padding-top:74px; }
     [data-world="dispatch"] ol.steps > li::before{ top:20px; left:20px; }
   }
+  /* one room per visit: only the room you're in is shown, with a hint that there's another */
+  .rooms{ grid-template-columns:minmax(0, 300px); justify-content:center; }
+  [data-world="oxblood"] .rooms figure:nth-child(2), [data-world="dispatch"] .rooms figure:first-child{ display:none; }
+  .other-room{ margin:6px 0 0; text-align:center; font-style:italic; color:var(--ink2); }
 </style>
 </head>
 <body>
@@ -172,6 +176,7 @@
   <div class="rooms">
     <figure><img src="oxblood.jpg" width="600" height="1300" alt="The Oxblood room: links hang as small framed paintings on a dark red wall, each with a number and a name."><figcaption>Oxblood</figcaption></figure>
     <figure><img src="dispatch.jpg" width="600" height="1300" alt="The Dispatch room: links are shown as numbered postage stamps in a catalogue; read ones are postmarked."><figcaption>Dispatch</figcaption></figure>
+    <p class="other-room">There is another room. If you're lucky, you'll find it.</p>
   </div>
 
   <section id="iphone">
